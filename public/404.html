@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Wuzzle Games</title>
+    <style>
+      * {
+        font-family: "Inter", system-ui, sans-serif;
+      }
+
+      :root {
+        --app-height: 100vh;
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @supports (height: 100dvh) {
+        :root {
+          --app-height: 100dvh;
+        }
+      }
+
+      html,
+      body,
+      #root {
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        min-height: var(--app-height);
+        background: #121213;
+        color: #ffffff;
+      }
+    </style>
+    <script>
+      // GitHub Pages 404.html handler for client-side routing
+      // This preserves the URL path when redirecting to index.html
+      (function() {
+        const basePath = '/wuzzle-games';
+        const path = window.location.pathname;
+        const search = window.location.search;
+        const hash = window.location.hash;
+        
+        // If we're already on index.html, no redirect needed
+        if (path === basePath + '/' || path === basePath + '/index.html') {
+          return;
+        }
+        
+        // Handle root path (/) - redirect to base path with query params
+        // This handles cases like Stripe redirects to root with ?subscription=success
+        if (path === '/' || path === '') {
+          // Redirect to base path with query params and hash preserved
+          const redirectUrl = basePath + '/' + search + hash;
+          window.location.replace(redirectUrl);
+          return;
+        }
+        
+        // Extract the path after the base path (e.g., '/game' from '/wuzzle-games/game')
+        let pathAfterBase = path;
+        if (path.startsWith(basePath)) {
+          pathAfterBase = path.substring(basePath.length);
+        }
+        
+        // Ensure pathAfterBase starts with / for proper routing
+        if (!pathAfterBase.startsWith('/')) {
+          pathAfterBase = '/' + pathAfterBase;
+        }
+        
+        // Store the original URL in sessionStorage so React Router can restore it
+        const originalUrl = pathAfterBase + search + hash;
+        sessionStorage.setItem('_404_redirect', originalUrl);
+        
+        // Redirect to index.html - React Router will read from sessionStorage and navigate
+        window.location.replace(basePath + '/index.html');
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <div style="display: flex; align-items: center; justify-content: center; height: 100vh; color: #ffffff; font-size: 16px;">
+        Loading...
+      </div>
+    </div>
+  </body>
+</html>

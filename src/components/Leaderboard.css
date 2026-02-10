@@ -1,0 +1,208 @@
+.leaderboardRoot {
+  min-height: 100vh;
+  background-color: #121213;
+  color: #ffffff;
+  padding: 20px;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.leaderboardInner {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.leaderboardContent {
+  padding: 0 16px 24px;
+}
+
+.leaderboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #3a3a3c;
+}
+
+.leaderboardTitle {
+  margin: 0 0 12px 0;
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.leaderboardFilters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filterLabel {
+  font-size: 14px;
+  color: #d7dadc;
+  font-weight: 500;
+}
+
+.filterSelect {
+  padding: 8px 12px;
+  border: 1px solid #3a3a3c;
+  border-radius: 6px;
+  background-color: #1a1a1b;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filterSelect:hover {
+  border-color: #818384;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #6aaa64;
+}
+
+.leaderboardError {
+  padding: 16px;
+  background-color: #f06272;
+  color: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.leaderboardLoading {
+  text-align: center;
+  padding: 48px;
+  color: #818384;
+  font-size: 16px;
+}
+
+.leaderboardEmpty {
+  text-align: center;
+  padding: 48px;
+  color: #818384;
+  font-size: 16px;
+}
+
+.leaderboardTable {
+  background-color: #1a1a1b;
+  border-radius: 12px;
+  border: 1px solid #3a3a3c;
+  width: 100%;
+  overflow: hidden;
+}
+
+.leaderboardRow {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px 120px;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #3a3a3c;
+  align-items: center;
+}
+
+.leaderboardRow:last-child {
+  border-bottom: none;
+}
+
+.leaderboardRow:hover {
+  background-color: #242426;
+}
+
+.leaderboardRowCurrent {
+  background-color: rgba(106, 170, 100, 0.1);
+  border-left: 3px solid #6aaa64;
+}
+
+.leaderboardHeaderRow {
+  background-color: #242426;
+  font-weight: bold;
+  color: #d7dadc;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #3a3a3c;
+}
+
+.leaderboardHeaderRow:hover {
+  background-color: #242426;
+}
+
+.leaderboardRank {
+  font-weight: 600;
+  color: #818384;
+}
+
+.leaderboardName {
+  font-weight: 500;
+  color: #ffffff;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboardYou {
+  color: #6aaa64;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.leaderboardBoards {
+  text-align: center;
+  color: #d7dadc;
+}
+
+.leaderboardTime {
+  text-align: center;
+  font-family: monospace;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .leaderboardRoot {
+    padding: 12px;
+  }
+
+  .leaderboardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .leaderboardTitle {
+    font-size: 24px;
+  }
+
+  .leaderboardRow {
+    grid-template-columns: 50px 1fr 60px 100px;
+    gap: 8px;
+    padding: 12px 12px;
+    font-size: 14px;
+  }
+
+  .leaderboardRank {
+    font-size: 12px;
+  }
+
+  .leaderboardName {
+    font-size: 13px;
+  }
+
+  .leaderboardBoards,
+  .leaderboardTime {
+    font-size: 12px;
+  }
+}

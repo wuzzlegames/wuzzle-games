@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://wisdom-githb.github.io/wuzzle-games/</loc>
+  </url>
+  <url>
+    <loc>https://wisdom-githb.github.io/wuzzle-games/game/</loc>
+  </url>
+  <url>
+    <loc>https://wisdom-githb.github.io/wuzzle-games/leaderboard/</loc>
+  </url>
+  <url>
+    <loc>https://wisdom-githb.github.io/wuzzle-games/profile/</loc>
+  </url>
+  <url>
+    <loc>https://wisdom-githb.github.io/wuzzle-games/faq/</loc>
+  </url>
+
+  <!-- SEO landing pages (long-tail intent) -->
+  <url>
+    <loc>https://wisdom-githb.github.io/wuzzle-games/multiplayer-wuzzle/</loc>
+  </url>
+  <url>
+    <loc>https://wisdom-githb.github.io/wuzzle-games/multi-board-wuzzle/</loc>
+  </url>
+  <url>
+    <loc>https://wisdom-githb.github.io/wuzzle-games/wuzzle-speedrun/</loc>
+  </url>
+  <url>
+    <loc>https://wisdom-githb.github.io/wuzzle-games/wuzzle-marathon/</loc>
+  </url>
+</urlset>

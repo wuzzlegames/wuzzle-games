@@ -1,0 +1,91 @@
+.openRoomsModalRoot {
+  padding: 24px;
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+}
+
+.openRoomsTitle {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.openRoomsStatus {
+  padding: 16px 0;
+  font-size: 14px;
+}
+
+.openRoomsStatusLoading {
+  color: #d7dadc;
+}
+
+.openRoomsStatusEmpty {
+  color: #818384;
+}
+
+.openRoomsList {
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.openRoomsItem {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #3a3a3c;
+  background: #2b2b2e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.openRoomsItemMain {
+  text-align: left;
+  flex: 1;
+}
+
+.openRoomsItemTitle {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.openRoomsItemMeta {
+  color: #d7dadc;
+  font-size: 12px;
+}
+
+.openRoomsItemExpires {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.openRoomsItemActions {
+  display: flex;
+  gap: 8px;
+}
+
+.openRoomsItemButton {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+.openRoomsFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.openRoomsFooterButton {
+  width: 100%;
+}

@@ -1,0 +1,211 @@
+/* Single-line user card: [username] [context badges] [earned badge icon] */
+.userCard {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: linear-gradient(145deg, #232326 0%, #1c1c1e 100%);
+  color: #e4e4e7;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.userCard--sm {
+  padding: 4px 10px;
+  font-size: 12px;
+  gap: 5px;
+}
+
+.userCard--md {
+  /* defaults above */
+}
+
+.userCard-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: default;
+}
+
+.userCard-main.userCard--clickable {
+  cursor: pointer;
+}
+
+.userCard-main.userCard--clickable:hover {
+  color: #fff;
+}
+
+.userCard-main.userCard--clickable:focus {
+  outline: none;
+}
+
+/* Highlight whole pill when hovering/focusing main button */
+.userCard:has(.userCard-main.userCard--clickable:hover),
+.userCard:has(.userCard-main.userCard--clickable:focus-visible) {
+  background: linear-gradient(145deg, #2a2a2e 0%, #222224 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.userCard--sm .userCard-main {
+  gap: 5px;
+}
+
+/* Context badges (e.g. Host) on the right of name */
+.userCard-badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.userCard-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(106, 170, 100, 0.2);
+  color: #86efac;
+  border: 1px solid rgba(106, 170, 100, 0.3);
+}
+
+.userCard--sm .userCard-badge {
+  font-size: 9px;
+  padding: 1px 5px;
+}
+
+.userCard-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Earned badge icon (ribbon/medal); click opens modal */
+.userCard-earnedWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.userCard-earnedIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  margin: -2px 0;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: #c9b458;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.userCard-earnedIcon:hover {
+  background: rgba(201, 180, 88, 0.2);
+  color: #e5d063;
+}
+
+.userCard-earnedIcon:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(201, 180, 88, 0.4);
+}
+
+/* Badges modal panel: hide scrollbar, keep scroll via mouse/touch */
+.userCard-badgesModalPanel {
+  text-align: left;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.userCard-badgesModalPanel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Badges modal content */
+.userCard-badgesModalContent {
+  padding: 4px 0;
+  min-width: 280px;
+}
+
+.userCard-badgesModalTitle {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #e4e4e7;
+}
+
+.userCard-badgesModalList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Row: badge image left, text right (like Profile badges section) */
+.userCard-badgesModalItem {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid #3a3a3c;
+  background: #1a1a1b;
+  overflow: hidden;
+}
+
+.userCard-badgesModalItem .badgeIcon {
+  color: #c9b458;
+  flex-shrink: 0;
+}
+
+.userCard-badgesModalItemText {
+  flex: 1;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* Wrap text; max 2 lines each */
+.userCard-badgesModalItemName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.userCard-badgesModalItemDesc {
+  font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

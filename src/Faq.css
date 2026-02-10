@@ -1,0 +1,50 @@
+.faqRoot {
+  min-height: 100vh;
+  background-color: #121213;
+  color: #ffffff;
+  padding: 20px;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.faqInner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faqMain {
+  padding: 16px;
+}
+
+.faqHeader {
+  margin-bottom: 24px;
+}
+
+.faqTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 16px 0 8px;
+}
+
+.faqIntro {
+  font-size: 14px;
+  color: #d7dadc;
+  line-height: 1.6;
+}
+
+.faqSection {
+  margin-bottom: 24px;
+}
+
+.faqSectionTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.faqParagraph {
+  font-size: 14px;
+  color: #d7dadc;
+  line-height: 1.6;
+  margin: 4px 0;
+}

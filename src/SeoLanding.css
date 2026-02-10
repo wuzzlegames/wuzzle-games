@@ -1,0 +1,134 @@
+.seoRoot {
+  min-height: 100vh;
+  background: #121213;
+  color: #ffffff;
+  padding: 18px 12px;
+}
+
+.seoCard {
+  max-width: 920px;
+  margin: 0 auto;
+  background: #1a1a1b;
+  border: 1px solid #3a3a3c;
+  border-radius: 14px;
+  padding: 18px 18px 14px;
+}
+
+.seoBreadcrumb {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  color: #d7dadc;
+  margin-bottom: 10px;
+}
+
+.seoBreadcrumb a {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+.seoH1 {
+  margin: 0 0 10px 0;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.3px;
+}
+
+.seoIntro {
+  margin: 0 0 16px 0;
+  color: #d7dadc;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.seoCtas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 18px;
+}
+
+.seoBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: #538d4e;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.seoBtn:hover {
+  filter: brightness(1.05);
+}
+
+.seoBtnOutline {
+  background: transparent;
+  border-color: #3a3a3c;
+  color: #ffffff;
+}
+
+.seoSection {
+  margin-top: 18px;
+}
+
+.seoSection h2 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+.seoSection p,
+.seoSection li {
+  color: #d7dadc;
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.seoSection ol,
+.seoSection ul {
+  padding-left: 18px;
+  margin: 8px 0 0;
+}
+
+.seoFaq details {
+  border-top: 1px solid #3a3a3c;
+  padding: 10px 0;
+}
+
+.seoFaq details:first-child {
+  border-top: none;
+}
+
+.seoFaq summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.seoFaq p {
+  margin: 10px 0 0;
+}
+
+.seoFooter {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid #3a3a3c;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+  color: #d7dadc;
+}
+
+.seoFooter a {
+  color: #93c5fd;
+  text-decoration: underline;
+}

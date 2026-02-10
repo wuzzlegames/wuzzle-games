@@ -1,0 +1,441 @@
+.waitingRoomRoot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 20px;
+  text-align: center;
+}
+
+.waitingRoomCard {
+  background: #1a1a1b;
+  border: 1px solid #3a3a3c;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.waitingRoomTitle {
+  margin: 0 0 24px 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.waitingRoomTitleInput {
+  width: 100%;
+  margin: 0 0 24px 0;
+  padding: 8px 12px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+  background: #1a1a1b;
+  border: 1px solid #3a3a3c;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.waitingRoomTitleInput:hover {
+  border-color: #565758;
+}
+
+.waitingRoomTitleInput:focus {
+  outline: none;
+  border-color: #6aaa64;
+  box-shadow: 0 0 0 2px rgba(106, 170, 100, 0.25);
+}
+
+.waitingRoomTitleInput::placeholder {
+  color: #818384;
+}
+
+.waitingRoomTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.waitingRoomTitleRow .waitingRoomTitle {
+  margin: 0;
+}
+
+.waitingRoomTitleEditLink {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 8px;
+}
+
+.waitingRoomTitleEditLink:hover {
+  color: #d7dadc;
+}
+
+.waitingRoomTitleEdit {
+  width: 100%;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.waitingRoomTitleEdit .waitingRoomTitleInput {
+  margin: 0;
+}
+
+.waitingRoomTitleEditActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.waitingRoomTitleEditBtn {
+  padding: 8px 16px;
+  font-size: 13px;
+  min-width: 80px;
+}
+
+.waitingRoomSubtitle {
+  color: #d7dadc;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.waitingRoomExpiry {
+  color: #9ca3af;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+
+.waitingRoomCodeCard {
+  background: #3a3a3c;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.waitingRoomCodeLabel {
+  color: #818384;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.waitingRoomCodeValue {
+  font-size: 36px;
+  font-weight: bold;
+  color: #6aaa64;
+  letter-spacing: 8px;
+  font-family: monospace;
+  margin-bottom: 12px;
+}
+
+.waitingRoomCodeHelp {
+  color: #818384;
+  font-size: 12px;
+  margin: 0 0 12px 0;
+}
+
+.waitingRoomSettings {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.waitingRoomSettingsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.waitingRoomSettingsLabel {
+  font-size: 13px;
+  color: #d7dadc;
+}
+
+.waitingRoomSettingsEdit {
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.waitingRoomSettingsSummary {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.waitingRoomSettingsEditForm {
+  font-size: 12px;
+  color: #d7dadc;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.waitingRoomSettingsRow {
+  display: flex;
+  gap: 8px;
+}
+
+.waitingRoomSettingsField {
+  flex: 1;
+}
+
+.waitingRoomSettingsFieldLabel {
+  margin-bottom: 2px;
+}
+
+.waitingRoomSelect {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #3a3a3c;
+  background: #1a1a1b;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.waitingRoomSettingsToggles {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.waitingRoomCheckboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.waitingRoomVisibilityGroup {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.waitingRoomRadioLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.waitingRoomSettingsButtons {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.waitingRoomSettingsButton {
+  flex: 1;
+}
+
+.waitingRoomPrimaryButton {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  background: #6aaa64;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.waitingRoomSecondaryButton {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid #3a3a3c;
+  background: transparent;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.waitingRoomCloseRoomButton {
+  margin-bottom: 16px;
+}
+
+.waitingRoomPlayersSection {
+  margin-bottom: 24px;
+}
+
+.waitingRoomPlayersTitle {
+  color: #d7dadc;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.waitingRoomPlayersList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.waitingRoomPlayerCard {
+  padding: 12px;
+  background: #3a3a3c;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.waitingRoomPlayerInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.waitingRoomPlayerName {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.waitingRoomPlayerFriendButton {
+  background: #6aaa64;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  min-width: 28px;
+  height: 28px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.waitingRoomPlayerFriendButton:hover:not(:disabled) {
+  background: #5a9a54;
+}
+
+.waitingRoomPlayerFriendButton:disabled {
+  background: #818384;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.waitingRoomPlayerReady {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.waitingRoomPlayerReadyOn {
+  color: #6aaa64;
+}
+
+.waitingRoomPlayerReadyOff {
+  color: #818384;
+}
+
+.waitingRoomReadyButton {
+  margin-bottom: 0;
+}
+
+.waitingRoomReadyButtonDisabled {
+  opacity: 0.5;
+}
+
+.waitingRoomStartButton {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  background: #c9b458;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.waitingRoomFriendButton {
+  margin-top: 12px;
+}
+
+.waitingRoomInviteSection {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.waitingRoomInviteToggle {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #3a3a3c;
+  background: transparent;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: left;
+}
+
+.waitingRoomInviteList {
+  margin-top: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.waitingRoomInviteItem {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #3a3a3c;
+  background: #2b2b2e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.waitingRoomInviteName {
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.waitingRoomInviteButton {
+  width: auto;
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.waitingRoomSavingIndicator {
+  color: #818384;
+  font-size: 12px;
+  font-style: italic;
+  margin-left: 8px;
+}
+
+.waitingRoomConfigError {
+  color: #ff5e5e;
+  font-size: 12px;
+  margin-top: 8px;
+  padding: 8px;
+  background: #2b1a1a;
+  border-radius: 4px;
+}

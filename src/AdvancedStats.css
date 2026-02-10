@@ -1,0 +1,334 @@
+.stats-page {
+  min-height: 100vh;
+  background: #121213;
+  color: #ffffff;
+}
+
+.stats-main {
+  padding: 24px 20px 48px;
+  max-width: 100%;
+}
+
+.stats-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.stats-nav {
+  margin-bottom: 24px;
+}
+
+.stats-back {
+  background: none;
+  border: none;
+  color: #818384;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+
+.stats-back:hover {
+  color: #d7dadc;
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.stats-title {
+  margin: 0 0 4px 0;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}
+
+.stats-subtitle {
+  margin: 0 0 24px 0;
+  font-size: 16px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.stats-mode-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.stats-mode-tab {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 2px solid #3a3a3c;
+  background: #1a1a1b;
+  color: #d7dadc;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.stats-mode-tab:hover {
+  border-color: #565758;
+  color: #ffffff;
+  background: rgba(58, 58, 60, 0.4);
+}
+
+.stats-mode-tab--active {
+  border-color: #6aaa64;
+  background: rgba(106, 170, 100, 0.15);
+  color: #ffffff;
+}
+
+.stats-mode-tab--active:hover {
+  border-color: #7bb87b;
+  background: rgba(106, 170, 100, 0.25);
+}
+
+.stats-premium-cta {
+  margin: 0;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.stats-subscribe-btn {
+  margin-left: 8px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #6aaa64;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.stats-subscribe-btn:hover {
+  opacity: 0.95;
+}
+
+.stats-loading,
+.stats-error,
+.stats-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.stats-error {
+  color: #f87171;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.stats-empty {
+  margin-top: 24px;
+}
+
+.stats-empty-stage {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 16px 0;
+  font-size: 14px;
+  color: #818384;
+}
+
+.stats-section {
+  margin-bottom: 40px;
+}
+
+.stats-section-stage {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #2b2b2e;
+}
+
+.stats-section-title {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #2b2b2e;
+}
+
+/* Horizontal guess distribution chart: Y = guess count, X = number of games */
+.stats-chart-horizontal {
+  margin-bottom: 8px;
+}
+
+.stats-chart-x-label {
+  font-size: 11px;
+  color: #818384;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  padding-left: 88px;
+}
+
+.stats-chart-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stats-chart-row {
+  display: grid;
+  grid-template-columns: 84px 1fr 72px;
+  align-items: center;
+  gap: 12px;
+  min-height: 32px;
+}
+
+@media (max-width: 520px) {
+  .stats-chart-row {
+    grid-template-columns: 70px 1fr 56px;
+    gap: 8px;
+  }
+  .stats-chart-x-label {
+    padding-left: 70px;
+  }
+}
+
+.stats-chart-y-label {
+  font-size: 13px;
+  color: #d7dadc;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.stats-chart-bar-track {
+  height: 24px;
+  background: #1a1a1b;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #2b2b2e;
+  min-width: 0;
+}
+
+.stats-chart-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6aaa64 0%, #5a9a54 100%);
+  border-radius: 5px;
+  min-width: 4px;
+  transition: width 0.3s ease;
+}
+
+.stats-chart-bar-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.stats-chart-bar-count {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.stats-chart-bar-pct {
+  font-size: 11px;
+  color: #818384;
+}
+
+/* Stat cards grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stats-card {
+  padding: 20px;
+  border-radius: 14px;
+  border: 2px solid #2b2b2e;
+  background: linear-gradient(180deg, #1a1a1b 0%, #161617 100%);
+  transition: border-color 0.2s, opacity 0.2s;
+}
+
+.stats-card--locked {
+  border-color: #3a3a3c;
+  opacity: 0.85;
+}
+
+.stats-card--clickable {
+  cursor: pointer;
+}
+
+.stats-card--clickable:hover {
+  border-color: #565758;
+  opacity: 1;
+}
+
+.stats-card__label {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.stats-card__value {
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.stats-card--locked .stats-card__value {
+  color: #818384;
+}
+
+.stats-card__subtitle {
+  font-size: 12px;
+  color: #818384;
+  margin-top: 4px;
+}
+
+.stats-card__premium {
+  font-size: 11px;
+  color: #9ca3af;
+  font-style: italic;
+  margin-top: 8px;
+}
+
+/* Average time by guess count (speedrun) */
+.stats-time-by-guess {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.stats-time-by-guess-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: #1a1a1b;
+  border-radius: 10px;
+  border: 1px solid #2b2b2e;
+}
+
+.stats-time-by-guess-label {
+  font-size: 13px;
+  color: #d7dadc;
+  font-weight: 600;
+}
+
+.stats-time-by-guess-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}

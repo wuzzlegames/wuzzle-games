@@ -11,6 +11,7 @@ import GamePopup from "./GamePopup";
 import Keyboard from "../Keyboard";
 import SiteHeader from "../SiteHeader";
 import CommentsSection from "./CommentsSection";
+import SolutionHuntModal from "./SolutionHuntModal";
 import { KEYBOARD_HEIGHT } from "../../lib/wordle";
 
 const FeedbackModal = lazy(() => import("../FeedbackModal"));
@@ -70,6 +71,13 @@ export default function SinglePlayerGameView({
   wordListError,
   onRetryWordLists,
   countdownRemaining,
+  // Solution Hunt mode props
+  isSolutionHuntMode = false,
+  showSolutionHuntModal = false,
+  setShowSolutionHuntModal,
+  filteredSolutionWords = [],
+  totalSolutionWords = 0,
+  onSelectSolutionWord,
 }) {
   const inRouter = useInRouterContext();
 
@@ -79,7 +87,7 @@ export default function SinglePlayerGameView({
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#121213",
+        backgroundColor: "#212121",
         color: "#ffffff",
       }}
     >
@@ -148,22 +156,26 @@ export default function SinglePlayerGameView({
           </div>
         )}
 
-        <div style={{ padding: "16px" }}>
+        <div style={{ padding: "16px", display: "flex", flexDirection: "column", alignItems: "center" }}>
           {/* Status bar: boards, guesses, timer */}
-          <GameStatusBar
-            numBoards={numBoards}
-            speedrunEnabled={speedrunEnabled}
-            isMarathonSpeedrun={isMarathonSpeedrun}
-            formatElapsed={formatElapsed}
-            stageElapsedMs={stageElapsedMs}
-            displayTotalMs={popupTotalMs || stageElapsedMs}
-            turnsUsed={turnsUsed}
-            maxTurns={maxTurns}
-          />
+          <div style={{ width: "100%", maxWidth: 600, marginBottom: 12 }}>
+            <GameStatusBar
+              numBoards={numBoards}
+              speedrunEnabled={speedrunEnabled}
+              isMarathonSpeedrun={isMarathonSpeedrun}
+              formatElapsed={formatElapsed}
+              stageElapsedMs={stageElapsedMs}
+              displayTotalMs={popupTotalMs || stageElapsedMs}
+              turnsUsed={turnsUsed}
+              maxTurns={maxTurns}
+            />
+          </div>
 
           {wordListError && (
             <div
               style={{
+                width: "100%",
+                maxWidth: 600,
                 marginTop: 12,
                 marginBottom: 12,
                 padding: "12px 16px",
@@ -189,23 +201,40 @@ export default function SinglePlayerGameView({
             </div>
           )}
 
-          {streakLabel && (
-            <div
-              style={{
-                marginTop: 8,
-                marginBottom: 8,
-                fontSize: 13,
-                color: "#d7dadc",
-              }}
-            >
-              {streakLabel}
+          <GameToast message={message} />
+
+          {/* Solution Hunt: View Possible Words button */}
+          {isSolutionHuntMode && !finished && (
+            <div style={{ width: "100%", maxWidth: 600, marginBottom: 12 }}>
+              <button
+                type="button"
+                onClick={() => setShowSolutionHuntModal(true)}
+                style={{
+                  width: "100%",
+                  padding: "12px 16px",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  border: "none",
+                  borderRadius: 8,
+                  background: "#50a339",
+                  color: "#ffffff",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                }}
+              >
+                <span>📋</span>
+                <span>View Possible Words ({filteredSolutionWords.length})</span>
+              </button>
             </div>
           )}
 
-          <GameToast message={message} />
-
           <div
             style={{
+              width: "100%",
+              maxWidth: 600,
               display: "grid",
               gridTemplateColumns: `repeat(auto-fit, minmax(${numBoards >= 16 ? 160 : 180}px, 1fr))`,
               gap: 16,
@@ -325,6 +354,17 @@ export default function SinglePlayerGameView({
           onRequestClose={() => setShowFeedbackModal(false)}
         />
       </Suspense>
+
+      {/* Solution Hunt Modal */}
+      {isSolutionHuntMode && (
+        <SolutionHuntModal
+          isOpen={showSolutionHuntModal}
+          onRequestClose={() => setShowSolutionHuntModal(false)}
+          words={filteredSolutionWords}
+          totalWords={totalSolutionWords}
+          onSelectWord={onSelectSolutionWord}
+        />
+      )}
     </div>
   );
 }

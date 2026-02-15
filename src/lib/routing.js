@@ -97,12 +97,13 @@ export function parseGameUrl(params = {}, searchParams = null) {
   const isMultiplayerQueryMode = rawMode === 'multiplayer';
   const isMultiplayerRoute = modeParam === 'multiplayer' || !!codeParam;
   const is1v1Alias = rawMode === '1v1' || modeParam === '1v1';
+  const isSolutionHuntMode = modeParam === 'solutionhunt' || rawMode === 'solutionhunt';
 
-  if (modeParam === 'daily' || modeParam === 'marathon') {
+  if (modeParam === 'daily' || modeParam === 'marathon' || modeParam === 'solutionhunt') {
     mode = validateGameMode(modeParam);
   } else if (isMultiplayerRoute || is1v1Alias) {
     mode = 'multiplayer';
-  } else if (rawMode === 'daily' || rawMode === 'marathon' || isMultiplayerQueryMode || is1v1Alias) {
+  } else if (rawMode === 'daily' || rawMode === 'marathon' || rawMode === 'solutionhunt' || isMultiplayerQueryMode || is1v1Alias) {
     mode = (isMultiplayerQueryMode || is1v1Alias) ? 'multiplayer' : validateGameMode(rawMode);
   } else if (modeParam && modeParam !== 'multiplayer' && !is1v1Alias) {
     // Invalid mode in route params - log and default to daily

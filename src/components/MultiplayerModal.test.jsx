@@ -81,18 +81,18 @@ describe('MultiplayerModal', () => {
     expect(onConfigOpen).toHaveBeenCalled();
     expect(screen.getByText('Multiplayer Game Configuration')).toBeInTheDocument();
 
-    // Change number of boards and enable speedrun
+    // Change number of boards and select speedrun variant
     const boardsSelect = screen.getByLabelText('Number of Boards');
     fireEvent.change(boardsSelect, { target: { value: '5' } });
 
-    const speedrunCheckbox = screen.getByLabelText('Speedrun Mode (Unlimited guesses, timed)');
-    fireEvent.click(speedrunCheckbox);
+    const variantSelect = screen.getByLabelText('Game Variant');
+    fireEvent.change(variantSelect, { target: { value: 'speedrun' } });
 
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
     expect(onConfigClose).toHaveBeenCalled();
     expect(onRequestClose).toHaveBeenCalled();
     expect(navigateMock).toHaveBeenCalledWith(
-      '/game?mode=multiplayer&host=true&speedrun=true&boards=5&maxPlayers=2&isPublic=true',
+      '/game?mode=multiplayer&host=true&variant=speedrun&boards=5&maxPlayers=2&isPublic=true',
     );
   });
 

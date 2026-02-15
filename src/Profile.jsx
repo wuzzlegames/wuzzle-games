@@ -596,7 +596,7 @@ export default function Profile() {
                     </div>
 
                     {/* Cross-Mode Comparison Button */}
-                    <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #2b2b2e' }}>
+                    <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #3A3A3C' }}>
                       <button
                         type="button"
                         onClick={() => setShowCrossModeComparison(true)}
@@ -865,7 +865,7 @@ export default function Profile() {
                   flex: 1,
                   padding: "12px",
                   borderRadius: 8,
-                  border: "1px solid #3a3a3c",
+                  border: "1px solid #3A3A3C",
                   background: "transparent",
                   color: "#ffffff",
                   fontSize: 14,
@@ -887,7 +887,7 @@ export default function Profile() {
                   padding: "12px",
                   borderRadius: 8,
                   border: "none",
-                  background: "#6aaa64",
+                  background: "#e56b6f",
                   color: "#ffffff",
                   fontSize: 14,
                   fontWeight: "bold",
@@ -934,7 +934,7 @@ export default function Profile() {
                   flex: 1,
                   padding: "12px",
                   borderRadius: 8,
-                  border: "1px solid #3a3a3c",
+                  border: "1px solid #3A3A3C",
                   background: "transparent",
                   color: "#ffffff",
                   fontSize: 14,
@@ -954,7 +954,7 @@ export default function Profile() {
                   padding: "12px",
                   borderRadius: 8,
                   border: "none",
-                  background: "#6aaa64",
+                  background: "#e56b6f",
                   color: "#ffffff",
                   fontSize: 14,
                   fontWeight: "bold",

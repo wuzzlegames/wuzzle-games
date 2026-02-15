@@ -93,6 +93,34 @@ export const GAME_MODES = {
       description: 'Play Wuzzle Games Multiplayer Mode: host or join multiplayer rooms, challenge friends with custom board counts and speedrun mode, and see who solves multi-board puzzles faster.',
     },
   },
+  solutionhunt: {
+    id: 'solutionhunt',
+    name: 'Solution Hunt',
+    route: '/game/solutionhunt',
+    component: GameSinglePlayer,
+    supportsSpeedrun: false, // No speedrun variant - this is a learning/practice mode
+    supportsBoards: false, // Always 1 board
+    minBoards: 1,
+    maxBoards: 1,
+    persistence: 'solutionhunt',
+    isMultiplayer: false,
+    // Feature flags for mode-specific capabilities
+    features: {
+      speedrun: false,
+      multiBoard: false,
+      streaks: { minBoards: 1, maxBoards: 1 }, // Streaks for 1-board only
+      leaderboard: false, // No leaderboard for this mode
+      sharing: true,
+      comments: true,
+      timer: false, // No timer
+      persistence: true, // Local and remote persistence
+      solutionHint: true, // Shows possible remaining words
+    },
+    seo: {
+      title: 'Daily Solution Hunt – Word Puzzle Helper | Wuzzle Games',
+      description: 'Play Wuzzle Games Solution Hunt: a daily word puzzle that shows all possible remaining words based on your guesses. Perfect for learning and improving your strategy.',
+    },
+  },
 };
 
 /**

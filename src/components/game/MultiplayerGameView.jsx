@@ -66,7 +66,7 @@ export default function MultiplayerGameView({
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#121213",
+          backgroundColor: "#212121",
           color: "#ffffff",
         }}
       >
@@ -95,7 +95,7 @@ export default function MultiplayerGameView({
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "#121213",
+            backgroundColor: "#212121",
             color: "#ffffff",
           }}
         >
@@ -171,7 +171,7 @@ export default function MultiplayerGameView({
   if (gameState && gameState.status === "cancelled") {
     const declinedBy = gameState.cancelledByName || "Your friend";
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "#121213", color: "#ffffff" }}>
+      <div style={{ minHeight: "100vh", backgroundColor: "#212121", color: "#ffffff" }}>
         <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
         <div
           style={{
@@ -194,7 +194,7 @@ export default function MultiplayerGameView({
               padding: "10px 18px",
               borderRadius: 8,
               border: "none",
-              background: "#6aaa64",
+              background: "#e56b6f",
               color: "#ffffff",
               fontSize: 14,
               fontWeight: "bold",
@@ -227,7 +227,7 @@ export default function MultiplayerGameView({
     const roomName = gameState.roomName || null;
 
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "#121213", color: "#ffffff" }}>
+      <div style={{ minHeight: "100vh", backgroundColor: "#212121", color: "#ffffff" }}>
         <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
         <GameHeader
           mode={mode}
@@ -279,7 +279,7 @@ export default function MultiplayerGameView({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#121213",
+          backgroundColor: "#212121",
           color: "#ffffff",
           flexDirection: "column",
           gap: "16px",
@@ -298,7 +298,7 @@ export default function MultiplayerGameView({
             padding: "12px 24px",
             borderRadius: 8,
             border: "none",
-            background: "#6aaa64",
+            background: "#e56b6f",
             color: "#ffffff",
             fontSize: 16,
             fontWeight: "bold",
@@ -320,7 +320,7 @@ export default function MultiplayerGameView({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#121213",
+          backgroundColor: "#212121",
           color: "#ffffff",
           flexDirection: "column",
           gap: "16px",
@@ -336,7 +336,7 @@ export default function MultiplayerGameView({
             padding: "12px 24px",
             borderRadius: 8,
             border: "none",
-            background: "#6aaa64",
+            background: "#e56b6f",
             color: "#ffffff",
             fontSize: 16,
             fontWeight: "bold",
@@ -364,7 +364,7 @@ export default function MultiplayerGameView({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#121213",
+          backgroundColor: "#212121",
           color: "#ffffff",
           flexDirection: "column",
           gap: "16px",
@@ -382,7 +382,7 @@ export default function MultiplayerGameView({
                 padding: "10px 18px",
                 borderRadius: 8,
                 border: "none",
-                background: "#6aaa64",
+                background: "#e56b6f",
                 color: "#ffffff",
                 fontSize: 14,
                 fontWeight: "bold",
@@ -414,7 +414,7 @@ export default function MultiplayerGameView({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#121213",
+            backgroundColor: "#212121",
             color: "#ffffff",
             flexDirection: "column",
             gap: "16px",
@@ -429,7 +429,7 @@ export default function MultiplayerGameView({
               padding: "10px 18px",
               borderRadius: 8,
               border: "none",
-              background: "#6aaa64",
+              background: "#e56b6f",
               color: "#ffffff",
               fontSize: 14,
               fontWeight: "bold",
@@ -589,7 +589,7 @@ export default function MultiplayerGameView({
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#121213",
+          backgroundColor: "#212121",
           color: "#ffffff",
         }}
       >
@@ -690,8 +690,8 @@ export default function MultiplayerGameView({
                 marginBottom: 4,
                 padding: "10px 12px",
                 borderRadius: 8,
-                border: "1px solid #3a3a3c",
-                background: "#18181a",
+                border: "1px solid #3A3A3C",
+                background: "#372F41",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
@@ -881,8 +881,8 @@ export default function MultiplayerGameView({
                   marginTop: 16,
                   padding: "12px 12px 10px",
                   borderRadius: 8,
-                  border: "1px solid #3a3a3c",
-                  background: "#18181a",
+                  border: "1px solid #3A3A3C",
+                  background: "#372F41",
                 }}
               >
                 <div
@@ -916,7 +916,7 @@ export default function MultiplayerGameView({
                         style={{
                           padding: "8px 8px 6px",
                           borderRadius: 6,
-                          background: "#202124",
+                          background: "#372F41",
                           display: "flex",
                           flexDirection: "column",
                           gap: 4,
@@ -939,7 +939,7 @@ export default function MultiplayerGameView({
                             <div
                               style={{
                                 fontSize: 11,
-                                color: isSelf ? "#6aaa64" : "#c9b458", // Highlight current player's time
+                                color: isSelf ? "#50a339" : "#B1A04C", // Highlight current player's time
                               }}
                             >
                               {renderSpeedrunTimeForPlayer(p.id)}
@@ -985,7 +985,7 @@ export default function MultiplayerGameView({
                                 style={{
                                   padding: "4px 6px",
                                   borderRadius: 4,
-                                  background: "#18181a",
+                                  background: "#372F41",
                                 }}
                               >
                                 {summaryText}
@@ -1030,7 +1030,7 @@ export default function MultiplayerGameView({
                     padding: "12px 24px",
                     borderRadius: 10,
                     border: "none",
-                    background: "#6aaa64",
+                    background: "#e56b6f",
                     color: "#ffffff",
                     fontSize: 14,
                     fontWeight: "bold",
@@ -1050,8 +1050,8 @@ export default function MultiplayerGameView({
                   style={{
                     padding: "12px 18px",
                     borderRadius: 10,
-                    border: "1px solid #3a3a3c",
-                    background: isPlayerHost ? "#18181a" : "transparent",
+                    border: "1px solid #3A3A3C",
+                    background: isPlayerHost ? "#372F41" : "#355070",
                     color: "#ffffff",
                     fontSize: 14,
                     fontWeight: "bold",

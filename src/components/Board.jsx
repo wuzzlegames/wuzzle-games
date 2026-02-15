@@ -88,12 +88,12 @@ function Board({
 
               const color = row ? row.colors[colIdx] : undefined;
 
-              let bg = "#121213";
-              if (color === "green") bg = "#6aaa64";
-              else if (color === "yellow") bg = "#c9b458";
-              else if (color === "grey") bg = "#3a3a3c";
+              let bg = "#212121";
+              if (color === "green") bg = "#50a339";
+              else if (color === "yellow") bg = "#B1A04C";
+              else if (color === "grey") bg = "#3A3A3C";
 
-              let borderColor = row ? "transparent" : isCurrentRow ? "#565758" : "#3a3a3c";
+              let borderColor = row ? "transparent" : isCurrentRow ? "#565758" : "#3A3A3C";
 
               if (isInvalidRow) {
                 borderColor = "#ef4444";

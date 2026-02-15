@@ -97,7 +97,7 @@ export default function GamePopup({
       >
       <div
         style={{
-          backgroundColor: "#1a1a1b",
+          backgroundColor: "#372F41",
           borderRadius: 16,
           padding: 24,
           maxWidth: 560,
@@ -208,7 +208,7 @@ export default function GamePopup({
           };
 
           let headingText = "Game finished";
-          let titleColor = "#c9b458";
+          let titleColor = "#B1A04C";
 
           if (rankedPlayers.length) {
             const findMe = () => {
@@ -228,7 +228,7 @@ export default function GamePopup({
               } else {
                 headingText = `You finished ${ordinal}`;
               }
-              titleColor = me.rank === 1 ? "#6aaa64" : "#c9b458";
+              titleColor = me.rank === 1 ? "#50a339" : "#B1A04C";
             }
           }
 
@@ -253,7 +253,7 @@ export default function GamePopup({
                 <div style={{
                   marginBottom: 12,
                   fontSize: 14,
-                  color: "#c9b458",
+                  color: "#B1A04C",
                 }}>
                   {(() => {
                     const players = multiplayerGameState?.players;
@@ -314,7 +314,7 @@ export default function GamePopup({
                   })()}
                 </div>
               </div>
-              <div style={{ borderTop: "1px solid #3a3a3c", paddingTop: 12 }}>
+              <div style={{ borderTop: "1px solid #3A3A3C", paddingTop: 12 }}>
                 <div style={{ fontSize: 16, color: "#818384", marginBottom: 4 }}>
                   {isSpeedrun
                     ? "Opponent's Time"
@@ -367,7 +367,7 @@ export default function GamePopup({
                   style={{
                     marginTop: 20,
                     paddingTop: 12,
-                    borderTop: "1px solid #3a3a3c",
+                    borderTop: "1px solid #3A3A3C",
                     textAlign: "left",
                   }}
                 >
@@ -413,7 +413,7 @@ export default function GamePopup({
                             alignItems: "center",
                             padding: "4px 6px",
                             borderRadius: 4,
-                            backgroundColor: isMe ? "#27272a" : "transparent",
+                            backgroundColor: isMe ? "#6d597a" : "transparent",
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -451,7 +451,7 @@ export default function GamePopup({
                                   fontSize: 12,
                                   borderRadius: 4,
                                   border: "none",
-                                  backgroundColor: sent ? "#818384" : "#6aaa64",
+                                  backgroundColor: sent ? "#3A3A3C" : "#e56b6f",
                                   color: "#ffffff",
                                   cursor: sent ? "default" : "pointer",
                                   fontWeight: "bold",
@@ -481,7 +481,7 @@ export default function GamePopup({
                 fontSize: 22,
                 fontWeight: "bold",
                 letterSpacing: 1,
-                color: allSolved ? "#6aaa64" : "#d7dadc"
+                color: allSolved ? "#50a339" : "#d7dadc"
               }}
             >
               {allSolved ? "Congratulations!" : "Stage ended"}
@@ -541,7 +541,7 @@ export default function GamePopup({
                 <div
                   key={b?.solution ?? `board-${i}`}
                   style={{
-                    backgroundColor: b && b.isSolved ? "#6aaa64" : "#3a3a3c",
+                    backgroundColor: b && b.isSolved ? "#50a339" : "#3A3A3C",
                     color: "#ffffff",
                     padding: "8px 10px",
                     borderRadius: 8,
@@ -579,7 +579,7 @@ export default function GamePopup({
                     <div
                       key={typeof word === "string" ? word : `sol-${idx}`}
                       style={{
-                        backgroundColor: "#6aaa64",
+                        backgroundColor: "#50a339",
                         color: "#ffffff",
                         padding: "8px 12px",
                         borderRadius: 8,
@@ -608,7 +608,7 @@ export default function GamePopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#6aaa64",
+                background: "#e56b6f",
                 color: "#ffffff",
                 fontSize: 14,
                 fontWeight: "bold",
@@ -630,7 +630,7 @@ export default function GamePopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#6aaa64",
+                background: "#e56b6f",
                 color: "#ffffff",
                 fontSize: 14,
                 fontWeight: "bold",
@@ -651,8 +651,8 @@ export default function GamePopup({
                 minWidth: 160,
                 padding: "12px 0",
                 borderRadius: 10,
-                border: "1px solid #3a3a3c",
-                background: "transparent",
+                border: "1px solid #3A3A3C",
+                background: "#355070",
                 color: "#ffffff",
                 fontSize: 14,
                 fontWeight: "bold",
@@ -673,8 +673,8 @@ export default function GamePopup({
                 minWidth: 160,
                 padding: "12px 0",
                 borderRadius: 10,
-                border: "1px solid #3a3a3c",
-                background: "transparent",
+                border: "1px solid #3A3A3C",
+                background: "#355070",
                 color: "#ffffff",
                 fontSize: 14,
                 fontWeight: "bold",
@@ -694,8 +694,8 @@ export default function GamePopup({
               minWidth: 160,
               padding: "12px 0",
               borderRadius: 10,
-              border: "1px solid #3a3a3c",
-              background: "transparent",
+              border: "1px solid #3A3A3C",
+              background: "#355070",
               color: "#ffffff",
               fontSize: 14,
               fontWeight: "bold",
@@ -716,7 +716,7 @@ export default function GamePopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#6aaa64",
+                background: "#e56b6f",
                 color: "#ffffff",
                 fontSize: 14,
                 fontWeight: "bold",
@@ -738,8 +738,8 @@ export default function GamePopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#c9b458",
-                color: "#121213",
+                background: "#B1A04C",
+                color: "#212121",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",

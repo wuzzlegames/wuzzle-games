@@ -13,7 +13,7 @@ const buttonStyle = {
   padding: "6px 10px",
   borderRadius: 6,
   border: "none",
-  background: "#6aaa64",
+  background: "#e56b6f",
   color: "#ffffff",
   fontWeight: "bold",
   fontSize: 11,
@@ -21,8 +21,8 @@ const buttonStyle = {
 };
 const buttonSecondaryStyle = {
   ...buttonStyle,
-  border: "1px solid #3a3a3c",
-  background: "transparent",
+  border: "1px solid #3A3A3C",
+  background: "#355070",
 };
 
 /**
@@ -151,7 +151,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
               padding: "10px 16px",
               borderRadius: 8,
               border: "none",
-              background: "#6aaa64",
+              background: "#e56b6f",
               color: "#ffffff",
               fontWeight: "bold",
               fontSize: 13,
@@ -189,7 +189,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                 <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "#d7dadc", textAlign: "left" }}>
                   Friend Requests ({friendRequests.length})
                 </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #3a3a3c" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #3A3A3C" }}>
                   {friendRequests.map((request) => (
                     <NotificationReceivedCard
                       key={request.id}
@@ -214,7 +214,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                 <p style={{ margin: "0 0 12px 0", fontSize: 11, color: "#818384", textAlign: "left" }}>
                   Challenges expire 30 minutes after they&apos;re sent. Dismiss expired ones to clear them.
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #3a3a3c" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #3A3A3C" }}>
                   {incomingChallenges.map((ch) => {
                     const expired = isChallengeExpired(ch);
                     const subline = `${ch.boards || 1} board${(ch.boards || 1) > 1 ? "s" : ""} · ${ch.speedrun ? "Speedrun" : "Standard"} · ${expired ? "Expired" : "Active"}`;
@@ -240,7 +240,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                 <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "#d7dadc", textAlign: "left" }}>
                   Sent challenges
                 </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #3a3a3c" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #3A3A3C" }}>
                   {sentChallenges.map((ch) => {
                     const expired = isChallengeExpired(ch);
                     return (
@@ -249,8 +249,8 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                         style={{
                           padding: "10px 12px",
                           borderRadius: 8,
-                          border: "1px solid #3a3a3c",
-                          background: "#2b2b2e",
+                          border: "1px solid #3A3A3C",
+                          background: "#372F41",
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
@@ -263,7 +263,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                           </div>
                           <div style={{ color: "#d7dadc", fontSize: 12 }}>
                             {ch.boards || 1} board{(ch.boards || 1) > 1 ? "s" : ""} · {ch.speedrun ? "Speedrun" : "Standard"}
-                            <span style={{ marginLeft: 8, fontSize: 11, color: expired ? "#818384" : "#6aaa64", fontWeight: "600" }}>
+                            <span style={{ marginLeft: 8, fontSize: 11, color: expired ? "#818384" : "#50a339", fontWeight: "600" }}>
                               {expired ? "Expired" : "Active"}
                             </span>
                           </div>
@@ -280,8 +280,8 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                           style={{
                             padding: "6px 10px",
                             borderRadius: 6,
-                            border: "1px solid #3a3a3c",
-                            background: "transparent",
+                            border: "1px solid #3A3A3C",
+                            background: "#355070",
                             color: expired ? "#818384" : "#ffffff",
                             fontWeight: "bold",
                             fontSize: 11,
@@ -307,7 +307,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
               padding: "10px 16px",
               borderRadius: 8,
               border: "none",
-              background: "#6aaa64",
+              background: "#e56b6f",
               color: "#ffffff",
               fontWeight: "bold",
               fontSize: 13,

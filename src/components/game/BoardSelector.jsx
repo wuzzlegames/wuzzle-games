@@ -25,7 +25,7 @@ export default function BoardSelector({
           left: 20,
           padding: "6px 12px",
           borderRadius: 6,
-          backgroundColor: "#121213",
+          backgroundColor: "#212121",
           border: "1px solid #ffffff",
           color: "#ffffff",
           fontSize: 11,
@@ -52,12 +52,12 @@ export default function BoardSelector({
             position: "fixed",
             bottom: 190 + 90,
             left: 20,
-            backgroundColor: "#1a1a1b",
+            backgroundColor: "#372F41",
             borderRadius: 12,
             padding: "16px",
             boxShadow: "0 4px 20px rgba(0,0,0,0.8)",
             zIndex: 9998,
-            border: "1px solid #3a3a3c",
+            border: "1px solid #3A3A3C",
             maxWidth: "90vw",
             minWidth: 200
           }}
@@ -91,13 +91,13 @@ export default function BoardSelector({
                     style={{
                       padding: "6px 12px",
                       borderRadius: 6,
-                      border: isSelected ? "2px solid #facc15" : "1px solid #3a3a3c",
+                      border: isSelected ? "2px solid #B1A04C" : "1px solid #3A3A3C",
                       background: isSolved
-                        ? "#6aaa64"
+                        ? "#50a339"
                         : isDead
-                        ? "#3a3a3c"
+                        ? "#3A3A3C"
                         : isSelected
-                        ? "#1a1a1b"
+                        ? "#372F41"
                         : "transparent",
                       color: isSolved || isDead ? "#ffffff" : "#ffffff",
                       fontSize: 13,

@@ -39,7 +39,7 @@ function createCommonProps(overrides = {}) {
     isMultiplayer: true,
     isHost: true,
     gameCode: '123456',
-    speedrunEnabled: false,
+    gameVariant: 'standard',
     boardsParam: null,
     numBoards: 1,
     authUser: { uid: 'host-uid' },
@@ -180,14 +180,14 @@ describe('useMultiplayerController', () => {
     // Set draft values - React should batch these updates
     act(() => {
       result.current.setMultiplayerConfigBoardsDraft(10);
-      result.current.setMultiplayerConfigSpeedrunDraft(true);
+      result.current.setMultiplayerConfigVariantDraft('speedrun');
     });
 
     // Wait for the hook to re-render with updated state
     // The useMemo return value should update when the draft state changes
     await waitFor(() => {
       expect(result.current.multiplayerConfigBoardsDraft).toBe(10);
-      expect(result.current.multiplayerConfigSpeedrunDraft).toBe(true);
+      expect(result.current.multiplayerConfigVariantDraft).toBe('speedrun');
     }, { timeout: 1000 });
 
     // Now apply the config
@@ -198,7 +198,9 @@ describe('useMultiplayerController', () => {
     // Should clamp boards from 10 to 4 (maxMultiplayerBoards)
     expect(setNextGameConfig).toHaveBeenCalledWith('123456', {
       numBoards: 4,
+      variant: 'speedrun',
       speedrun: true,
+      solutionHunt: false,
     });
     // Should show success message
     expect(setTimedMessage).toHaveBeenCalledWith(

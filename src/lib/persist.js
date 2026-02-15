@@ -53,6 +53,11 @@ export function makeMarathonKey(speedrunEnabled, dateString = null) {
   return `${PREFIX}game:marathon:${speedrunEnabled ? "speedrun" : "standard"}:${date}`;
 }
 
+export function makeSolutionHuntKey(dateString = null) {
+  const date = dateString || getCurrentDateString();
+  return `${PREFIX}game:solutionhunt:standard:${date}`;
+}
+
 export function marathonMetaKey(speedrunEnabled) {
   // Marathon meta doesn't reset daily, only on reset all
   return `${PREFIX}meta:marathon:${speedrunEnabled ? "speedrun" : "standard"}`;

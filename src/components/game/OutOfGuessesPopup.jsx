@@ -54,7 +54,7 @@ export default function OutOfGuessesPopup({
     >
       <div
         style={{
-          backgroundColor: "#1a1a1b",
+          backgroundColor: "#372F41",
           borderRadius: 16,
           padding: 24,
           maxWidth: 520,
@@ -79,7 +79,7 @@ export default function OutOfGuessesPopup({
               minWidth: 160,
               padding: "12px 0",
               borderRadius: 10,
-              border: "1px solid #3a3a3c",
+              border: "1px solid #3A3A3C",
               background: "transparent",
               color: "#ffffff",
               fontSize: 14,
@@ -100,8 +100,8 @@ export default function OutOfGuessesPopup({
               padding: "12px 0",
               borderRadius: 10,
               border: "none",
-              background: "#c9b458",
-              color: "#121213",
+              background: "#B1A04C",
+              color: "#212121",
               fontSize: 14,
               fontWeight: "bold",
               cursor: "pointer",
@@ -121,7 +121,7 @@ export default function OutOfGuessesPopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#6aaa64",
+                background: "#e56b6f",
                 color: "#ffffff",
                 fontSize: 14,
                 fontWeight: "bold",

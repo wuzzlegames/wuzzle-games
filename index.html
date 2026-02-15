@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <!-- Core SEO -->
+    <title>Wuzzle Games</title>
+    <meta
+      name="description"
+      content="Wuzzle Games is a free browser-based Wordle alternative with multi-board daily puzzles, marathon and speedrun modes, multiplayer Wordle-style battles, and a global leaderboard."
+    />
+    <meta
+      name="keywords"
+      content="wuzzle games,wordle alternative,multi board wordle,multiplayer wordle,wordle with friends,wordle marathon,harder wordle"
+    />
+    <link
+      rel="canonical"
+      href="https://wisdom-githb.github.io/wuzzle-games/"
+    />
+    <meta name="theme-color" content="#121213" />
+
+    <!-- Open Graph (for sharing / previews) -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Wuzzle Games – Multi‑Board & multiplayer Wordle Alternative"
+    />
+    <meta
+      property="og:description"
+      content="Play Wuzzle Games, a feature-packed Wordle-style puzzle game with multi-board daily challenges, marathon and speedrun modes, multiplayer battles, and a global leaderboard."
+    />
+    <meta
+      property="og:url"
+      content="https://wisdom-githb.github.io/wuzzle-games/"
+    />
+    <!-- Social preview image -->
+    <meta
+      property="og:image"
+      content="https://wisdom-githb.github.io/wuzzle-games/og-wuzzle-games.png"
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Wuzzle Games – Multi‑Board & multiplayer Wordle Alternative"
+    />
+    <meta
+      name="twitter:description"
+      content="Play Wuzzle Games with multi-board puzzles, marathon and speedrun modes, and multiplayer Wordle-style battles with friends."
+    />
+    <meta
+      name="twitter:image"
+      content="https://wisdom-githb.github.io/wuzzle-games/og-wuzzle-games.png"
+    />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Game",
+        "name": "Wuzzle Games",
+        "url": "https://wisdom-githb.github.io/wuzzle-games/",
+        "description": "Wuzzle Games is an advanced Wordle-style puzzle game with multi-board daily puzzles, marathon and speedrun modes, multiplayer Wordle-style battles, and a global leaderboard.",
+        "applicationCategory": "Game",
+        "operatingSystem": "Web browser",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+
+    <!-- Existing inline styles -->
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, sans-serif;
+      }
+
+      :root {
+        --app-height: 100vh;
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @supports (height: 100dvh) {
+        :root {
+          --app-height: 100dvh;
+        }
+      }
+
+      html,
+      body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      html,
+      body,
+      #root {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #root {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      body {
+        min-height: var(--app-height);
+        background: #121213;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Build-time prerender entry (vite-prerender-plugin). Keeps your app a SPA for users,
+         but outputs static HTML for bots and faster first paint. -->
+    <script prerender type="module" src="/src/prerender.jsx"></script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+

@@ -9,8 +9,8 @@
 }
 
 .waitingRoomCard {
-  background: #1a1a1b;
-  border: 1px solid #3a3a3c;
+  background: #372F41;
+  border: 1px solid #3A3A3C;
   border-radius: 12px;
   padding: 32px;
   max-width: 500px;
@@ -31,20 +31,20 @@
   font-size: 24px;
   font-weight: bold;
   color: #ffffff;
-  background: #1a1a1b;
-  border: 1px solid #3a3a3c;
+  background: #372F41;
+  border: 1px solid #3A3A3C;
   border-radius: 8px;
   box-sizing: border-box;
 }
 
 .waitingRoomTitleInput:hover {
-  border-color: #565758;
+  border-color: #6d597a;
 }
 
 .waitingRoomTitleInput:focus {
   outline: none;
-  border-color: #6aaa64;
-  box-shadow: 0 0 0 2px rgba(106, 170, 100, 0.25);
+  border-color: #50a339;
+  box-shadow: 0 0 0 2px rgba(80, 163, 57, 0.25);
 }
 
 .waitingRoomTitleInput::placeholder {
@@ -116,7 +116,7 @@
 }
 
 .waitingRoomCodeCard {
-  background: #3a3a3c;
+  background: #3A3A3C;
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 16px;
@@ -131,7 +131,7 @@
 .waitingRoomCodeValue {
   font-size: 36px;
   font-weight: bold;
-  color: #6aaa64;
+  color: #50a339;
   letter-spacing: 8px;
   font-family: monospace;
   margin-bottom: 12px;
@@ -200,8 +200,8 @@
   width: 100%;
   padding: 6px 8px;
   border-radius: 6px;
-  border: 1px solid #3a3a3c;
-  background: #1a1a1b;
+  border: 1px solid #3A3A3C;
+  background: #212121;
   color: #ffffff;
   font-size: 12px;
 }
@@ -246,7 +246,7 @@
   padding: 14px;
   border-radius: 8px;
   border: none;
-  background: #6aaa64;
+  background: #e56b6f;
   color: #ffffff;
   font-size: 16px;
   font-weight: bold;
@@ -257,8 +257,8 @@
   width: 100%;
   padding: 14px;
   border-radius: 8px;
-  border: 1px solid #3a3a3c;
-  background: transparent;
+  border: 1px solid #3A3A3C;
+  background: #355070;
   color: #ffffff;
   font-size: 16px;
   font-weight: bold;
@@ -287,7 +287,7 @@
 
 .waitingRoomPlayerCard {
   padding: 12px;
-  background: #3a3a3c;
+  background: #3A3A3C;
   border-radius: 6px;
   display: flex;
   justify-content: space-between;
@@ -308,7 +308,7 @@
 }
 
 .waitingRoomPlayerFriendButton {
-  background: #6aaa64;
+  background: #e56b6f;
   color: #ffffff;
   border: none;
   border-radius: 4px;
@@ -326,7 +326,7 @@
 }
 
 .waitingRoomPlayerFriendButton:hover:not(:disabled) {
-  background: #5a9a54;
+  background: #eaac8b;
 }
 
 .waitingRoomPlayerFriendButton:disabled {
@@ -341,7 +341,7 @@
 }
 
 .waitingRoomPlayerReadyOn {
-  color: #6aaa64;
+  color: #50a339;
 }
 
 .waitingRoomPlayerReadyOff {
@@ -362,7 +362,7 @@
   padding: 14px;
   border-radius: 8px;
   border: none;
-  background: #c9b458;
+  background: #B1A04C;
   color: #ffffff;
   font-size: 16px;
   font-weight: bold;
@@ -382,8 +382,8 @@
   width: 100%;
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid #3a3a3c;
-  background: transparent;
+  border: 1px solid #3A3A3C;
+  background: #355070;
   color: #ffffff;
   font-size: 13px;
   font-weight: bold;
@@ -403,8 +403,8 @@
 .waitingRoomInviteItem {
   padding: 8px 10px;
   border-radius: 6px;
-  border: 1px solid #3a3a3c;
-  background: #2b2b2e;
+  border: 1px solid #3A3A3C;
+  background: #372F41;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -432,10 +432,10 @@
 }
 
 .waitingRoomConfigError {
-  color: #ff5e5e;
+  color: #ED2939;
   font-size: 12px;
   margin-top: 8px;
   padding: 8px;
-  background: #2b1a1a;
+  background: rgba(237, 41, 57, 0.1);
   border-radius: 4px;
 }

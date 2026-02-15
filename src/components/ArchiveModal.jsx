@@ -81,11 +81,11 @@ export default function ArchiveModal({
           width: 8px;
         }
         .modalPanel--archive::-webkit-scrollbar-track {
-          background: #1a1a1b;
+          background: #372F41;
           border-radius: 4px;
         }
         .modalPanel--archive::-webkit-scrollbar-thumb {
-          background: #3a3a3c;
+          background: #3A3A3C;
           border-radius: 4px;
         }
         .modalPanel--archive::-webkit-scrollbar-thumb:hover {
@@ -101,14 +101,14 @@ export default function ArchiveModal({
       >
         <div
           style={{
-            backgroundColor: '#1a1a1b',
+            backgroundColor: '#372F41',
             borderRadius: 20,
             padding: '28px 24px 24px',
             maxWidth: 640,
             width: '100%',
             boxSizing: 'border-box',
             boxShadow: '0 25px 70px rgba(0,0,0,0.9)',
-            border: '1px solid #2b2b2e',
+            border: '1px solid #3A3A3C',
           }}
         >
           <div style={{ marginBottom: 24, textAlign: 'center', flexShrink: 0 }}>
@@ -148,7 +148,7 @@ export default function ArchiveModal({
                   padding: '12px 24px',
                   borderRadius: 12,
                   border: 'none',
-                  background: 'linear-gradient(135deg, #6aaa64 0%, #5a9a54 100%)',
+                  background: 'linear-gradient(135deg, #e56b6f 0%, #d55a5e 100%)',
                   color: '#ffffff',
                   fontSize: 14,
                   fontWeight: '600',
@@ -187,11 +187,11 @@ export default function ArchiveModal({
                     padding: '16px 12px',
                     borderRadius: 14,
                     border: isLocked 
-                      ? '2px solid #3a3a3c' 
-                      : '2px solid #6aaa64',
+                      ? '2px solid #3A3A3C' 
+                      : '2px solid #50a339',
                     background: isLocked 
-                      ? 'linear-gradient(135deg, #18181a 0%, #1a1a1b 100%)' 
-                      : 'linear-gradient(135deg, rgba(106, 170, 100, 0.15) 0%, rgba(106, 170, 100, 0.05) 100%)',
+                      ? 'linear-gradient(135deg, #372F41 0%, #372F41 100%)' 
+                      : 'linear-gradient(135deg, rgba(80, 163, 57, 0.15) 0%, rgba(80, 163, 57, 0.05) 100%)',
                     color: isLocked ? '#9ca3af' : '#ffffff',
                     fontSize: 13,
                     fontWeight: '600',
@@ -208,17 +208,17 @@ export default function ArchiveModal({
                   onMouseEnter={(e) => {
                     if (!isLocked) {
                       e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 8px 20px rgba(106, 170, 100, 0.3)';
-                      e.currentTarget.style.borderColor = '#7bb87b';
-                      e.currentTarget.style.background = 'linear-gradient(135deg, rgba(106, 170, 100, 0.25) 0%, rgba(106, 170, 100, 0.1) 100%)';
+                      e.currentTarget.style.boxShadow = '0 8px 20px rgba(80, 163, 57, 0.3)';
+                      e.currentTarget.style.borderColor = '#50a339';
+                      e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 163, 57, 0.25) 0%, rgba(80, 163, 57, 0.1) 100%)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isLocked) {
                       e.currentTarget.style.transform = 'translateY(0)';
                       e.currentTarget.style.boxShadow = 'none';
-                      e.currentTarget.style.borderColor = '#6aaa64';
-                      e.currentTarget.style.background = 'linear-gradient(135deg, rgba(106, 170, 100, 0.15) 0%, rgba(106, 170, 100, 0.05) 100%)';
+                      e.currentTarget.style.borderColor = '#50a339';
+                      e.currentTarget.style.background = 'linear-gradient(135deg, rgba(80, 163, 57, 0.15) 0%, rgba(80, 163, 57, 0.05) 100%)';
                     }
                   }}
                 >
@@ -236,7 +236,7 @@ export default function ArchiveModal({
                       width: 32, 
                       height: 32, 
                       borderRadius: '50%',
-                      backgroundColor: 'rgba(106, 170, 100, 0.2)',
+                      backgroundColor: 'rgba(80, 163, 57, 0.2)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -251,7 +251,7 @@ export default function ArchiveModal({
                       >
                         <path
                           d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                          stroke="#6aaa64"
+                          stroke="#50a339"
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -275,7 +275,7 @@ export default function ArchiveModal({
             display: 'flex', 
             justifyContent: 'center', 
             paddingTop: 16,
-            borderTop: '1px solid #2b2b2e',
+            borderTop: '1px solid #3A3A3C',
           }}>
             <button
               type="button"
@@ -283,7 +283,7 @@ export default function ArchiveModal({
               style={{
                 padding: '14px 32px',
                 borderRadius: 12,
-                border: '2px solid #3a3a3c',
+                border: '2px solid #3A3A3C',
                 background: 'transparent',
                 color: '#d7dadc',
                 fontSize: 14,

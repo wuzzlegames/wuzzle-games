@@ -17,9 +17,9 @@
   justify-content: flex-start;
   gap: 0;
   backdrop-filter: blur(6px);
-  background-color: rgba(24, 24, 27, 0.96);
+  background-color: rgba(33, 33, 33, 0.96);
   color: #e5e7eb;
-  border: 1px solid #6aaa64;
+  border: 1px solid #50a339;
   cursor: pointer;
   pointer-events: auto;
   overflow: hidden;

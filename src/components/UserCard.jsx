@@ -3,6 +3,13 @@ import BadgeIcon from "./BadgeIcon";
 import Modal from "./Modal";
 import "./UserCard.css";
 
+/** Premium badge definition for inline display */
+const PREMIUM_BADGE_DEF = {
+  id: 'premium_member',
+  name: 'Premium Member',
+  description: 'Unlocked by subscribing to Wuzzle Games Premium.',
+};
+
 /**
  * Single-line user card showing username, context badges (e.g. Host), and earned badge icon.
  * Use wherever a username is displayed (header, waiting room, leaderboard, etc.).
@@ -11,6 +18,7 @@ import "./UserCard.css";
  * @param {Array} [badges] - Context badges (e.g. [{ id, label }] for "Host").
  * @param {Array<{ id: string; name: string; description: string }>} [earnedBadges] - Earned badge defs. Shows latest as icon; click reveals all.
  * @param {boolean} [isYou] - Append " (You)" when true
+ * @param {boolean} [isPremium] - Show premium member badge on the left when true
  * @param {string} [href] - If set, card main part is clickable (use with onClick).
  * @param {function} [onClick] - Optional click handler for main part (e.g. navigate to profile).
  * @param {string} [className] - Additional CSS class
@@ -21,6 +29,7 @@ export default function UserCard({
   badges = [],
   earnedBadges = [],
   isYou = false,
+  isPremium = false,
   href,
   onClick,
   className = "",
@@ -34,8 +43,15 @@ export default function UserCard({
   const latestEarned = earnedBadges.length > 0 ? earnedBadges[0] : null;
   const hasEarnedBadges = earnedBadges.length > 0;
 
+  const iconSize = size === "sm" ? "sm" : "md";
+
   const mainContent = (
     <>
+      {isPremium && (
+        <span className="userCard-premiumBadge" title="Premium Member">
+          <BadgeIcon badge={PREMIUM_BADGE_DEF} size={iconSize} />
+        </span>
+      )}
       <span className="userCard-name">
         {displayName}
         {suffix}
@@ -58,7 +74,6 @@ export default function UserCard({
   );
 
   const baseClass = `userCard userCard--${size} ${className}`.trim();
-  const iconSize = size === "sm" ? "sm" : "md";
   const badgesModalTitle = isYou ? "Your badges" : "Badges";
 
   return (

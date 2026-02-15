@@ -80,6 +80,7 @@ export function useSinglePlayerGame({
   setTimedMessage,
   setStageTimerSeed,
   archiveDate = null, // Optional: date string (YYYY-MM-DD) for archive games
+  setAnswerWords = null, // Optional: for Solution Hunt mode to filter possible words
 }) {
   const { user: authUser, loading: authLoading } = useAuth();
   // Note: We can't use useSubscription here directly due to hook rules,
@@ -192,8 +193,13 @@ export function useSinglePlayerGame({
           const turns = getMaxTurns(numBoards);
           setMaxTurns(turns);
 
-          const { ALLOWED_GUESSES } = await loadWordLists();
+          const { ALLOWED_GUESSES, ANSWER_WORDS } = await loadWordLists();
           setAllowedSet(new Set(ALLOWED_GUESSES));
+          
+          // For Solution Hunt mode, pass the answer words for filtering
+          if (mode === 'solutionhunt' && typeof setAnswerWords === 'function') {
+            setAnswerWords(ANSWER_WORDS);
+          }
 
           setIsLoading(false);
 
@@ -251,8 +257,13 @@ export function useSinglePlayerGame({
           const allSolvedInSaved = savedGameState.boards.every((b) => b.isSolved);
           if (!allSolvedInSaved) {
             // Resume incomplete game
-            const { ALLOWED_GUESSES } = await loadWordLists();
+            const { ALLOWED_GUESSES, ANSWER_WORDS } = await loadWordLists();
             setAllowedSet(new Set(ALLOWED_GUESSES));
+            
+            // For Solution Hunt mode, pass the answer words for filtering
+            if (mode === 'solutionhunt' && typeof setAnswerWords === 'function') {
+              setAnswerWords(ANSWER_WORDS);
+            }
 
             setBoards(savedGameState.boards);
             setCurrentGuess(savedGameState.currentGuess || "");
@@ -286,6 +297,11 @@ export function useSinglePlayerGame({
         // No saved state - start new game (or archive game)
         const { ANSWER_WORDS, ALLOWED_GUESSES } = await loadWordLists();
         setAllowedSet(new Set(ALLOWED_GUESSES));
+        
+        // For Solution Hunt mode, pass the answer words for filtering
+        if (mode === 'solutionhunt' && typeof setAnswerWords === 'function') {
+          setAnswerWords(ANSWER_WORDS);
+        }
 
         const turns = getMaxTurns(numBoards);
         setMaxTurns(turns);

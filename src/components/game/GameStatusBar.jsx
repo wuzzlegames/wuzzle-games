@@ -13,12 +13,12 @@ export default function GameStatusBar({
   return (
     <div
       style={{
-        marginBottom: 12,
         padding: "10px 12px",
         borderRadius: 8,
         border: "1px solid #3a3a3c",
-        background: "#18181a",
+        background: "#372F41",
         display: "flex",
+        flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "space-between",
         gap: 12,

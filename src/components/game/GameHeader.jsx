@@ -35,7 +35,7 @@ export default function GameHeader({
     <div
       style={{
         padding: "16px 16px 8px",
-        backgroundColor: "#121213",
+        backgroundColor: "#212121",
         textAlign: "center",
       }}
     >

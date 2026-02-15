@@ -20,9 +20,9 @@ export default function OpponentBoardView({ opponentColors, maxTurns, opponentGu
     <div
       style={{
         borderRadius: 8,
-        border: isActive ? "2px solid #6aaa64" : "1px solid #3a3a3c",
+        border: isActive ? "2px solid #50a339" : "1px solid #3A3A3C",
         padding: 8,
-        background: "#1a1a1b",
+        background: "#372F41",
         display: "flex",
         flexDirection: "column",
         minWidth: 0,
@@ -74,8 +74,8 @@ export default function OpponentBoardView({ opponentColors, maxTurns, opponentGu
             {Array.from({ length: 5 }).map((_, colIdx) => {
               const color = Array.isArray(colors) ? (colors[colIdx] || 0) : 0;
               // 0 = gray (not in word), 1 = yellow (wrong position), 2 = green (correct)
-              const bgColor = color === 2 ? "#6aaa64" : color === 1 ? "#c9b458" : "#3a3a3c";
-              const borderColor = color === 0 ? "#3a3a3c" : color === 2 ? "#538d4e" : "#b59f3b";
+              const bgColor = color === 2 ? "#50a339" : color === 1 ? "#B1A04C" : "#3A3A3C";
+              const borderColor = color === 0 ? "#3A3A3C" : color === 2 ? "#50a339" : "#B1A04C";
               const letter = showLetters && opponentGuesses && opponentGuesses[rowIdx] 
                 ? opponentGuesses[rowIdx][colIdx]?.toUpperCase() || "" 
                 : "";

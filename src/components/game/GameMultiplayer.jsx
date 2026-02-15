@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useRef, useState, useEffect, Suspense, laz
 import { useSearchParams, useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { WORD_LENGTH, buildLetterMapFromGuesses, getTurnsUsed, formatElapsed, scoreGuess } from "../../lib/wordle";
+import { filterWordsByClues } from "../../lib/wordFilter";
 import { FLIP_COMPLETE_MS, MAX_BOARDS, TIMER_INTERVAL_MS, DEFAULT_MAX_TURNS, SPEEDRUN_COUNTDOWN_MS } from "../../lib/gameConstants";
 import { useAuth } from "../../hooks/useAuth";
 import { useMultiplayerGame } from "../../hooks/useMultiplayerGame";
@@ -11,6 +12,7 @@ import { useShare } from "../../hooks/useShare";
 import { useKeyboard } from "../../hooks/useKeyboard";
 import { useBoardLayout } from "../../hooks/useBoardLayout";
 import { clampBoards } from "../../lib/validation";
+import { loadWordLists } from "../../lib/wordLists";
 import GameToast from "./GameToast";
 import MultiplayerRoomConfigModal from "./MultiplayerRoomConfigModal";
 import MultiplayerGameView from "./MultiplayerGameView";
@@ -41,12 +43,29 @@ export default function GameMultiplayer() {
 
   const rawMode = searchParams.get("mode");
   const isHost = searchParams.get("host") === "true";
-  const speedrunEnabled = (() => {
+  
+  // Read game variant from URL (supports both new 'variant' param and legacy 'speedrun' param)
+  const gameVariant = (() => {
     if (rawMode === "multiplayer") {
-      return searchParams.get("speedrun") === "true";
+      const variant = searchParams.get("variant");
+      if (variant === 'speedrun' || variant === 'solutionhunt' || variant === 'standard') {
+        return variant;
+      }
+      // Legacy support: convert speedrun=true to 'speedrun' variant
+      if (searchParams.get("speedrun") === "true") {
+        return 'speedrun';
+      }
     }
-    return false;
+    return 'standard';
   })();
+  
+  // Derived booleans for backward compatibility
+  const speedrunEnabled = gameVariant === 'speedrun';
+  const solutionHuntEnabled = gameVariant === 'solutionhunt';
+
+  // Solution Hunt mode state
+  const [showSolutionHuntModal, setShowSolutionHuntModal] = useState(false);
+  const [answerWords, setAnswerWords] = useState([]);
 
   const boardsParam = searchParams.get("boards");
   const maxPlayersParam = searchParams.get("maxPlayers");
@@ -221,10 +240,10 @@ export default function GameMultiplayer() {
     hasPlayerSolvedAllMultiplayerBoards,
     isMultiplayerConfigModalOpen,
     multiplayerConfigBoardsDraft,
-    multiplayerConfigSpeedrunDraft,
+    multiplayerConfigVariantDraft,
     setIsMultiplayerConfigModalOpen,
     setMultiplayerConfigBoardsDraft,
-    setMultiplayerConfigSpeedrunDraft,
+    setMultiplayerConfigVariantDraft,
     handleMultiplayerReady,
     handleMultiplayerStart,
     handleCancelHostedChallenge,
@@ -236,7 +255,7 @@ export default function GameMultiplayer() {
     isMultiplayer: true,
     isHost,
     gameCode,
-    speedrunEnabled,
+    gameVariant,
     boardsParam,
     numBoards,
     maxPlayersParam,
@@ -286,6 +305,52 @@ export default function GameMultiplayer() {
     () => boards.length > 0 && boards.every((b) => b.isSolved),
     [boards]
   );
+
+  // Solution Hunt: Check if current game is in solution hunt mode (from Firebase game state)
+  const isSolutionHuntGame = useMemo(() => {
+    if (!gameState) return false;
+    // Check both variant field and solutionHunt field for backward compatibility
+    return gameState.variant === 'solutionhunt' || gameState.solutionHunt === true;
+  }, [gameState]);
+
+  // Solution Hunt: Load answer words when game starts in solution hunt mode
+  useEffect(() => {
+    if (!isSolutionHuntGame || gameState?.status !== 'playing') return;
+    if (answerWords.length > 0) return; // Already loaded
+
+    (async () => {
+      try {
+        const { ANSWER_WORDS } = await loadWordLists();
+        setAnswerWords(ANSWER_WORDS);
+      } catch (err) {
+        console.error('Failed to load answer words for Solution Hunt:', err);
+      }
+    })();
+  }, [isSolutionHuntGame, gameState?.status, answerWords.length]);
+
+  // Solution Hunt: Filter words based on player's guesses
+  const filteredSolutionWords = useMemo(() => {
+    if (!isSolutionHuntGame || answerWords.length === 0) return [];
+    if (boards.length === 0) return answerWords;
+
+    // Get all guesses from the first board (multiplayer solution hunt is single board)
+    const board = boards[0];
+    if (!board || !board.guesses || board.guesses.length === 0) return answerWords;
+
+    // Build guesses array with colors for filtering
+    const guessesWithColors = board.guesses.map((g) => ({
+      word: g.word,
+      colors: g.colors,
+    }));
+
+    return filterWordsByClues(answerWords, guessesWithColors);
+  }, [isSolutionHuntGame, answerWords, boards]);
+
+  // Solution Hunt: Handle word selection from modal
+  const handleSelectSolutionWord = useCallback((word) => {
+    setCurrentGuess(word.toLowerCase());
+    setShowSolutionHuntModal(false);
+  }, []);
 
   const isInputBlocked = useCallback(() => {
     if (allSolved) return true;
@@ -550,8 +615,8 @@ export default function GameMultiplayer() {
         boardOptions={MULTIPLAYER_BOARD_OPTIONS}
         boardsDraft={multiplayerConfigBoardsDraft}
         onChangeBoardsDraft={(value) => setMultiplayerConfigBoardsDraft(value)}
-        speedrunDraft={multiplayerConfigSpeedrunDraft}
-        onChangeSpeedrunDraft={(value) => setMultiplayerConfigSpeedrunDraft(value)}
+        variantDraft={multiplayerConfigVariantDraft}
+        onChangeVariantDraft={(value) => setMultiplayerConfigVariantDraft(value)}
         onSave={applyMultiplayerConfig}
         isHost={gameState && authUser && gameState.players ? gameState.players[authUser.uid]?.isHost === true : false}
       />
@@ -600,7 +665,7 @@ export default function GameMultiplayer() {
               friend.name,
               gameCode,
               initialBoardsConfig,
-              speedrunEnabled,
+              gameVariant,
             );
             if (!ok) {
               setTimedMessage(

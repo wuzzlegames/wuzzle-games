@@ -5,14 +5,14 @@
   gap: 6px;
   padding: 5px 12px;
   border-radius: 9999px;
-  background: linear-gradient(145deg, #232326 0%, #1c1c1e 100%);
+  background: linear-gradient(145deg, #372F41 0%, #372F41 100%);
   color: #e4e4e7;
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
   max-width: 100%;
   box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid #3A3A3C;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   position: relative;
 }
@@ -58,8 +58,8 @@
 /* Highlight whole pill when hovering/focusing main button */
 .userCard:has(.userCard-main.userCard--clickable:hover),
 .userCard:has(.userCard-main.userCard--clickable:focus-visible) {
-  background: linear-gradient(145deg, #2a2a2e 0%, #222224 100%);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, #6d597a 0%, #6d597a 100%);
+  border-color: #6d597a;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
@@ -85,9 +85,9 @@
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  background: rgba(106, 170, 100, 0.2);
-  color: #86efac;
-  border: 1px solid rgba(106, 170, 100, 0.3);
+  background: rgba(80, 163, 57, 0.2);
+  color: #50a339;
+  border: 1px solid rgba(80, 163, 57, 0.3);
 }
 
 .userCard--sm .userCard-badge {
@@ -98,6 +98,23 @@
 .userCard-name {
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Premium badge displayed to the left of username */
+.userCard-premiumBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 2px;
+}
+
+.userCard-premiumBadge .badgeIcon {
+  display: flex;
+}
+
+.userCard--sm .userCard-premiumBadge {
+  margin-right: 1px;
 }
 
 /* Earned badge icon (ribbon/medal); click opens modal */
@@ -117,19 +134,19 @@
   background: none;
   border: none;
   border-radius: 6px;
-  color: #c9b458;
+  color: #B1A04C;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .userCard-earnedIcon:hover {
-  background: rgba(201, 180, 88, 0.2);
-  color: #e5d063;
+  background: rgba(177, 160, 76, 0.2);
+  color: #B1A04C;
 }
 
 .userCard-earnedIcon:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(201, 180, 88, 0.4);
+  box-shadow: 0 0 0 2px rgba(177, 160, 76, 0.4);
 }
 
 /* Badges modal panel: hide scrollbar, keep scroll via mouse/touch */
@@ -137,6 +154,7 @@
   text-align: left;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  background: #212121;
 }
 .userCard-badgesModalPanel::-webkit-scrollbar {
   display: none;
@@ -168,13 +186,13 @@
   align-items: stretch;
   padding: 0;
   border-radius: 8px;
-  border: 1px solid #3a3a3c;
-  background: #1a1a1b;
+  border: 1px solid #3A3A3C;
+  background: #372F41;
   overflow: hidden;
 }
 
 .userCard-badgesModalItem .badgeIcon {
-  color: #c9b458;
+  color: #B1A04C;
   flex-shrink: 0;
 }
 

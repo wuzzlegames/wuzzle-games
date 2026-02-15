@@ -67,8 +67,8 @@ export default function TileRow({
 
         // Input/current row (no flip, no reveal coloring)
         if (!row) {
-          let bg = "#121213";
-          let borderColor = isCurrentRow ? "#565758" : "#3a3a3c";
+          let bg = "#212121";
+          let borderColor = isCurrentRow ? "#565758" : "#3A3A3C";
           let fg = isPlaceholder ? "rgba(255,255,255,0.45)" : "#ffffff";
 
           if (isInvalidRow) {
@@ -141,8 +141,8 @@ export default function TileRow({
         }
 
         // Newest revealed row: flip only for active (unsolved) boards
-        const frontBg = "#121213";
-        const frontBorder = "#3a3a3c";
+        const frontBg = "#212121";
+        const frontBorder = "#3A3A3C";
         const backBg = bgForColor(color);
 
         // Tiles flip sequentially with a delay per tile

@@ -164,7 +164,7 @@ export function validateSpeedrun(speedrun) {
  * @returns {string} Valid mode or 'daily' as default
  */
 export function validateGameMode(mode) {
-  const validModes = ['daily', 'marathon', 'multiplayer'];
+  const validModes = ['daily', 'marathon', 'multiplayer', 'solutionhunt'];
   if (typeof mode === 'string' && validModes.includes(mode)) {
     return mode;
   }

@@ -16,7 +16,7 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
   const [codeError, setCodeError] = useState('');
   const [showConfig, setShowConfig] = useState(showConfigFirst);
   const [numBoards, setNumBoards] = useState(1);
-  const [isSpeedrun, setIsSpeedrun] = useState(false);
+  const [gameVariant, setGameVariant] = useState('standard'); // 'standard' | 'speedrun' | 'solutionhunt'
   const [maxPlayers, setMaxPlayers] = useState(2);
   const [isPublic, setIsPublic] = useState(true);
   const [showOpenRoomsModal, setShowOpenRoomsModal] = useState(false);
@@ -29,12 +29,12 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
   const handleHostWithConfig = useCallback(() => {
     const clampedMaxPlayers = Math.max(2, Math.min(8, maxPlayers));
     navigate(
-      `/game?mode=multiplayer&host=true&speedrun=${isSpeedrun}&boards=${numBoards}&maxPlayers=${clampedMaxPlayers}&isPublic=${isPublic}`
+      `/game?mode=multiplayer&host=true&variant=${gameVariant}&boards=${numBoards}&maxPlayers=${clampedMaxPlayers}&isPublic=${isPublic}`
     );
     setShowConfig(false);
     onConfigClose?.();
     onRequestClose();
-  }, [navigate, onRequestClose, isSpeedrun, numBoards, maxPlayers, isPublic, onConfigClose]);
+  }, [navigate, onRequestClose, gameVariant, numBoards, maxPlayers, isPublic, onConfigClose]);
 
   const handleJoin = useCallback(() => {
     // Validate game code format
@@ -143,8 +143,8 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                 width: '100%',
                 padding: '12px',
                 borderRadius: 6,
-                border: `1px solid ${codeError ? '#f06272' : '#3a3a3c'}`,
-                background: '#1a1a1b',
+                border: `1px solid ${codeError ? '#ED2939' : '#3A3A3C'}`,
+                background: '#372F41',
                 color: '#ffffff',
                 fontSize: 18,
                 textAlign: 'center',
@@ -230,8 +230,8 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                   width: '100%',
                   padding: '10px',
                   borderRadius: 6,
-                  border: '1px solid #3a3a3c',
-                  background: '#1a1a1b',
+                  border: '1px solid #3A3A3C',
+                  background: '#372F41',
                   color: '#ffffff',
                   fontSize: 14,
                   cursor: 'pointer',
@@ -245,20 +245,37 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
               </select>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <input
-                type="checkbox"
-                id="multiplayer-config-speedrun-host"
-                checked={isSpeedrun}
-                onChange={(e) => setIsSpeedrun(e.target.checked)}
-                style={{ cursor: 'pointer', width: '18px', height: '18px' }}
-              />
+            <div>
               <label
-                htmlFor="multiplayer-config-speedrun-host"
-                style={{ color: '#d7dadc', fontSize: 14, cursor: 'pointer', margin: 0 }}
+                htmlFor="multiplayer-config-variant-host"
+                style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  color: '#d7dadc',
+                  fontSize: 14,
+                }}
               >
-                Speedrun Mode (Unlimited guesses, timed)
+                Game Variant
               </label>
+              <select
+                id="multiplayer-config-variant-host"
+                value={gameVariant}
+                onChange={(e) => setGameVariant(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  borderRadius: 6,
+                  border: '1px solid #3A3A3C',
+                  background: '#372F41',
+                  color: '#ffffff',
+                  fontSize: 14,
+                  cursor: 'pointer',
+                }}
+              >
+                <option value="standard">Standard (6 guesses)</option>
+                <option value="speedrun">Speedrun (Unlimited guesses, timed)</option>
+                <option value="solutionhunt">Solution Hunt (See possible words)</option>
+              </select>
             </div>
 
             <div>
@@ -280,8 +297,8 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                   width: '100%',
                   padding: '10px',
                   borderRadius: 6,
-                  border: '1px solid #3a3a3c',
-                  background: '#1a1a1b',
+                  border: '1px solid #3A3A3C',
+                  background: '#372F41',
                   color: '#ffffff',
                   fontSize: 14,
                   cursor: 'pointer',

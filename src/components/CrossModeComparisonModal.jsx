@@ -140,7 +140,7 @@ export default function CrossModeComparisonModal({
         gridTemplateColumns: '200px repeat(4, 1fr)',
         gap: 12,
         padding: '12px 16px',
-        borderBottom: '1px solid #2b2b2e',
+        borderBottom: '1px solid #3A3A3C',
         alignItems: 'center',
       }}>
         <div style={{ 
@@ -160,12 +160,12 @@ export default function CrossModeComparisonModal({
               key={modeLabel}
               style={{
                 fontSize: 14,
-                color: value === null ? '#818384' : isBest ? '#6aaa64' : isWorst ? '#c9b458' : '#d7dadc',
+                color: value === null ? '#818384' : isBest ? '#50a339' : isWorst ? '#B1A04C' : '#d7dadc',
                 fontWeight: isBest || isWorst ? 'bold' : 'normal',
                 textAlign: 'center',
                 padding: '4px 8px',
                 borderRadius: 6,
-                background: isBest ? 'rgba(106, 170, 100, 0.15)' : isWorst ? 'rgba(201, 180, 88, 0.15)' : 'transparent',
+                background: isBest ? 'rgba(80, 163, 57, 0.15)' : isWorst ? 'rgba(177, 160, 76, 0.15)' : 'transparent',
               }}
             >
               {value === null ? 'N/A' : formatValue(value)}
@@ -190,13 +190,13 @@ export default function CrossModeComparisonModal({
         >
           <div
             style={{
-              backgroundColor: '#1a1a1b',
-              borderRadius: 20,
-              padding: '40px 32px',
-              maxWidth: 600,
-              width: '92vw',
-              boxShadow: '0 25px 70px rgba(0,0,0,0.9)',
-              border: '1px solid #2b2b2e',
+            backgroundColor: '#372F41',
+            borderRadius: 20,
+            padding: '40px 32px',
+            maxWidth: 600,
+            width: '92vw',
+            boxShadow: '0 25px 70px rgba(0,0,0,0.9)',
+            border: '1px solid #3A3A3C',
               textAlign: 'center',
             }}
           >
@@ -225,7 +225,7 @@ export default function CrossModeComparisonModal({
                   padding: '14px 32px',
                   borderRadius: 12,
                   border: 'none',
-                  background: 'linear-gradient(135deg, #6aaa64 0%, #5a9a54 100%)',
+                  background: 'linear-gradient(135deg, #e56b6f 0%, #d55a5e 100%)',
                   color: '#ffffff',
                   fontSize: 14,
                   fontWeight: '600',
@@ -250,7 +250,7 @@ export default function CrossModeComparisonModal({
                 style={{
                   padding: '14px 32px',
                   borderRadius: 12,
-                  border: '2px solid #3a3a3c',
+                  border: '2px solid #3A3A3C',
                   background: 'transparent',
                   color: '#d7dadc',
                   fontSize: 14,
@@ -265,7 +265,7 @@ export default function CrossModeComparisonModal({
                   e.currentTarget.style.color = '#ffffff';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#3a3a3c';
+                  e.currentTarget.style.borderColor = '#3A3A3C';
                   e.currentTarget.style.color = '#d7dadc';
                 }}
               >
@@ -296,7 +296,7 @@ export default function CrossModeComparisonModal({
       >
         <div
           style={{
-            backgroundColor: '#1a1a1b',
+            backgroundColor: '#372F41',
             borderRadius: 20,
             padding: '40px 32px',
             maxWidth: 1000,
@@ -304,7 +304,7 @@ export default function CrossModeComparisonModal({
             maxHeight: '90vh',
             overflowY: 'auto',
             boxShadow: '0 25px 70px rgba(0,0,0,0.9)',
-            border: '1px solid #2b2b2e',
+            border: '1px solid #3A3A3C',
           }}
         >
           <div style={{ marginBottom: 32, textAlign: 'center' }}>
@@ -362,10 +362,10 @@ export default function CrossModeComparisonModal({
                 gridTemplateColumns: '200px repeat(4, 1fr)',
                 gap: 12,
                 padding: '16px',
-                backgroundColor: '#2b2b2e',
+                backgroundColor: '#372F41',
                 borderRadius: 12,
                 marginBottom: 16,
-                border: '1px solid #3a3a3c',
+                border: '1px solid #3A3A3C',
               }}>
                 <div style={{ 
                   fontSize: 14, 
@@ -393,9 +393,9 @@ export default function CrossModeComparisonModal({
 
               {/* Comparison Table */}
               <div style={{
-                backgroundColor: '#18181a',
+                backgroundColor: '#372F41',
                 borderRadius: 12,
-                border: '1px solid #2b2b2e',
+                border: '1px solid #3A3A3C',
                 overflow: 'hidden',
                 marginBottom: 32,
               }}>
@@ -430,7 +430,7 @@ export default function CrossModeComparisonModal({
                 </div>
 
                 {/* Performance Metrics */}
-                <div style={{ padding: '16px 0', borderTop: '1px solid #2b2b2e' }}>
+                <div style={{ padding: '16px 0', borderTop: '1px solid #3A3A3C' }}>
                   <div style={{
                     fontSize: 16,
                     fontWeight: 'bold',
@@ -518,7 +518,7 @@ export default function CrossModeComparisonModal({
                 </div>
 
                 {/* Time-Based Stats (for speedrun modes) */}
-                <div style={{ padding: '16px 0', borderTop: '1px solid #2b2b2e' }}>
+                <div style={{ padding: '16px 0', borderTop: '1px solid #3A3A3C' }}>
                   <div style={{
                     fontSize: 16,
                     fontWeight: 'bold',
@@ -570,9 +570,9 @@ export default function CrossModeComparisonModal({
               {comparisonData && Object.values(comparisonData).some(s => s && s.solvedGames > 0) && (
                 <div style={{
                   padding: '20px',
-                  backgroundColor: '#2b2b2e',
+                  backgroundColor: '#372F41',
                   borderRadius: 12,
-                  border: '1px solid #3a3a3c',
+                  border: '1px solid #3A3A3C',
                   marginBottom: 24,
                 }}>
                   <h3 style={{
@@ -645,7 +645,7 @@ export default function CrossModeComparisonModal({
             justifyContent: 'center', 
             gap: 12,
             paddingTop: 24,
-            borderTop: '1px solid #2b2b2e',
+            borderTop: '1px solid #3A3A3C',
             marginTop: 32,
           }}>
             <button
@@ -653,7 +653,7 @@ export default function CrossModeComparisonModal({
               style={{
                 padding: '14px 32px',
                 borderRadius: 12,
-                border: '2px solid #3a3a3c',
+                border: '2px solid #3A3A3C',
                 background: 'transparent',
                 color: '#d7dadc',
                 fontSize: 14,
@@ -669,7 +669,7 @@ export default function CrossModeComparisonModal({
                 e.currentTarget.style.background = 'rgba(58, 58, 60, 0.3)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = '#3a3a3c';
+                e.currentTarget.style.borderColor = '#3A3A3C';
                 e.currentTarget.style.color = '#d7dadc';
                 e.currentTarget.style.background = 'transparent';
               }}

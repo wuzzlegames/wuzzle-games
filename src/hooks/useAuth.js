@@ -639,7 +639,8 @@ export function useAuth() {
   // This helper returns `true` when a new challenge is created, and `false`
   // when a challenge between the two users is already pending. In the
   // latter case no alert/error is thrown so callers can show a toast instead.
-  const sendChallenge = useCallback(async (friendId, friendName, gameCode, boards, speedrun) => {
+  // gameVariant can be 'standard' | 'speedrun' | 'solutionhunt' (string) or a boolean for legacy support
+  const sendChallenge = useCallback(async (friendId, friendName, gameCode, boards, gameVariant) => {
     try {
       setError(null);
       if (!auth.currentUser) throw new Error('No user signed in');
@@ -672,6 +673,15 @@ export function useAuth() {
         }
       }
 
+      // Normalize variant: support both legacy boolean and new string format
+      let variant = 'standard';
+      if (typeof gameVariant === 'string') {
+        variant = gameVariant;
+      } else if (gameVariant === true) {
+        // Legacy: boolean true means speedrun
+        variant = 'speedrun';
+      }
+
       const now = Date.now();
       const challengeData = {
         fromUserId: currentUserId,
@@ -680,7 +690,9 @@ export function useAuth() {
         toUserName: friendName,
         gameCode,
         boards,
-        speedrun: !!speedrun,
+        variant, // new: 'standard' | 'speedrun' | 'solutionhunt'
+        speedrun: variant === 'speedrun', // backward compatibility
+        solutionHunt: variant === 'solutionhunt',
         status: 'pending', // pending, accepted, cancelled
         createdAt: now,
       };

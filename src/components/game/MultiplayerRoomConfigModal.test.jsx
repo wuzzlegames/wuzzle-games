@@ -21,8 +21,8 @@ describe('MultiplayerRoomConfigModal', () => {
     boardOptions: [1, 2, 3, 4, 5],
     boardsDraft: 1,
     onChangeBoardsDraft: vi.fn(),
-    speedrunDraft: false,
-    onChangeSpeedrunDraft: vi.fn(),
+    variantDraft: 'standard',
+    onChangeVariantDraft: vi.fn(),
     onSave: vi.fn(),
     isHost: true,
   };
@@ -81,27 +81,27 @@ describe('MultiplayerRoomConfigModal', () => {
     expect(select).toBeDisabled();
   });
 
-  it('allows host to toggle speedrun mode', () => {
-    const onChangeSpeedrunDraft = vi.fn();
+  it('allows host to change game variant', () => {
+    const onChangeVariantDraft = vi.fn();
     render(
       <MultiplayerRoomConfigModal
         {...defaultProps}
-        onChangeSpeedrunDraft={onChangeSpeedrunDraft}
+        onChangeVariantDraft={onChangeVariantDraft}
       />
     );
 
-    const checkbox = screen.getByLabelText(/Speedrun Mode/i);
-    expect(checkbox).not.toBeDisabled();
+    const select = screen.getByLabelText(/Game Variant/i);
+    expect(select).not.toBeDisabled();
 
-    fireEvent.click(checkbox);
-    expect(onChangeSpeedrunDraft).toHaveBeenCalledWith(true);
+    fireEvent.change(select, { target: { value: 'speedrun' } });
+    expect(onChangeVariantDraft).toHaveBeenCalledWith('speedrun');
   });
 
-  it('disables speedrun checkbox for non-host', () => {
+  it('disables game variant selector for non-host', () => {
     render(<MultiplayerRoomConfigModal {...defaultProps} isHost={false} />);
 
-    const checkbox = screen.getByLabelText(/Speedrun Mode/i);
-    expect(checkbox).toBeDisabled();
+    const select = screen.getByLabelText(/Game Variant/i);
+    expect(select).toBeDisabled();
   });
 
   it('shows Save button for host', () => {
@@ -137,14 +137,14 @@ describe('MultiplayerRoomConfigModal', () => {
       <MultiplayerRoomConfigModal
         {...defaultProps}
         boardsDraft={5}
-        speedrunDraft={true}
+        variantDraft="speedrun"
       />
     );
 
-    const select = screen.getByLabelText(/Number of Boards/i);
-    expect(select.value).toBe('5');
+    const boardsSelect = screen.getByLabelText(/Number of Boards/i);
+    expect(boardsSelect.value).toBe('5');
 
-    const checkbox = screen.getByLabelText(/Speedrun Mode/i);
-    expect(checkbox.checked).toBe(true);
+    const variantSelect = screen.getByLabelText(/Game Variant/i);
+    expect(variantSelect.value).toBe('speedrun');
   });
 });

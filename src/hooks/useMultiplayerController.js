@@ -31,7 +31,7 @@ export function useMultiplayerController({
   isMultiplayer,
   isHost,
   gameCode,
-  speedrunEnabled,
+  gameVariant, // 'standard' | 'speedrun' | 'solutionhunt'
   boardsParam,
   numBoards,
   maxPlayersParam,
@@ -81,7 +81,7 @@ export function useMultiplayerController({
   onGameJoined,
 }) {
   // Internal next-round configuration selected from the end-of-game UI.
-  // When null, rematches reuse the previous board count & speedrun flag.
+  // When null, rematches reuse the previous board count & variant.
   const [multiplayerNextConfig, setMultiplayerNextConfig] = useState(null);
 
   // Guard to ensure we only create a new room once per controller instance,
@@ -92,7 +92,7 @@ export function useMultiplayerController({
   // Host-only multiplayer configuration modal state.
   const [isMultiplayerConfigModalOpen, setIsMultiplayerConfigModalOpen] = useState(false);
   const [multiplayerConfigBoardsDraft, setMultiplayerConfigBoardsDraft] = useState(1);
-  const [multiplayerConfigSpeedrunDraft, setMultiplayerConfigSpeedrunDraft] = useState(false);
+  const [multiplayerConfigVariantDraft, setMultiplayerConfigVariantDraft] = useState('standard');
 
   // Sync modal draft values when Firebase config changes (so guests see host's updates)
   useEffect(() => {
@@ -104,8 +104,11 @@ export function useMultiplayerController({
       if (Number.isFinite(firebaseConfig.numBoards)) {
         setMultiplayerConfigBoardsDraft(firebaseConfig.numBoards);
       }
-      if (typeof firebaseConfig.speedrun === 'boolean') {
-        setMultiplayerConfigSpeedrunDraft(firebaseConfig.speedrun);
+      if (firebaseConfig.variant) {
+        setMultiplayerConfigVariantDraft(firebaseConfig.variant);
+      } else if (typeof firebaseConfig.speedrun === 'boolean') {
+        // Backward compatibility: convert old speedrun boolean to variant
+        setMultiplayerConfigVariantDraft(firebaseConfig.speedrun ? 'speedrun' : 'standard');
       }
     }
   }, [
@@ -246,7 +249,9 @@ export function useMultiplayerController({
           }
 
           const result = await multiplayerGame.createGame({
-            speedrun: speedrunEnabled,
+            variant: gameVariant,
+            speedrun: gameVariant === 'speedrun',
+            solutionHunt: gameVariant === 'solutionhunt',
             maxPlayers: maxPlayersForRoom,
             isPublic: isPublicRoom,
             boards: boardsForRoom,
@@ -258,7 +263,7 @@ export function useMultiplayerController({
           const boardsQuery = boardsParam ? `&boards=${boardsParam}` : '';
           const roomQuery = `&maxPlayers=${maxPlayersForRoom}&isPublic=${isPublicRoom}`;
           navigate(
-            `/game?mode=multiplayer&code=${code}&host=true&speedrun=${speedrunEnabled}${boardsQuery}${roomQuery}`,
+            `/game?mode=multiplayer&code=${code}&host=true&variant=${gameVariant}${boardsQuery}${roomQuery}`,
             { replace: true }
           );
           setIsLoading(false);
@@ -319,7 +324,7 @@ export function useMultiplayerController({
     gameCode,
     authUser,
     isVerifiedUser,
-    speedrunEnabled,
+    gameVariant,
     boardsParam,
     maxPlayersParam,
     isPublicParam,
@@ -681,12 +686,23 @@ export function useMultiplayerController({
         : gs.solution
         ? 1
         : multiBoardCount);
-    const defaultSpeedrun = (effectiveConfig && typeof effectiveConfig.speedrun === 'boolean')
-      ? effectiveConfig.speedrun
-      : !!gs.speedrun;
+    // Determine default variant from config or game state
+    let defaultVariant = 'standard';
+    if (effectiveConfig && effectiveConfig.variant) {
+      defaultVariant = effectiveConfig.variant;
+    } else if (effectiveConfig && typeof effectiveConfig.speedrun === 'boolean') {
+      // Backward compatibility
+      defaultVariant = effectiveConfig.speedrun ? 'speedrun' : 'standard';
+    } else if (gs.variant) {
+      defaultVariant = gs.variant;
+    } else if (gs.solutionHunt) {
+      defaultVariant = 'solutionhunt';
+    } else if (gs.speedrun) {
+      defaultVariant = 'speedrun';
+    }
 
     setMultiplayerConfigBoardsDraft(defaultBoards);
-    setMultiplayerConfigSpeedrunDraft(defaultSpeedrun);
+    setMultiplayerConfigVariantDraft(defaultVariant);
     setIsMultiplayerConfigModalOpen(true);
   }, [
     isMultiplayer,
@@ -703,7 +719,9 @@ export function useMultiplayerController({
     const clampedBoards = Math.max(1, Math.min(upper, multiplayerConfigBoardsDraft));
     const config = {
       numBoards: clampedBoards,
-      speedrun: !!multiplayerConfigSpeedrunDraft,
+      variant: multiplayerConfigVariantDraft,
+      speedrun: multiplayerConfigVariantDraft === 'speedrun',
+      solutionHunt: multiplayerConfigVariantDraft === 'solutionhunt',
     };
     
     // Save to local state for immediate UI updates
@@ -719,7 +737,8 @@ export function useMultiplayerController({
     }
     
     setIsMultiplayerConfigModalOpen(false);
-    const modeLabel = multiplayerConfigSpeedrunDraft ? 'speedrun' : 'standard';
+    const variantLabels = { standard: 'standard', speedrun: 'speedrun', solutionhunt: 'solution hunt' };
+    const modeLabel = variantLabels[multiplayerConfigVariantDraft] || 'standard';
     setTimedMessage(
       `Next rematch will use ${clampedBoards} board${clampedBoards > 1 ? 's' : ''} (${modeLabel} mode).`,
       MESSAGE_TIMEOUT_MS
@@ -728,7 +747,7 @@ export function useMultiplayerController({
     gameCode,
     maxMultiplayerBoards,
     multiplayerConfigBoardsDraft,
-    multiplayerConfigSpeedrunDraft,
+    multiplayerConfigVariantDraft,
     multiplayerGame,
     setTimedMessage,
   ]);
@@ -754,15 +773,18 @@ export function useMultiplayerController({
       const effectiveConfig = firebaseConfig || localConfig;
       
       let boardsForRematch = 1;
-      let speedrunForRematch = false;
+      let variantForRematch = 'standard';
       
       if (effectiveConfig) {
         if (Number.isFinite(effectiveConfig.numBoards)) {
           const upper = Number.isFinite(maxMultiplayerBoards) ? maxMultiplayerBoards : 32;
           boardsForRematch = Math.max(1, Math.min(upper, effectiveConfig.numBoards));
         }
-        if (typeof effectiveConfig.speedrun === 'boolean') {
-          speedrunForRematch = effectiveConfig.speedrun;
+        if (effectiveConfig.variant) {
+          variantForRematch = effectiveConfig.variant;
+        } else if (typeof effectiveConfig.speedrun === 'boolean') {
+          // Backward compatibility
+          variantForRematch = effectiveConfig.speedrun ? 'speedrun' : 'standard';
         }
       } else {
         // Use current game settings
@@ -772,7 +794,13 @@ export function useMultiplayerController({
           ? [gameState.solution]
           : [];
         boardsForRematch = Math.max(previousSolutions.length || 1, 1);
-        speedrunForRematch = !!gameState.speedrun;
+        if (gameState.variant) {
+          variantForRematch = gameState.variant;
+        } else if (gameState.solutionHunt) {
+          variantForRematch = 'solutionhunt';
+        } else if (gameState.speedrun) {
+          variantForRematch = 'speedrun';
+        }
       }
       
       // Generate new solutions
@@ -784,7 +812,11 @@ export function useMultiplayerController({
       });
       
       // Start the new game immediately
-      await multiplayerGame.startGame(gameCode, solutions, { speedrun: speedrunForRematch });
+      await multiplayerGame.startGame(gameCode, solutions, {
+        variant: variantForRematch,
+        speedrun: variantForRematch === 'speedrun',
+        solutionHunt: variantForRematch === 'solutionhunt',
+      });
       
       // Clear the config for next time (both local and Firebase)
       setMultiplayerNextConfig(null);
@@ -826,10 +858,10 @@ export function useMultiplayerController({
     hasPlayerSolvedAllMultiplayerBoards,
     isMultiplayerConfigModalOpen,
     multiplayerConfigBoardsDraft,
-    multiplayerConfigSpeedrunDraft,
+    multiplayerConfigVariantDraft,
     setIsMultiplayerConfigModalOpen,
     setMultiplayerConfigBoardsDraft,
-    setMultiplayerConfigSpeedrunDraft,
+    setMultiplayerConfigVariantDraft,
     handleMultiplayerReady,
     handleMultiplayerStart,
     handleCancelHostedChallenge,
@@ -842,10 +874,10 @@ export function useMultiplayerController({
     hasPlayerSolvedAllMultiplayerBoards,
     isMultiplayerConfigModalOpen,
     multiplayerConfigBoardsDraft,
-    multiplayerConfigSpeedrunDraft,
+    multiplayerConfigVariantDraft,
     setIsMultiplayerConfigModalOpen,
     setMultiplayerConfigBoardsDraft,
-    setMultiplayerConfigSpeedrunDraft,
+    setMultiplayerConfigVariantDraft,
     handleMultiplayerReady,
     handleMultiplayerStart,
     handleCancelHostedChallenge,

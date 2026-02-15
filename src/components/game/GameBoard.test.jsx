@@ -130,7 +130,7 @@ describe('GameBoard', () => {
     );
 
     const containerDiv = container.firstChild;
-    expect(containerDiv).toHaveStyle({ border: '2px solid #facc15' });
+    expect(containerDiv).toHaveStyle({ border: '2px solid #B1A04C' });
 
     fireEvent.click(containerDiv);
     expect(onToggleSelect).toHaveBeenCalledTimes(1);

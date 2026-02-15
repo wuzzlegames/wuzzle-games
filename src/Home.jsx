@@ -143,6 +143,10 @@ export default function Home({
     saveJSON("mw:dailyBoards", dailyBoards);
     navigate(`/game/daily/${dailyBoards}/speedrun`);
   }, [dailyBoards, navigate]);
+
+  const handleSolutionHunt = useCallback(() => {
+    navigate('/game/solutionhunt');
+  }, [navigate]);
   
   const handleMarathonStandard = useCallback(() => {
     navigate(`/game/marathon`);
@@ -299,6 +303,16 @@ export default function Home({
                 variant="green"
                 modeVariant="daily"
                 titleRight={dailyTitleRight}
+              />
+
+              <ModeRow
+                title="Solution Hunt"
+                desc="See all possible remaining words as you guess. Great for learning."
+                buttonText="Play Solution Hunt"
+                onClick={handleSolutionHunt}
+                variant="green"
+                modeVariant="daily"
+                titleRight="1 board"
               />
             </div>
           </section>

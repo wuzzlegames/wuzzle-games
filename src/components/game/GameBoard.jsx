@@ -35,10 +35,10 @@ function GameBoard({
       style={{
         borderRadius: 8,
         border: isSelected
-          ? "2px solid #facc15"
-          : "1px solid #3a3a3c",
+          ? "2px solid #B1A04C"
+          : "1px solid #3A3A3C",
         padding: 8,
-        background: "#1a1a1b",
+        background: "#372F41",
         cursor: "pointer",
         // When selected, use a yellow glow and do not stack a separate green effect
         boxShadow: isSelected ? "0 0 0 1px rgba(250,204,21,0.53)" : "none",

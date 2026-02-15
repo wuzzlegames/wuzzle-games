@@ -1,0 +1,98 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth.uid === $uid",
+        ".write": "auth.uid === $uid",
+
+        "profile": {
+          ".read": "auth != null",
+          ".write": "auth.uid === $uid"
+        },
+
+        "friendRequests": {
+          ".read": "auth.uid === $uid",
+          ".write": "auth !== null"
+        },
+        "friends": {
+          "$friendUid": {
+            ".read": "auth.uid === $uid",
+            ".write": "auth != null && (auth.uid === $uid || auth.uid === $friendUid)"
+          }
+        },
+        "challenges": {
+          "$challengeId": {
+            ".read": "auth.uid === $uid",
+            ".write": "auth != null && (auth.uid === $uid || auth.uid === newData.child('fromUserId').val() || auth.uid === data.child('fromUserId').val())"
+          }
+        },
+        "sentChallenges": {
+          "$challengeId": {
+            ".read": "auth.uid === $uid",
+            ".write": "auth.uid === $uid || auth.uid === data.child('toUserId').val()"
+          }
+        },
+        "notificationSeenAt": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth.uid === $uid"
+        }
+      }
+    },
+
+    "usernames": {
+      "$usernameKey": {
+        ".read": "auth != null",
+        ".write": "auth != null && (!data.exists() || data.child('uid').val() === auth.uid)"
+      }
+    },
+
+    "emails": {
+      "$emailKey": {
+        ".read": "auth != null",
+        ".write": "auth != null && (!data.exists() || data.child('uid').val() === auth.uid)"
+      }
+    },
+
+    "multiplayer": {
+      ".read": "auth != null",
+      "$gameCode": {
+        ".read": "auth != null",
+        ".write": "auth != null && (
+          !data.exists() || 
+          data.child('hostId').val() === auth.uid || 
+          data.child('players').child(auth.uid).exists() ||
+          (data.child('status').val() === 'waiting' && 
+           newData.child('players').child(auth.uid).exists() &&
+           (!data.child('players').exists() || !data.child('players').child(auth.uid).exists()))
+        )",
+        "players": {
+          "$playerId": {
+            ".write": "auth != null && (
+              $playerId === auth.uid ||
+              root.child('multiplayer').child($gameCode).child('hostId').val() === auth.uid
+            )"
+          }
+        },
+        "chat": {
+          ".read": "auth != null",
+          ".write": "auth != null && (
+            root.child('multiplayer').child($gameCode).child('hostId').val() === auth.uid || 
+            root.child('multiplayer').child($gameCode).child('players').child(auth.uid).exists()
+          )"
+        }
+      }
+    },
+
+    "leaderboard": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+
+    "comments": {
+      "$threadId": {
+        ".read": true,
+        ".write": true
+      }
+    }
+  }
+}

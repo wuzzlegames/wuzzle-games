@@ -93,17 +93,17 @@ export function mergeStatus(oldStatus, newStatus) {
 }
 
 export function colorForStatus(status) {
-  if (status === "green") return "#6aaa64";
-  if (status === "yellow") return "#c9b458";
-  if (status === "grey") return "#3a3a3c";
-  return "#818384";
+  if (status === "green") return "#50a339";
+  if (status === "yellow") return "#B1A04C";
+  if (status === "grey") return "#3A3A3C";
+  return "#3A3A3C";
 }
 
 export function colorForMiniCell(status) {
-  if (status === "green") return "#6aaa64";
-  if (status === "yellow") return "#c9b458";
-  if (status === "grey") return "#3a3a3c";
-  return "#121213";
+  if (status === "green") return "#50a339";
+  if (status === "yellow") return "#B1A04C";
+  if (status === "grey") return "#3A3A3C";
+  return "#212121";
 }
 
 export function buildLetterMapFromGuesses(guesses) {

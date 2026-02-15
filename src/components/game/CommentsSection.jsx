@@ -197,8 +197,8 @@ export default function CommentsSection({ threadId }) {
               width: "100%",
               padding: "8px 10px",
               borderRadius: 8,
-              border: "1px solid #3a3a3c",
-              backgroundColor: "#121213",
+              border: "1px solid #3A3A3C",
+              backgroundColor: "#212121",
               color: "#ffffff",
               fontSize: 14,
             }}
@@ -221,8 +221,8 @@ export default function CommentsSection({ threadId }) {
               width: "100%",
               padding: "8px 10px",
               borderRadius: 8,
-              border: "1px solid #3a3a3c",
-              backgroundColor: "#121213",
+              border: "1px solid #3A3A3C",
+              backgroundColor: "#212121",
               color: "#ffffff",
               fontSize: 14,
               resize: "vertical",
@@ -245,8 +245,8 @@ export default function CommentsSection({ threadId }) {
             border: "none",
             backgroundColor:
               isSubmitting || !comment.trim() || !username.trim()
-                ? "#3a3a3c"
-                : "#6aaa64",
+                ? "#3A3A3C"
+                : "#e56b6f",
             color: "#ffffff",
             fontSize: 14,
             fontWeight: "bold",
@@ -321,8 +321,8 @@ export default function CommentsSection({ threadId }) {
                   style={{
                     padding: "8px 10px",
                     borderRadius: 10,
-                    backgroundColor: "#1f1f20",
-                    border: "1px solid #2f2f31",
+                    backgroundColor: "#372F41",
+                    border: "1px solid #3A3A3C",
                   }}
                 >
                   <div
@@ -387,10 +387,10 @@ export default function CommentsSection({ threadId }) {
                             borderRadius: 999,
                             padding: "2px 8px",
                             backgroundColor: isMine
-                              ? "#4b5563"
+                              ? "#6d597a"
                               : count > 0
-                              ? "#27272a"
-                              : "#18181b",
+                              ? "#372F41"
+                              : "#372F41",
                             color: "#e5e7eb",
                             fontSize: 12,
                             fontWeight: isMine ? "bold" : "normal",

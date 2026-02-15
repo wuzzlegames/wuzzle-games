@@ -71,10 +71,10 @@ export default function AdvancedStatsModal({
         style={{
           padding: '16px 20px',
           borderRadius: 12,
-          border: locked ? '2px solid #3a3a3c' : '2px solid #2b2b2e',
+          border: locked ? '2px solid #3A3A3C' : '2px solid #3A3A3C',
           background: locked 
-            ? 'linear-gradient(135deg, #18181a 0%, #1a1a1b 100%)' 
-            : 'linear-gradient(135deg, #1a1a1b 0%, #18181a 100%)',
+            ? 'linear-gradient(135deg, #372F41 0%, #372F41 100%)' 
+            : 'linear-gradient(135deg, #372F41 0%, #372F41 100%)',
           display: 'flex',
           flexDirection: 'column',
           gap: 4,
@@ -91,7 +91,7 @@ export default function AdvancedStatsModal({
         }}
         onMouseLeave={(e) => {
           if (locked && onClick) {
-            e.currentTarget.style.borderColor = '#3a3a3c';
+            e.currentTarget.style.borderColor = '#3A3A3C';
             e.currentTarget.style.opacity = 0.6;
           }
         }}
@@ -128,7 +128,7 @@ export default function AdvancedStatsModal({
       >
         <div
           style={{
-            backgroundColor: '#1a1a1b',
+            backgroundColor: '#372F41',
             borderRadius: 20,
             padding: '40px 32px',
             maxWidth: 800,
@@ -136,7 +136,7 @@ export default function AdvancedStatsModal({
             maxHeight: '85vh',
             overflowY: 'auto',
             boxShadow: '0 25px 70px rgba(0,0,0,0.9)',
-            border: '1px solid #2b2b2e',
+            border: '1px solid #3A3A3C',
           }}
         >
           <div style={{ marginBottom: 32, textAlign: 'center' }}>
@@ -195,7 +195,7 @@ export default function AdvancedStatsModal({
                   fontWeight: 'bold', 
                   color: '#ffffff', 
                   marginBottom: 16,
-                  borderBottom: '1px solid #2b2b2e',
+                  borderBottom: '1px solid #3A3A3C',
                   paddingBottom: 8,
                 }}>
                   Guess Distribution
@@ -234,7 +234,7 @@ export default function AdvancedStatsModal({
                         }}>
                           <div style={{
                             height: `${barHeight}%`,
-                            backgroundColor: '#6aaa64',
+                          backgroundColor: '#50a339',
                             borderRadius: '4px 4px 0 0',
                             minHeight: barHeight > 0 ? '4px' : '0',
                             transition: 'all 0.3s ease',
@@ -259,7 +259,7 @@ export default function AdvancedStatsModal({
                   fontWeight: 'bold', 
                   color: '#ffffff', 
                   marginBottom: 16,
-                  borderBottom: '1px solid #2b2b2e',
+                  borderBottom: '1px solid #3A3A3C',
                   paddingBottom: 8,
                 }}>
                   Performance Metrics
@@ -346,7 +346,7 @@ export default function AdvancedStatsModal({
                     fontWeight: 'bold', 
                     color: '#ffffff', 
                     marginBottom: 16,
-                    borderBottom: '1px solid #2b2b2e',
+                    borderBottom: '1px solid #3A3A3C',
                     paddingBottom: 8,
                   }}>
                     Time-Based Statistics
@@ -412,7 +412,7 @@ export default function AdvancedStatsModal({
             justifyContent: 'center', 
             gap: 12,
             paddingTop: 24,
-            borderTop: '1px solid #2b2b2e',
+            borderTop: '1px solid #3A3A3C',
             marginTop: 32,
           }}>
             <button
@@ -420,7 +420,7 @@ export default function AdvancedStatsModal({
               style={{
                 padding: '14px 32px',
                 borderRadius: 12,
-                border: '2px solid #3a3a3c',
+                border: '2px solid #3A3A3C',
                 background: 'transparent',
                 color: '#d7dadc',
                 fontSize: 14,

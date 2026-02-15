@@ -6,11 +6,11 @@ import "./HowToPlay.css";
 const FeedbackModal = lazy(() => import("./components/FeedbackModal"));
 
 // Color constants matching the game
-const GREEN = "#6aaa64";
-const YELLOW = "#c9b458";
-const GRAY = "#3a3a3c";
-const DARK_BG = "#1a1a1b";
-const BORDER = "#3a3a3c";
+const GREEN = "#50a339";
+const YELLOW = "#B1A04C";
+const GRAY = "#3A3A3C";
+const DARK_BG = "#372F41";
+const BORDER = "#3A3A3C";
 
 // Example: Solution is CLOUD, guess is DRONE
 // O is in correct position (green), D is in word but wrong position (yellow), R/N/E are not in word (gray)

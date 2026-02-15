@@ -1,6 +1,6 @@
 .leaderboardRoot {
   min-height: 100vh;
-  background-color: #121213;
+  background-color: #212121;
   color: #ffffff;
   padding: 20px;
   max-width: 100vw;
@@ -24,7 +24,7 @@
   align-items: center;
   margin-bottom: 32px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #3a3a3c;
+  border-bottom: 1px solid #3A3A3C;
 }
 
 .leaderboardTitle {
@@ -55,26 +55,26 @@
 
 .filterSelect {
   padding: 8px 12px;
-  border: 1px solid #3a3a3c;
+  border: 1px solid #3A3A3C;
   border-radius: 6px;
-  background-color: #1a1a1b;
+  background-color: #372F41;
   color: #ffffff;
   font-size: 14px;
   cursor: pointer;
 }
 
 .filterSelect:hover {
-  border-color: #818384;
+  border-color: #6d597a;
 }
 
 .filterSelect:focus {
   outline: none;
-  border-color: #6aaa64;
+  border-color: #50a339;
 }
 
 .leaderboardError {
   padding: 16px;
-  background-color: #f06272;
+  background-color: #ED2939;
   color: #ffffff;
   border-radius: 8px;
   margin-bottom: 24px;
@@ -96,9 +96,9 @@
 }
 
 .leaderboardTable {
-  background-color: #1a1a1b;
+  background-color: #372F41;
   border-radius: 12px;
-  border: 1px solid #3a3a3c;
+  border: 1px solid #3A3A3C;
   width: 100%;
   overflow: hidden;
 }
@@ -108,7 +108,7 @@
   grid-template-columns: 60px 1fr 80px 120px;
   gap: 16px;
   padding: 16px 20px;
-  border-bottom: 1px solid #3a3a3c;
+  border-bottom: 1px solid #3A3A3C;
   align-items: center;
 }
 
@@ -117,26 +117,26 @@
 }
 
 .leaderboardRow:hover {
-  background-color: #242426;
+  background-color: #6d597a;
 }
 
 .leaderboardRowCurrent {
-  background-color: rgba(106, 170, 100, 0.1);
-  border-left: 3px solid #6aaa64;
+  background-color: rgba(80, 163, 57, 0.1);
+  border-left: 3px solid #50a339;
 }
 
 .leaderboardHeaderRow {
-  background-color: #242426;
+  background-color: #355070;
   font-weight: bold;
   color: #d7dadc;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-bottom: 2px solid #3a3a3c;
+  border-bottom: 2px solid #3A3A3C;
 }
 
 .leaderboardHeaderRow:hover {
-  background-color: #242426;
+  background-color: #355070;
 }
 
 .leaderboardRank {
@@ -154,7 +154,7 @@
 }
 
 .leaderboardYou {
-  color: #6aaa64;
+  color: #50a339;
   font-size: 12px;
   font-weight: normal;
 }

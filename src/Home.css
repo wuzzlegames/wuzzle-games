@@ -1,6 +1,6 @@
 .homeRoot {
   min-height: 100vh;
-  background: #121213;
+  background: #212121;
   color: #ffffff;
   padding: 20px;
   max-width: 100vw;
@@ -19,7 +19,7 @@
   gap: 20px;
   margin-bottom: 24px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #2b2b2e;
+  border-bottom: 1px solid #3A3A3C;
 }
 
 .homeTitle {
@@ -65,9 +65,9 @@
 }
 
 .panel {
-  border: 1px solid #2b2b2e;
+  border: 1px solid #3A3A3C;
   border-radius: 14px;
-  background: #18181b;
+  background: #372F41;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
   padding: 20px;
   margin-bottom: 18px;
@@ -117,16 +117,16 @@
 }
 
 .select {
-  background: #121213;
+  background: #212121;
   color: #ffffff;
-  border: 1px solid #3a3a3c;
+  border: 1px solid #3A3A3C;
   border-radius: 10px;
   padding: 10px 12px;
   outline: none;
 }
 
 .select:focus {
-  border-color: #565758;
+  border-color: #6d597a;
 }
 
 /* Mode rows */
@@ -137,10 +137,10 @@
   justify-content: center;
   gap: 8px;
 
-  border: 1px solid #2b2b2e;
+  border: 1px solid #3A3A3C;
   border-radius: 12px;
   padding: 16px 14px;
-  background: #18181b;
+  background: #372F41;
 
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
@@ -148,36 +148,36 @@
 
 .modeRow--daily {
   /* Daily modes: soft green accent + subtle glow */
-  border-color: #22c55e;
-  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.3);
-  background: linear-gradient(0deg, rgba(34, 197, 94, 0.06), #18181b);
+  border-color: #50a339;
+  box-shadow: 0 0 0 1px rgba(80, 163, 57, 0.3);
+  background: linear-gradient(0deg, rgba(80, 163, 57, 0.06), #372F41);
 }
 
 .modeRow--marathon {
   /* Marathon modes: amber/yellow accent + subtle glow */
-  border-color: #eab308;
-  box-shadow: 0 0 0 1px rgba(234, 179, 8, 0.32);
-  background: linear-gradient(0deg, rgba(234, 179, 8, 0.06), #18181b);
+  border-color: #B1A04C;
+  box-shadow: 0 0 0 1px rgba(177, 160, 76, 0.32);
+  background: linear-gradient(0deg, rgba(177, 160, 76, 0.06), #372F41);
 }
 
 .modeRow--pvp {
   /* Multiplayer: warm red accent + subtle glow */
-  border-color: #ef4444;
-  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.32);
-  background: linear-gradient(0deg, rgba(239, 68, 68, 0.06), #18181b);
+  border-color: #ED2939;
+  box-shadow: 0 0 0 1px rgba(237, 41, 57, 0.32);
+  background: linear-gradient(0deg, rgba(237, 41, 57, 0.06), #372F41);
 }
 
 .modeRow:hover {
-  background: #1f1f23;
+  background: #6d597a;
 }
 
 .modeRow:active {
-  background: #18181b;
+  background: #372F41;
 }
 
 .modeRow:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.4);
+  box-shadow: 0 0 0 2px rgba(177, 160, 76, 0.4);
 }
 
 .modeRowText {
@@ -204,21 +204,21 @@
 }
 
 .modeRow--green .modeRowCtaLabel {
-  background: #6aaa64;
+  background: #e56b6f;
   color: #ffffff;
 }
 
 .modeRow--green:hover .modeRowCtaLabel {
-  background: #5a9a54;
+  background: #eaac8b;
 }
 
 .modeRow--gold .modeRowCtaLabel {
-  background: #c9b458;
-  color: #121213;
+  background: #B1A04C;
+  color: #212121;
 }
 
 .modeRow--gold:hover .modeRowCtaLabel {
-  background: #d4c267;
+  background: #eaac8b;
 }
 
 .modeRowTitle {
@@ -237,8 +237,8 @@
   font-size: 12px;
   font-weight: 600;
   color: #e5e7eb;
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid #3A3A3C;
+  background: rgba(53, 80, 112, 0.9);
   padding: 2px 10px;
   border-radius: 999px;
 }
@@ -282,7 +282,7 @@
   justify-content: space-between;
   gap: 10px;
 
-  border-top: 1px solid #2b2b2e;
+  border-top: 1px solid #3A3A3C;
   padding-top: 12px;
 }
 
@@ -298,11 +298,11 @@
 
 .homeIntroDetails {
   border-radius: 16px;
-  border: 1px solid #2b2b2e;
+  border: 1px solid #3A3A3C;
   padding: 14px 16px 16px;
   background:
-    linear-gradient(0deg, rgba(34, 197, 94, 0.04), rgba(234, 179, 8, 0.03)),
-    #18181b;
+    linear-gradient(0deg, rgba(80, 163, 57, 0.04), rgba(177, 160, 76, 0.03)),
+    #372F41;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
   color: #e5e7eb;
 }
@@ -326,7 +326,7 @@
 }
 
 .homeLink {
-  color: #22c55e;
+  color: #50a339;
   font-weight: 500;
   text-decoration: none;
 }
@@ -358,35 +358,35 @@
 }
 
 .homeBtnGreen {
-  background: #6aaa64;
+  background: #e56b6f;
   color: #ffffff;
   transition: all 0.2s ease;
 }
 
 .homeBtnGreen:hover {
-  background: #5a9a54;
+  background: #eaac8b;
 }
 
 .homeBtnGold {
-  background: #c9b458;
-  color: #121213;
+  background: #B1A04C;
+  color: #212121;
   transition: all 0.2s ease;
 }
 
 .homeBtnGold:hover {
-  background: #d4c267;
+  background: #eaac8b;
 }
 
 .homeBtnOutline {
-  border: 1px solid #3a3a3c;
-  background: transparent;
+  border: 1px solid #3A3A3C;
+  background: #e56b6f;
   color: #ffffff;
   transition: all 0.2s ease;
 }
 
 .homeBtnOutline:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: #565758;
+  background: #eaac8b;
+  border-color: #eaac8b;
 }
 
 .homeBtn:active {
@@ -395,7 +395,7 @@
 
 .homeBtn:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.25);
+  box-shadow: 0 0 0 3px rgba(177, 160, 76, 0.25);
 }
 
 /* Larger buttons for modals and primary actions */
@@ -407,13 +407,13 @@
 
 /* Neutral gray button using the same typography */
 .homeBtnNeutral {
-  background: #3a3a3c;
+  background: #355070;
   color: #ffffff;
   transition: all 0.2s ease;
 }
 
 .homeBtnNeutral:hover {
-  background: #565758;
+  background: #6d597a;
 }
 
 @media (max-width: 768px) {

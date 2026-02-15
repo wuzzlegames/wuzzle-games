@@ -90,10 +90,10 @@ describe('OpponentBoardView', () => {
     const tiles = container.querySelectorAll('div[style*="width: 32px"]');
 
     // First tile: color=2 -> green
-    expect(tiles[0].style.background).toBe('rgb(106, 170, 100)');
+    expect(tiles[0].style.background).toBe('rgb(80, 163, 57)');
 
     // Second tile: color=1 -> yellow-ish
-    expect(tiles[1].style.background).toBe('rgb(201, 180, 88)');
+    expect(tiles[1].style.background).toBe('rgb(177, 160, 76)');
 
     // Third tile: color=0 -> gray
     expect(tiles[2].style.background).toBe('rgb(58, 58, 60)');

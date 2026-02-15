@@ -72,8 +72,8 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
               position: "absolute",
               top: "calc(100% + 4px)",
               right: 0,
-              background: "#2b2b2e",
-              border: "1px solid #3a3a3c",
+              background: "#372F41",
+              border: "1px solid #3A3A3C",
               borderRadius: "8px",
               minWidth: "140px",
               zIndex: 1000,
@@ -97,9 +97,9 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3a3a3c"
+                borderBottom: "1px solid #3A3A3C"
               }}
-              onMouseEnter={(e) => e.target.style.background = "rgba(255, 255, 255, 0.1)"}
+              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               Home
@@ -121,9 +121,9 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3a3a3c"
+                borderBottom: "1px solid #3A3A3C"
               }}
-              onMouseEnter={(e) => e.target.style.background = "rgba(255, 255, 255, 0.1)"}
+              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               How to Play
@@ -149,9 +149,9 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3a3a3c"
+                borderBottom: "1px solid #3A3A3C"
               }}
-              onMouseEnter={(e) => e.target.style.background = "rgba(255, 255, 255, 0.1)"}
+              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               Profile
@@ -182,12 +182,12 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3a3a3c",
+                borderBottom: "1px solid #3A3A3C",
                 position: "relative",
                 display: "flex",
                 alignItems: "center"
               }}
-              onMouseEnter={(e) => e.target.style.background = "rgba(255, 255, 255, 0.1)"}
+              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               Friends
@@ -197,7 +197,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                   width: "20px",
                   height: "20px",
                   borderRadius: "50%",
-                  background: "#ef5350",
+                  background: "#ED2939",
                   color: "#ffffff",
                   fontSize: "11px",
                   fontWeight: "bold",
@@ -235,12 +235,12 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3a3a3c",
+                borderBottom: "1px solid #3A3A3C",
                 position: "relative",
                 display: "flex",
                 alignItems: "center",
               }}
-              onMouseEnter={(e) => (e.target.style.background = "rgba(255, 255, 255, 0.1)")}
+              onMouseEnter={(e) => (e.target.style.background = "#6d597a")}
               onMouseLeave={(e) => (e.target.style.background = "transparent")}
             >
               Challenges
@@ -251,8 +251,8 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                     width: "20px",
                     height: "20px",
                     borderRadius: "50%",
-                    background: "#c9b458",
-                    color: "#121213",
+                    background: "#B1A04C",
+                    color: "#212121",
                     fontSize: "11px",
                     fontWeight: "bold",
                     display: "flex",
@@ -285,9 +285,9 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3a3a3c",
+                borderBottom: "1px solid #3A3A3C",
               }}
-              onMouseEnter={(e) => (e.target.style.background = "rgba(255, 255, 255, 0.1)")}
+              onMouseEnter={(e) => (e.target.style.background = "#6d597a")}
               onMouseLeave={(e) => (e.target.style.background = "transparent")}
             >
               Open Rooms
@@ -311,9 +311,9 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                   fontWeight: "600",
                   letterSpacing: "0.3px",
                   transition: "all 0.2s ease",
-                  borderBottom: "1px solid #3a3a3c",
+                  borderBottom: "1px solid #3A3A3C",
                 }}
-                onMouseEnter={(e) => (e.target.style.background = "rgba(255, 255, 255, 0.1)")}
+                onMouseEnter={(e) => (e.target.style.background = "#6d597a")}
                 onMouseLeave={(e) => (e.target.style.background = "transparent")}
               >
                 View all rooms
@@ -337,7 +337,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease"
               }}
-              onMouseEnter={(e) => e.target.style.background = "rgba(255, 255, 255, 0.1)"}
+              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               Feedback
@@ -459,8 +459,8 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                         style={{
                           padding: "10px 12px",
                           borderRadius: 8,
-                          border: "1px solid #3a3a3c",
-                          background: "#2b2b2e",
+                        border: "1px solid #3A3A3C",
+                        background: "#372F41",
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
@@ -571,24 +571,24 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                         style={{
                           padding: "10px 12px",
                           borderRadius: 8,
-                          border: "1px solid #3a3a3c",
-                          background: "#2b2b2e",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <div style={{ textAlign: "left", flex: 1 }}>
-                          <div style={{ marginBottom: 2 }}>
-                            <UserCardWithBadges
-                              userId={ch.fromUserId}
-                              username={ch.fromUserName || "Unknown"}
+                        border: "1px solid #3A3A3C",
+                        background: "#372F41",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <div style={{ textAlign: "left", flex: 1 }}>
+                        <div style={{ marginBottom: 2 }}>
+                          <UserCardWithBadges
+                            userId={ch.fromUserId}
+                            username={ch.fromUserName || "Unknown"}
                               size="sm"
                             />
                           </div>
                           <div style={{ color: "#d7dadc", fontSize: 12 }}>
-                            {ch.boards || 1} board{(ch.boards || 1) > 1 ? "s" : ""} · {ch.speedrun ? "Speedrun" : "Standard"}
+                            {ch.boards || 1} board{(ch.boards || 1) > 1 ? "s" : ""} · {ch.variant === 'solutionhunt' ? 'Solution Hunt' : ch.variant === 'speedrun' || ch.speedrun ? 'Speedrun' : 'Standard'}
                             {expired && (
                               <span style={{ marginLeft: 8, fontSize: 11, color: "#818384", fontWeight: "600" }}>Expired</span>
                             )}
@@ -603,9 +603,10 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                                   setShowChallengesModal(false);
                                   // Navigate into the multiplayer waiting room as the guest.
                                   const boards = data.boards || 1;
-                                  const speedrun = !!data.speedrun;
+                                  // Support both new variant and legacy speedrun fields
+                                  const variant = data.variant || (data.speedrun ? 'speedrun' : 'standard');
                                   navigate(
-                                    `/game?mode=multiplayer&code=${data.gameCode}&speedrun=${speedrun}&boards=${boards}`,
+                                    `/game?mode=multiplayer&code=${data.gameCode}&variant=${variant}&boards=${boards}`,
                                   );
                                 } catch (err) {
                                   // eslint-disable-next-line no-alert

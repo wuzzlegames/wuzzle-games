@@ -201,13 +201,15 @@ describe('FriendsModal', () => {
 
     await waitFor(() => {
       expect(createGame).toHaveBeenCalledWith({
+        variant: 'standard',
         speedrun: false,
+        solutionHunt: false,
         maxPlayers: 2,
         isPublic: false,
         boards: 1,
         challengeOnly: true,
       });
-      expect(sendChallenge).toHaveBeenCalledWith('f1', 'Bob', '654321', 1, false);
+      expect(sendChallenge).toHaveBeenCalledWith('f1', 'Bob', '654321', 1, 'standard');
     });
   });
 });

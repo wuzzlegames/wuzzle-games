@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { loadJSON, saveJSON, makeSolvedKey, makeDailyKey, makeMarathonKey, makeStreakKey, loadStreak, updateStreakOnWin, marathonMetaKey } from "../../lib/persist";
+import { loadJSON, saveJSON, makeSolvedKey, makeDailyKey, makeMarathonKey, makeSolutionHuntKey, makeStreakKey, loadStreak, updateStreakOnWin, marathonMetaKey } from "../../lib/persist";
 import { loadMarathonMeta, saveMarathonMeta } from "../../lib/marathonMeta";
 import {
   WORD_LENGTH,
@@ -32,6 +32,7 @@ import { addPendingLeaderboard } from "../../lib/pendingLeaderboard";
 import { grantBadge } from "../../lib/badgeService";
 import { clampBoards } from "../../lib/validation";
 import { logError } from "../../lib/errorUtils";
+import { filterWordsByClues } from "../../lib/wordFilter";
 import SubscribeModal from "../SubscribeModal";
 import SinglePlayerGameView from "./SinglePlayerGameView";
 import "../../Game.css";
@@ -43,7 +44,7 @@ function buildStreakLabel(mode, speedrunEnabled, streak) {
   const current = typeof streak.current === "number" ? streak.current : 0;
   const best = typeof streak.best === "number" ? streak.best : 0;
 
-  const modeLabel = mode === "daily" ? "Daily" : mode === "marathon" ? "Marathon" : "";
+  const modeLabel = mode === "daily" ? "Daily" : mode === "marathon" ? "Marathon" : mode === "solutionhunt" ? "Solution Hunt" : "";
   const variant = speedrunEnabled ? "Speedrun" : "Standard";
   const prefix = modeLabel || "Streak";
   const base = `${prefix} ${variant} streak`;
@@ -119,15 +120,21 @@ export default function GameSinglePlayer({
   const marathonStageTimes = marathonMeta.stageTimes || [];
 
   // Determine numBoards (clamp to a safe range, non-marathon only).
+  // Solution Hunt mode is always 1 board.
   let parsedBoards = 1;
-  if (mode !== "marathon" && boardsParam) {
+  if (mode !== "marathon" && mode !== "solutionhunt" && boardsParam) {
     const n = parseInt(boardsParam, 10);
     if (Number.isFinite(n)) {
       parsedBoards = clampBoards(n);
     }
   }
 
-  const numBoards = mode === "marathon" ? marathonLevels[marathonIndex] : parsedBoards;
+  const numBoards = mode === "marathon" ? marathonLevels[marathonIndex] : mode === "solutionhunt" ? 1 : parsedBoards;
+
+  // Solution Hunt mode state
+  const isSolutionHuntMode = mode === "solutionhunt";
+  const [showSolutionHuntModal, setShowSolutionHuntModal] = useState(false);
+  const [answerWords, setAnswerWords] = useState([]);
 
   const [boards, setBoards] = useState([]);
   const [currentGuess, setCurrentGuess] = useState("");
@@ -213,7 +220,7 @@ export default function GameSinglePlayer({
 
   // Initial streak label from local storage for fast paint / guests.
   useEffect(() => {
-    const tracksStreak = (mode === "daily" && numBoards === 1) || mode === "marathon";
+    const tracksStreak = (mode === "daily" && numBoards === 1) || mode === "marathon" || mode === "solutionhunt";
     if (!tracksStreak) {
       setStreakLabel(null);
       return;
@@ -230,7 +237,7 @@ export default function GameSinglePlayer({
   // For signed-in users, prefer the server-stored streak so it stays consistent
   // across devices.
   useEffect(() => {
-    const tracksStreak = (mode === "daily" && numBoards === 1) || mode === "marathon";
+    const tracksStreak = (mode === "daily" && numBoards === 1) || mode === "marathon" || mode === "solutionhunt";
     if (!tracksStreak) return;
 
     let isMounted = true;
@@ -304,6 +311,9 @@ export default function GameSinglePlayer({
   const getGameStateKey = useCallback(() => {
     if (mode === "marathon") {
       return makeMarathonKey(speedrunEnabled);
+    }
+    if (mode === "solutionhunt") {
+      return makeSolutionHuntKey();
     }
     return makeDailyKey(numBoards, speedrunEnabled);
   }, [mode, speedrunEnabled, numBoards]);
@@ -387,6 +397,7 @@ export default function GameSinglePlayer({
     setTimedMessage,
     setStageTimerSeed,
     archiveDate,
+    setAnswerWords, // For Solution Hunt mode
   });
 
   const hasThisStageCommittedInProps =
@@ -439,6 +450,28 @@ export default function GameSinglePlayer({
     selectedBoardIndex,
     numBoards
   );
+
+  // Solution Hunt: Filter possible words based on guesses
+  const filteredSolutionWords = useMemo(() => {
+    if (!isSolutionHuntMode || answerWords.length === 0) return [];
+    // For solution hunt, we only have 1 board
+    const board = boards[0];
+    if (!board) return answerWords;
+    return filterWordsByClues(answerWords, board.guesses || []);
+  }, [isSolutionHuntMode, answerWords, boards]);
+
+  // Solution Hunt: Callback to select a word from the modal
+  const handleSelectSolutionWord = useCallback((word) => {
+    if (!word || typeof word !== 'string') return;
+    const upperWord = word.toUpperCase();
+    currentGuessRef.current = upperWord;
+    setCurrentGuess(upperWord);
+    // Clear any existing message
+    if (message) {
+      setMessage("");
+      clearMessageTimer();
+    }
+  }, [message, setMessage, clearMessageTimer]);
 
   // Use game engine for solved count (can be replaced with gameEngine.countSolvedBoards(boards))
   const solvedCount = useMemo(() => boards.filter((b) => b.isSolved).length, [boards]);
@@ -1074,7 +1107,7 @@ export default function GameSinglePlayer({
   const { handleShare } = useShare(shareText, setTimedMessage);
 
   const getModeLabel = () => {
-    const modeLabel = mode === "marathon" ? "Marathon" : mode === "daily" ? "Daily" : "Game";
+    const modeLabel = mode === "marathon" ? "Marathon" : mode === "daily" ? "Daily" : mode === "solutionhunt" ? "Solution Hunt" : "Game";
     const variant = speedrunEnabled ? " Speedrun" : " Standard";
     return `${modeLabel}${variant}`;
   };
@@ -1085,6 +1118,8 @@ export default function GameSinglePlayer({
       ? "Marathon & Speedrun – Multi‑Board Game | Wuzzle Games"
       : mode === "daily"
       ? "Daily Multi‑Board Wordle-Style Game – Wuzzle Games"
+      : mode === "solutionhunt"
+      ? "Daily Solution Hunt – Word Puzzle Helper | Wuzzle Games"
       : "Game – Wuzzle Games";
 
   const pageDescription =
@@ -1094,6 +1129,8 @@ export default function GameSinglePlayer({
       ? "Play Wuzzle Games marathon and speedrun modes with multi-board Wordle-style puzzles, cumulative times and increasing difficulty across stages."
       : mode === "daily"
       ? "Play Wuzzle Games daily multi-board Wordle-style puzzles with standard and speedrun options, tracking your guesses and scores across boards."
+      : mode === "solutionhunt"
+      ? "Play Wuzzle Games Solution Hunt: a daily word puzzle that shows all possible remaining words based on your guesses. Perfect for learning and improving your strategy."
       : "Play Wuzzle Games game modes including daily, marathon, speedrun and multi-board Wordle-style puzzles.";
 
   // Show comments only once the stage is definitively completed for the day
@@ -1101,7 +1138,7 @@ export default function GameSinglePlayer({
   // they do not appear while the player is still deciding whether to
   // continue after running out of guesses.
   const shouldShowComments =
-    hasCompletedStage && (mode === "daily" || mode === "marathon");
+    hasCompletedStage && (mode === "daily" || mode === "marathon" || mode === "solutionhunt");
 
   const commentsThreadId = shouldShowComments
     ? makeSolvedKey(
@@ -1201,6 +1238,13 @@ export default function GameSinglePlayer({
             : null
         }
         onRetryWordLists={() => window.location.reload()}
+        // Solution Hunt mode props
+        isSolutionHuntMode={isSolutionHuntMode}
+        showSolutionHuntModal={showSolutionHuntModal}
+        setShowSolutionHuntModal={setShowSolutionHuntModal}
+        filteredSolutionWords={filteredSolutionWords}
+        totalSolutionWords={answerWords.length}
+        onSelectSolutionWord={handleSelectSolutionWord}
       />
 
         <SubscribeModal

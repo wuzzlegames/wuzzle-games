@@ -27,7 +27,7 @@ export default defineConfig({
       ],
     }),
   ],
-  base: '/better-wordle/',
+  base: '/',
   build: {
     emptyOutDir: true,
     outDir: 'dist',

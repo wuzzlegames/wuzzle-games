@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "better-wrodle"
-  }
+    "default": "better-wrodle",
+    "wuzzlegames": "wuzzle-games"
+  },
+  "targets": {},
+  "etags": {}
 }

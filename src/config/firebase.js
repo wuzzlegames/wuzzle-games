@@ -10,15 +10,15 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 
 // Your web app's Firebase configuration (env preferred; fallbacks from .env for local/dev)
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCr81IrmH5LQedoRSQHorEjK5-sWMdVf_k",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "better-wrodle.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "better-wrodle",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "better-wrodle.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "445700190808",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:445700190808:web:c4da4d756ac143583f102d",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCd9eodM3NUscQAIf02-Q6c2YK37MYl88o",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "wuzzle-games.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "wuzzle-games",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "wuzzle-games.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "190786846587",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:190786846587:web:cea8ff9822372ebfdf47de",
   databaseURL:
     (import.meta.env.VITE_FIREBASE_DATABASE_URL && import.meta.env.VITE_FIREBASE_DATABASE_URL.trim()) ||
-    "https://better-wrodle-default-rtdb.firebaseio.com",
+    "https://wuzzle-games-default-rtdb.firebaseio.com",
 };
 
 if (import.meta.env.MODE === 'development') {

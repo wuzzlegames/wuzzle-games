@@ -21,7 +21,7 @@ const firebaseConfig = {
     "https://wuzzle-games-default-rtdb.firebaseio.com",
 };
 
-console.log('[Firebase] Realtime Database URL:', firebaseConfig.databaseURL);
+
 
 if (import.meta.env.MODE === 'development') {
   console.log('[Firebase] Realtime Database URL:', firebaseConfig.databaseURL);
@@ -63,8 +63,11 @@ try {
   app = getApp();
 } catch {
   app = initializeApp(firebaseConfig);
-  console.log("Firebase authDomain:", app.options.authDomain);
-  console.log("Firebase projectId:", app.options.projectId);  
+  console.log("[env] MODE:", import.meta.env.MODE);
+console.log("[env] VITE_FIREBASE_PROJECT_ID:", import.meta.env.VITE_FIREBASE_PROJECT_ID);
+console.log("[env] VITE_FIREBASE_AUTH_DOMAIN:", import.meta.env.VITE_FIREBASE_AUTH_DOMAIN);
+console.log("[env] VITE_FIREBASE_DATABASE_URL:", import.meta.env.VITE_FIREBASE_DATABASE_URL);
+console.log("[env] resolved firebaseConfig:", firebaseConfig);
 }
 
 // Initialize Firebase Authentication and get a reference to the service

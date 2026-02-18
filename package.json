@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

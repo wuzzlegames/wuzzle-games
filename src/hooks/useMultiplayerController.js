@@ -720,8 +720,8 @@ export function useMultiplayerController({
     const config = {
       numBoards: clampedBoards,
       variant: multiplayerConfigVariantDraft,
-      speedrun: multiplayerConfigVariantDraft === 'speedrun',
-      solutionHunt: multiplayerConfigVariantDraft === 'solutionhunt',
+      speedrun: multiplayerConfigVariantDraft === 'speedrun' || multiplayerConfigVariantDraft === 'solutionhunt_speedrun',
+      solutionHunt: multiplayerConfigVariantDraft === 'solutionhunt' || multiplayerConfigVariantDraft === 'solutionhunt_speedrun',
     };
     
     // Save to local state for immediate UI updates
@@ -737,7 +737,7 @@ export function useMultiplayerController({
     }
     
     setIsMultiplayerConfigModalOpen(false);
-    const variantLabels = { standard: 'standard', speedrun: 'speedrun', solutionhunt: 'solution hunt' };
+    const variantLabels = { standard: 'standard', speedrun: 'speedrun', solutionhunt: 'solution hunt', solutionhunt_speedrun: 'solution hunt speedrun' };
     const modeLabel = variantLabels[multiplayerConfigVariantDraft] || 'standard';
     setTimedMessage(
       `Next rematch will use ${clampedBoards} board${clampedBoards > 1 ? 's' : ''} (${modeLabel} mode).`,
@@ -814,8 +814,8 @@ export function useMultiplayerController({
       // Start the new game immediately
       await multiplayerGame.startGame(gameCode, solutions, {
         variant: variantForRematch,
-        speedrun: variantForRematch === 'speedrun',
-        solutionHunt: variantForRematch === 'solutionhunt',
+        speedrun: variantForRematch === 'speedrun' || variantForRematch === 'solutionhunt_speedrun',
+        solutionHunt: variantForRematch === 'solutionhunt' || variantForRematch === 'solutionhunt_speedrun',
       });
       
       // Clear the config for next time (both local and Firebase)

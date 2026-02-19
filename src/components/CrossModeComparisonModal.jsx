@@ -7,7 +7,7 @@ import SubscribeModal from './SubscribeModal';
 
 /**
  * Modal for displaying cross-mode comparison statistics
- * Compares performance across all 4 modes: Daily Standard, Daily Speedrun, Marathon Standard, Marathon Speedrun
+ * Compares performance across all 6 modes: Daily, Marathon, and Solution Hunt (each with Standard and Speedrun variants)
  * Premium feature
  */
 export default function CrossModeComparisonModal({ 
@@ -26,6 +26,8 @@ export default function CrossModeComparisonModal({
     { mode: 'daily', speedrunEnabled: true, label: 'Daily Speedrun' },
     { mode: 'marathon', speedrunEnabled: false, label: 'Marathon Standard' },
     { mode: 'marathon', speedrunEnabled: true, label: 'Marathon Speedrun' },
+    { mode: 'solutionhunt', speedrunEnabled: false, label: 'Solution Hunt' },
+    { mode: 'solutionhunt', speedrunEnabled: true, label: 'Sol. Hunt Speedrun' },
   ];
 
   useEffect(() => {
@@ -137,8 +139,8 @@ export default function CrossModeComparisonModal({
     return (
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '200px repeat(4, 1fr)',
-        gap: 12,
+        gridTemplateColumns: '160px repeat(6, 1fr)',
+        gap: 8,
         padding: '12px 16px',
         borderBottom: '1px solid #3A3A3C',
         alignItems: 'center',
@@ -359,8 +361,8 @@ export default function CrossModeComparisonModal({
               {/* Header Row */}
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: '200px repeat(4, 1fr)',
-                gap: 12,
+                gridTemplateColumns: '160px repeat(6, 1fr)',
+                gap: 8,
                 padding: '16px',
                 backgroundColor: '#372F41',
                 borderRadius: 12,
@@ -380,7 +382,7 @@ export default function CrossModeComparisonModal({
                   <div
                     key={label}
                     style={{
-                      fontSize: 13,
+                      fontSize: 11,
                       fontWeight: '600',
                       color: '#d7dadc',
                       textAlign: 'center',

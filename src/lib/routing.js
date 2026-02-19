@@ -6,7 +6,7 @@ import { logError } from './errorUtils';
 /**
  * Build a game URL from configuration
  * @param {Object} config - Game configuration
- * @param {string} config.mode - Game mode ('daily', 'marathon', 'multiplayer')
+ * @param {string} config.mode - Game mode ('daily', 'marathon', 'multiplayer', 'solutionhunt')
  * @param {number} [config.boards] - Number of boards (optional)
  * @param {boolean} [config.speedrun] - Enable speedrun mode (optional)
  * @param {string} [config.code] - Multiplayer game code (optional, for multiplayer mode)
@@ -47,7 +47,7 @@ export function buildGameUrl(config) {
     return url;
   }
   
-  // Single player modes (daily, marathon)
+  // Single player modes (daily, marathon, solutionhunt)
   if (useQueryParams) {
     const params = new URLSearchParams();
     params.set('mode', mode);
@@ -84,7 +84,7 @@ export function buildGameUrl(config) {
  * @returns {Object} Parsed game configuration
  */
 export function parseGameUrl(params = {}, searchParams = null) {
-  const { mode: modeParam, boards: boardsParam, variant: variantParam, code: codeParam } = params;
+  let { mode: modeParam, boards: boardsParam, variant: variantParam, code: codeParam } = params;
   
   // Get search params if provided
   const rawMode = searchParams?.get('mode');
@@ -112,20 +112,31 @@ export function parseGameUrl(params = {}, searchParams = null) {
   }
   
   // Validate mode config exists
-  const modeConfig = getGameMode(mode);
+  let modeConfig = getGameMode(mode);
   if (!modeConfig) {
     logError(`Mode config not found for: ${mode}, defaulting to daily`, 'routing.parseGameUrl');
     mode = 'daily';
+    modeConfig = getGameMode(mode);
+  }
+  
+  // Handle modes that don't support boards but have "speedrun" captured in boards position
+  // e.g., /game/solutionhunt/speedrun captures speedrun as boardsParam
+  if (!modeConfig.supportsBoards && boardsParam === 'speedrun') {
+    variantParam = 'speedrun';
+    boardsParam = null;
   }
   
   // Determine speedrun with validation
   let speedrunEnabled = false;
   const supportsSpeedrunParam = modeConfig?.supportsSpeedrun && 
-    (rawMode === 'daily' || rawMode === 'marathon' || isMultiplayerQueryMode || is1v1Alias);
+    (rawMode === 'daily' || rawMode === 'marathon' || rawMode === 'solutionhunt' || isMultiplayerQueryMode || is1v1Alias);
   
   if (variantParam === 'speedrun') {
     speedrunEnabled = modeConfig?.supportsSpeedrun || false;
   } else if (supportsSpeedrunParam && speedrunParam) {
+    speedrunEnabled = validateSpeedrun(speedrunParam);
+  } else if (isSolutionHuntMode && speedrunParam) {
+    // Support solutionhunt speedrun via query param or variant
     speedrunEnabled = validateSpeedrun(speedrunParam);
   }
   

@@ -9,6 +9,12 @@ import { validateGameCode } from '../lib/validation';
 const OpenRoomsModal = lazy(() => import('./OpenRoomsModal'));
 const BOARD_OPTIONS = Array.from({ length: MAX_BOARDS }, (_, i) => i + 1);
 
+// Game variant values:
+// 'standard' = Standard (6 guesses)
+// 'speedrun' = Standard Speedrun (unlimited guesses, timed)
+// 'solutionhunt' = Solution Hunt (6 guesses, see possible words)
+// 'solutionhunt_speedrun' = Solution Hunt Speedrun (unlimited guesses, timed, see possible words)
+
 export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFirst = false, onConfigClose, onConfigOpen }) {
   const navigate = useNavigate();
   const { user, isVerifiedUser } = useAuth();
@@ -16,10 +22,13 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
   const [codeError, setCodeError] = useState('');
   const [showConfig, setShowConfig] = useState(showConfigFirst);
   const [numBoards, setNumBoards] = useState(1);
-  const [gameVariant, setGameVariant] = useState('standard'); // 'standard' | 'speedrun' | 'solutionhunt'
+  const [gameVariant, setGameVariant] = useState('standard');
   const [maxPlayers, setMaxPlayers] = useState(2);
   const [isPublic, setIsPublic] = useState(true);
   const [showOpenRoomsModal, setShowOpenRoomsModal] = useState(false);
+  
+  // Only show boards selector for standard and speedrun (not solution hunt variants)
+  const showBoardsSelector = gameVariant === 'standard' || gameVariant === 'speedrun';
 
   const handleHost = useCallback(() => {
     setShowConfig(true);
@@ -212,41 +221,6 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
               <label
-                htmlFor="multiplayer-host-boards"
-                style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  color: '#d7dadc',
-                  fontSize: 14,
-                }}
-              >
-                Number of Boards
-              </label>
-              <select
-                id="multiplayer-host-boards"
-                value={numBoards}
-                onChange={(e) => setNumBoards(parseInt(e.target.value, 10))}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: 6,
-                  border: '1px solid #3A3A3C',
-                  background: '#372F41',
-                  color: '#ffffff',
-                  fontSize: 14,
-                  cursor: 'pointer',
-                }}
-              >
-                {BOARD_OPTIONS.map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label
                 htmlFor="multiplayer-config-variant-host"
                 style={{
                   display: 'block',
@@ -273,10 +247,48 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                 }}
               >
                 <option value="standard">Standard (6 guesses)</option>
-                <option value="speedrun">Speedrun (Unlimited guesses, timed)</option>
-                <option value="solutionhunt">Solution Hunt (See possible words)</option>
+                <option value="speedrun">Standard Speedrun (Unlimited, timed)</option>
+                <option value="solutionhunt">Solution Hunt (6 guesses)</option>
+                <option value="solutionhunt_speedrun">Solution Hunt Speedrun (Unlimited, timed)</option>
               </select>
             </div>
+
+            {showBoardsSelector && (
+              <div>
+                <label
+                  htmlFor="multiplayer-host-boards"
+                  style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    color: '#d7dadc',
+                    fontSize: 14,
+                  }}
+                >
+                  Number of Boards
+                </label>
+                <select
+                  id="multiplayer-host-boards"
+                  value={numBoards}
+                  onChange={(e) => setNumBoards(parseInt(e.target.value, 10))}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: 6,
+                    border: '1px solid #3A3A3C',
+                    background: '#372F41',
+                    color: '#ffffff',
+                    fontSize: 14,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {BOARD_OPTIONS.map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div>
               <label

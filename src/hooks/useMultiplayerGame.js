@@ -203,9 +203,20 @@ export function useMultiplayerGame(gameCode = null, isHost = false, speedrun = f
 const createGame = useCallback(async (options = {}) => {
     if (!user) throw new Error('User must be signed in to host a game');
 
-    const effectiveSpeedrun = Object.prototype.hasOwnProperty.call(options, 'speedrun')
-      ? !!options.speedrun
-      : !!speedrun;
+    // Determine effective variant - support both legacy speedrun flag and new variant field
+    // Variants: 'standard', 'speedrun', 'solutionhunt', 'solutionhunt_speedrun'
+    const effectiveVariant = Object.prototype.hasOwnProperty.call(options, 'variant')
+      ? options.variant
+      : options.solutionHunt && (options.speedrun || speedrun)
+      ? 'solutionhunt_speedrun'
+      : options.solutionHunt
+      ? 'solutionhunt'
+      : options.speedrun || speedrun
+      ? 'speedrun'
+      : 'standard';
+    
+    const effectiveSpeedrun = effectiveVariant === 'speedrun' || effectiveVariant === 'solutionhunt_speedrun';
+    const effectiveSolutionHunt = effectiveVariant === 'solutionhunt' || effectiveVariant === 'solutionhunt_speedrun';
 
     const rawMaxPlayers = Number.isFinite(options.maxPlayers)
       ? options.maxPlayers
@@ -216,9 +227,8 @@ const createGame = useCallback(async (options = {}) => {
       : true;
 
     // Boards configuration for this room (used for waiting-room display and first round).
-    const rawBoards = Number.isFinite(options.boards)
-      ? options.boards
-      : 1;
+    // Solution Hunt is always 1 board.
+    const rawBoards = effectiveSolutionHunt ? 1 : (Number.isFinite(options.boards) ? options.boards : 1);
     const configBoards = clampBoards(rawBoards);
 
     const challengeOnly = options.challengeOnly === true;
@@ -234,7 +244,9 @@ const createGame = useCallback(async (options = {}) => {
       solution: null,
       solutions: [], // Array of solutions (one per board)
       winner: null, // Will be set to a uid when a player wins, or 'draw' for ties
-      speedrun: effectiveSpeedrun, // Whether speedrun mode is enabled
+      variant: effectiveVariant, // Game mode variant: 'standard', 'speedrun', 'solutionhunt'
+      speedrun: effectiveSpeedrun, // Whether speedrun mode is enabled (for backward compatibility)
+      solutionHunt: effectiveSolutionHunt, // Whether solution hunt mode is enabled
       createdAt: now,
       startedAt: null,
       hostId: user.uid, // Set hostId for Firebase security rules
@@ -489,10 +501,15 @@ const createGame = useCallback(async (options = {}) => {
           throw new Error('Game has already started');
         }
 
-        // Decide whether this round is speedrun or standard. Allow an explicit
-        // override via `options.speedrun` so hosts can change modes between rounds.
+        // Decide game mode for this round. Allow explicit overrides via options
+        // so hosts can change modes between rounds.
         const hasOverrideSpeedrun = Object.prototype.hasOwnProperty.call(options, 'speedrun');
+        const hasOverrideSolutionHunt = Object.prototype.hasOwnProperty.call(options, 'solutionHunt');
+        const hasOverrideVariant = Object.prototype.hasOwnProperty.call(options, 'variant');
+        
         const isSpeedrunRound = hasOverrideSpeedrun ? !!options.speedrun : !!currentData.speedrun;
+        const isSolutionHuntRound = hasOverrideSolutionHunt ? !!options.solutionHunt : !!currentData.solutionHunt;
+        const variantForRound = hasOverrideVariant ? options.variant : currentData.variant;
 
         const now = Date.now();
 
@@ -520,7 +537,9 @@ const createGame = useCallback(async (options = {}) => {
           status: 'playing',
           solution: solutionsArray[0],
           solutions: solutionsArray,
+          variant: variantForRound,
           speedrun: isSpeedrunRound,
+          solutionHunt: isSolutionHuntRound,
           startedAt: now,
           winner: null,
           players: updatedPlayers,
@@ -862,10 +881,21 @@ const createGame = useCallback(async (options = {}) => {
         // Clear the config
         updateData.nextGameConfig = null;
       } else {
+        // Determine effective variant
+        // Variants: 'standard', 'speedrun', 'solutionhunt', 'solutionhunt_speedrun'
+        const variant = config.variant || (
+          config.solutionHunt && config.speedrun ? 'solutionhunt_speedrun' :
+          config.solutionHunt ? 'solutionhunt' :
+          config.speedrun ? 'speedrun' :
+          'standard'
+        );
+        const isSolutionHuntVariant = variant === 'solutionhunt' || variant === 'solutionhunt_speedrun';
         // Set the config
         updateData.nextGameConfig = {
-          numBoards: Number.isFinite(config.numBoards) ? clampBoards(config.numBoards) : null,
-          speedrun: typeof config.speedrun === 'boolean' ? config.speedrun : null,
+          numBoards: isSolutionHuntVariant ? 1 : (Number.isFinite(config.numBoards) ? clampBoards(config.numBoards) : null),
+          variant: variant,
+          speedrun: variant === 'speedrun' || variant === 'solutionhunt_speedrun',
+          solutionHunt: isSolutionHuntVariant,
         };
       }
 
@@ -1031,13 +1061,36 @@ const createGame = useCallback(async (options = {}) => {
 
       const updatePayload = {};
 
-      if (Object.prototype.hasOwnProperty.call(config, 'boards')) {
-        const rawBoards = parseInt(config.boards, 10);
-        updatePayload.configBoards = Number.isFinite(rawBoards) ? clampBoards(rawBoards) : 1;
+      // Handle variant field (takes precedence over separate speedrun/solutionHunt flags)
+      // Variants: 'standard', 'speedrun', 'solutionhunt', 'solutionhunt_speedrun'
+      if (Object.prototype.hasOwnProperty.call(config, 'variant')) {
+        const variant = config.variant;
+        const isSolutionHuntVariant = variant === 'solutionhunt' || variant === 'solutionhunt_speedrun';
+        updatePayload.variant = variant;
+        updatePayload.speedrun = variant === 'speedrun' || variant === 'solutionhunt_speedrun';
+        updatePayload.solutionHunt = isSolutionHuntVariant;
+        
+        // Solution Hunt variants are always 1 board
+        if (isSolutionHuntVariant) {
+          updatePayload.configBoards = 1;
+        }
+      } else {
+        // Legacy support: handle separate flags
+        if (Object.prototype.hasOwnProperty.call(config, 'speedrun')) {
+          updatePayload.speedrun = !!config.speedrun;
+        }
+        if (Object.prototype.hasOwnProperty.call(config, 'solutionHunt')) {
+          updatePayload.solutionHunt = !!config.solutionHunt;
+          if (config.solutionHunt) {
+            updatePayload.configBoards = 1;
+          }
+        }
       }
 
-      if (Object.prototype.hasOwnProperty.call(config, 'speedrun')) {
-        updatePayload.speedrun = !!config.speedrun;
+      // Boards config (only if not already set by solutionhunt)
+      if (Object.prototype.hasOwnProperty.call(config, 'boards') && !updatePayload.configBoards) {
+        const rawBoards = parseInt(config.boards, 10);
+        updatePayload.configBoards = Number.isFinite(rawBoards) ? clampBoards(rawBoards) : 1;
       }
 
       if (Object.prototype.hasOwnProperty.call(config, 'maxPlayers')) {

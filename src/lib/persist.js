@@ -53,9 +53,9 @@ export function makeMarathonKey(speedrunEnabled, dateString = null) {
   return `${PREFIX}game:marathon:${speedrunEnabled ? "speedrun" : "standard"}:${date}`;
 }
 
-export function makeSolutionHuntKey(dateString = null) {
+export function makeSolutionHuntKey(speedrunEnabled = false, dateString = null) {
   const date = dateString || getCurrentDateString();
-  return `${PREFIX}game:solutionhunt:standard:${date}`;
+  return `${PREFIX}game:solutionhunt:${speedrunEnabled ? 'speedrun' : 'standard'}:${date}`;
 }
 
 export function marathonMetaKey(speedrunEnabled) {

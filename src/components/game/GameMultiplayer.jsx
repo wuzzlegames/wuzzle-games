@@ -18,6 +18,7 @@ import MultiplayerRoomConfigModal from "./MultiplayerRoomConfigModal";
 import MultiplayerGameView from "./MultiplayerGameView";
 import GamePopup from "./GamePopup";
 import BoardSelector from "./BoardSelector";
+import SolutionHuntModal from "./SolutionHuntModal";
 const FeedbackModal = lazy(() => import("../FeedbackModal"));
 import Keyboard from "../Keyboard";
 import "../../Game.css";
@@ -45,10 +46,11 @@ export default function GameMultiplayer() {
   const isHost = searchParams.get("host") === "true";
   
   // Read game variant from URL (supports both new 'variant' param and legacy 'speedrun' param)
+  // Variants: 'standard', 'speedrun', 'solutionhunt', 'solutionhunt_speedrun'
   const gameVariant = (() => {
     if (rawMode === "multiplayer") {
       const variant = searchParams.get("variant");
-      if (variant === 'speedrun' || variant === 'solutionhunt' || variant === 'standard') {
+      if (variant === 'speedrun' || variant === 'solutionhunt' || variant === 'solutionhunt_speedrun' || variant === 'standard') {
         return variant;
       }
       // Legacy support: convert speedrun=true to 'speedrun' variant
@@ -60,8 +62,8 @@ export default function GameMultiplayer() {
   })();
   
   // Derived booleans for backward compatibility
-  const speedrunEnabled = gameVariant === 'speedrun';
-  const solutionHuntEnabled = gameVariant === 'solutionhunt';
+  const speedrunEnabled = gameVariant === 'speedrun' || gameVariant === 'solutionhunt_speedrun';
+  const solutionHuntEnabled = gameVariant === 'solutionhunt' || gameVariant === 'solutionhunt_speedrun';
 
   // Solution Hunt mode state
   const [showSolutionHuntModal, setShowSolutionHuntModal] = useState(false);
@@ -294,11 +296,6 @@ export default function GameMultiplayer() {
     numBoards
   );
 
-  const invalidCurrentGuess =
-    currentGuess.length === WORD_LENGTH &&
-    allowedSet.size > 0 &&
-    !allowedSet.has(currentGuess);
-
   const solvedCount = useMemo(() => boards.filter((b) => b.isSolved).length, [boards]);
 
   const allSolved = useMemo(
@@ -307,11 +304,28 @@ export default function GameMultiplayer() {
   );
 
   // Solution Hunt: Check if current game is in solution hunt mode (from Firebase game state)
+  // Includes both solutionhunt and solutionhunt_speedrun variants
   const isSolutionHuntGame = useMemo(() => {
     if (!gameState) return false;
-    // Check both variant field and solutionHunt field for backward compatibility
-    return gameState.variant === 'solutionhunt' || gameState.solutionHunt === true;
+    // Check variant field (includes both solutionhunt and solutionhunt_speedrun)
+    // Also check solutionHunt boolean field for backward compatibility
+    return gameState.variant === 'solutionhunt' || 
+           gameState.variant === 'solutionhunt_speedrun' || 
+           gameState.solutionHunt === true;
   }, [gameState]);
+
+  // For Solution Hunt mode, also accept words from answerWords list
+  // since those are the words shown in the modal
+  const answerWordsSet = useMemo(
+    () => new Set(answerWords.map(w => w.toLowerCase())),
+    [answerWords]
+  );
+
+  const invalidCurrentGuess =
+    currentGuess.length === WORD_LENGTH &&
+    allowedSet.size > 0 &&
+    !allowedSet.has(currentGuess) &&
+    !(isSolutionHuntGame && answerWordsSet.has(currentGuess.toLowerCase()));
 
   // Solution Hunt: Load answer words when game starts in solution hunt mode
   useEffect(() => {
@@ -348,7 +362,8 @@ export default function GameMultiplayer() {
 
   // Solution Hunt: Handle word selection from modal
   const handleSelectSolutionWord = useCallback((word) => {
-    setCurrentGuess(word.toLowerCase());
+    // Use uppercase to match the format expected by allowedSet and scoreGuess
+    setCurrentGuess(word.toUpperCase());
     setShowSolutionHuntModal(false);
   }, []);
 
@@ -423,7 +438,11 @@ export default function GameMultiplayer() {
     // board state clean while the server remains authoritative. If the
     // dictionary has not yet loaded (empty set), fall back to allowing the
     // guess and let the server remain authoritative.
-    if (allowedSet.size > 0 && !allowedSet.has(guess)) {
+    // For Solution Hunt mode, also allow words from the answer words list
+    // since those are selected from the modal.
+    const isInAllowedSet = allowedSet.size > 0 && allowedSet.has(guess);
+    const isInAnswerWords = isSolutionHuntGame && answerWordsSet.has(guess.toLowerCase());
+    if (allowedSet.size > 0 && !isInAllowedSet && !isInAnswerWords) {
       setTimedMessage("Not in word list.", 5000);
       setCurrentGuess("");
       return;
@@ -657,6 +676,10 @@ export default function GameMultiplayer() {
         onUpdateConfig={handleUpdateConfig}
         onUpdateRoomName={handleUpdateRoomName}
         countdownRemaining={countdownRemaining}
+        isSolutionHuntGame={isSolutionHuntGame}
+        showSolutionHuntModal={showSolutionHuntModal}
+        setShowSolutionHuntModal={setShowSolutionHuntModal}
+        filteredSolutionWords={filteredSolutionWords}
         onInviteFriend={async (friend) => {
           if (!friend || !friend.id || !gameCode) return;
           try {
@@ -743,6 +766,15 @@ export default function GameMultiplayer() {
           statusText={statusText}
         />
       )}
+
+      {/* Solution Hunt Modal */}
+      <SolutionHuntModal
+        isOpen={showSolutionHuntModal}
+        onRequestClose={() => setShowSolutionHuntModal(false)}
+        words={filteredSolutionWords}
+        onSelectWord={handleSelectSolutionWord}
+        totalWords={answerWords.length}
+      />
 
       {gameState &&
         gameState.status === "playing" &&

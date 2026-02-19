@@ -12,13 +12,10 @@ import { getCurrentDateString } from './dailyWords';
  * Get stats key for a mode/variant
  * @param {string} mode - 'daily', 'marathon', or 'solutionhunt'
  * @param {boolean} speedrunEnabled - Whether speedrun is enabled
- * @returns {string} Stats key (e.g., 'daily_standard', 'marathon_speedrun', 'solutionhunt_standard')
+ * @returns {string} Stats key (e.g., 'daily_standard', 'marathon_speedrun', 'solutionhunt_speedrun')
  */
 function getStatsKey(mode, speedrunEnabled) {
-  if (mode === 'solutionhunt') {
-    return 'solutionhunt_standard'; // Solution Hunt has no speedrun variant
-  }
-  const modeKey = mode === 'daily' ? 'daily' : 'marathon';
+  const modeKey = mode === 'daily' ? 'daily' : mode === 'marathon' ? 'marathon' : 'solutionhunt';
   const variantKey = speedrunEnabled ? 'speedrun' : 'standard';
   return `${modeKey}_${variantKey}`;
 }

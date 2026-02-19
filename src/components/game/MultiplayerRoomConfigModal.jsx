@@ -12,6 +12,8 @@ export default function MultiplayerRoomConfigModal({
   onSave,
   isHost = true,
 }) {
+  // Only show boards selector for standard and speedrun (not solution hunt variants)
+  const showBoardsSelector = variantDraft === 'standard' || variantDraft === 'speedrun';
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div style={{ padding: "24px" }}>
@@ -32,43 +34,6 @@ export default function MultiplayerRoomConfigModal({
           </p>
         )}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <div>
-            <label
-              htmlFor="multiplayer-boards-select"
-              style={{
-                display: "block",
-                marginBottom: "8px",
-                color: "#d7dadc",
-                fontSize: 14,
-              }}
-            >
-              Number of Boards
-            </label>
-            <select
-              id="multiplayer-boards-select"
-              value={boardsDraft}
-              onChange={(e) => onChangeBoardsDraft(parseInt(e.target.value, 10))}
-              disabled={!isHost}
-              style={{
-                width: "100%",
-                padding: "10px",
-                borderRadius: 6,
-                border: "1px solid #3A3A3C",
-                background: isHost ? "#372F41" : "#212121",
-                color: isHost ? "#ffffff" : "#818384",
-                fontSize: 14,
-                cursor: isHost ? "pointer" : "not-allowed",
-                opacity: isHost ? 1 : 0.6,
-              }}
-            >
-              {boardOptions.map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-          </div>
-
           <div>
             <label
               htmlFor="multiplayer-variant-config-select"
@@ -99,10 +64,50 @@ export default function MultiplayerRoomConfigModal({
               }}
             >
               <option value="standard">Standard (6 guesses)</option>
-              <option value="speedrun">Speedrun (Unlimited guesses, timed)</option>
-              <option value="solutionhunt">Solution Hunt (See possible words)</option>
+              <option value="speedrun">Standard Speedrun (Unlimited, timed)</option>
+              <option value="solutionhunt">Solution Hunt (6 guesses)</option>
+              <option value="solutionhunt_speedrun">Solution Hunt Speedrun (Unlimited, timed)</option>
             </select>
           </div>
+
+          {showBoardsSelector && (
+            <div>
+              <label
+                htmlFor="multiplayer-boards-select"
+                style={{
+                  display: "block",
+                  marginBottom: "8px",
+                  color: "#d7dadc",
+                  fontSize: 14,
+                }}
+              >
+                Number of Boards
+              </label>
+              <select
+                id="multiplayer-boards-select"
+                value={boardsDraft}
+                onChange={(e) => onChangeBoardsDraft(parseInt(e.target.value, 10))}
+                disabled={!isHost}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: 6,
+                  border: "1px solid #3A3A3C",
+                  background: isHost ? "#372F41" : "#212121",
+                  color: isHost ? "#ffffff" : "#818384",
+                  fontSize: 14,
+                  cursor: isHost ? "pointer" : "not-allowed",
+                  opacity: isHost ? 1 : 0.6,
+                }}
+              >
+                {boardOptions.map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
             <button

@@ -63,13 +63,6 @@ try {
   app = getApp();
 } catch {
   app = initializeApp(firebaseConfig);
-  console.log("FIREBASE_INIT_MARKER: wuzzle-2026-02-17");
-
-  console.log("[env] MODE:", import.meta.env.MODE);
-console.log("[env] VITE_FIREBASE_PROJECT_ID:", import.meta.env.VITE_FIREBASE_PROJECT_ID);
-console.log("[env] VITE_FIREBASE_AUTH_DOMAIN:", import.meta.env.VITE_FIREBASE_AUTH_DOMAIN);
-console.log("[env] VITE_FIREBASE_DATABASE_URL:", import.meta.env.VITE_FIREBASE_DATABASE_URL);
-console.log("[env] resolved firebaseConfig:", firebaseConfig);
 }
 
 // Initialize Firebase Authentication and get a reference to the service

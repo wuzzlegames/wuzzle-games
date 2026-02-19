@@ -105,6 +105,8 @@ export default function Profile() {
           dailySpeedrun: loadStreak("daily", true),
           marathonStandard: loadStreak("marathon", false),
           marathonSpeedrun: loadStreak("marathon", true),
+          solutionhuntStandard: loadStreak("solutionhunt", false),
+          solutionhuntSpeedrun: loadStreak("solutionhunt", true),
         };
 
         if (!user) {
@@ -130,6 +132,8 @@ export default function Profile() {
           dailySpeedrun: remote.daily_speedrun || local.dailySpeedrun,
           marathonStandard: remote.marathon_standard || local.marathonStandard,
           marathonSpeedrun: remote.marathon_speedrun || local.marathonSpeedrun,
+          solutionhuntStandard: remote.solutionhunt_standard || local.solutionhuntStandard,
+          solutionhuntSpeedrun: remote.solutionhunt_speedrun || local.solutionhuntSpeedrun,
         };
         const normalizeStreak = (s) => ({
           current: Math.max(0, Number(s?.current)) || 0,
@@ -141,6 +145,8 @@ export default function Profile() {
           dailySpeedrun: normalizeStreak(raw.dailySpeedrun),
           marathonStandard: normalizeStreak(raw.marathonStandard),
           marathonSpeedrun: normalizeStreak(raw.marathonSpeedrun),
+          solutionhuntStandard: normalizeStreak(raw.solutionhuntStandard),
+          solutionhuntSpeedrun: normalizeStreak(raw.solutionhuntSpeedrun),
         };
 
         setStreaks(merged);
@@ -415,9 +421,10 @@ export default function Profile() {
 
                 {(streaks || streakLoadError) && (
                   <div className="profileSection profileSectionSpacing">
-                    <h2>Game streaks</h2>
+                    <details className="profileDetails" open>
+                      <summary className="profileDetailsSummary">Game streaks</summary>
                     {streakLoadError ? (
-                      <div className="profileField">
+                      <div className="profileField" style={{ paddingTop: 12 }}>
                         <div style={{ color: "#f87171", fontSize: 14, marginBottom: 8 }}>
                           {streakLoadError}
                         </div>
@@ -430,7 +437,7 @@ export default function Profile() {
                         </button>
                       </div>
                     ) : (
-                      <>
+                      <div style={{ paddingTop: 12 }}>
                     <div className="profileField">
                       <label style={{ fontSize: 12, color: "#9ca3af" }}>
                         Streaks are tied to your account and sync across devices once you're signed in.
@@ -593,6 +600,84 @@ export default function Profile() {
                           </button>
                         </div>
                       </div>
+
+                      {/* Solution Hunt Standard */}
+                      <div className="streakCard" style={{ width: '100%' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                          <div style={{ flex: 1 }}>
+                            <div className="streakLabel">Solution Hunt Standard</div>
+                            <div className="streakCurrent">
+                              {streaks.solutionhuntStandard.current} day{streaks.solutionhuntStandard.current === 1 ? "" : "s"}
+                            </div>
+                            <div className="streakBest">Best: {streaks.solutionhuntStandard.best}</div>
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                          <button
+                            type="button"
+                            onClick={() => setArchiveModal({ isOpen: true, mode: 'solutionhunt', speedrunEnabled: false })}
+                            className="homeBtn homeBtnOutline"
+                            style={{
+                              flex: 1,
+                              padding: '8px 12px',
+                              fontSize: 12,
+                            }}
+                          >
+                            View Archive
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => navigate('/stats?mode=solutionhunt&speedrun=false')}
+                            className="homeBtn homeBtnOutline"
+                            style={{
+                              flex: 1,
+                              padding: '8px 12px',
+                              fontSize: 12,
+                            }}
+                          >
+                            View Advanced Stats
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Solution Hunt Speedrun */}
+                      <div className="streakCard" style={{ width: '100%' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                          <div style={{ flex: 1 }}>
+                            <div className="streakLabel">Solution Hunt Speedrun</div>
+                            <div className="streakCurrent">
+                              {streaks.solutionhuntSpeedrun.current} day{streaks.solutionhuntSpeedrun.current === 1 ? "" : "s"}
+                            </div>
+                            <div className="streakBest">Best: {streaks.solutionhuntSpeedrun.best}</div>
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                          <button
+                            type="button"
+                            onClick={() => setArchiveModal({ isOpen: true, mode: 'solutionhunt', speedrunEnabled: true })}
+                            className="homeBtn homeBtnOutline"
+                            style={{
+                              flex: 1,
+                              padding: '8px 12px',
+                              fontSize: 12,
+                            }}
+                          >
+                            View Archive
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => navigate('/stats?mode=solutionhunt&speedrun=true')}
+                            className="homeBtn homeBtnOutline"
+                            style={{
+                              flex: 1,
+                              padding: '8px 12px',
+                              fontSize: 12,
+                            }}
+                          >
+                            View Advanced Stats
+                          </button>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Cross-Mode Comparison Button */}
@@ -619,8 +704,9 @@ export default function Profile() {
                         Compare your performance across all game modes (Premium)
                       </div>
                     </div>
-                      </>
+                      </div>
                     )}
+                    </details>
                   </div>
                 )}
 

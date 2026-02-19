@@ -14,12 +14,12 @@ const ARCHIVE_DAYS = 14;
 
 /**
  * Get archive key for a mode/variant
- * @param {string} mode - 'daily' or 'marathon'
+ * @param {string} mode - 'daily', 'marathon', or 'solutionhunt'
  * @param {boolean} speedrunEnabled - Whether speedrun is enabled
- * @returns {string} Archive key (e.g., 'daily_standard', 'marathon_speedrun')
+ * @returns {string} Archive key (e.g., 'daily_standard', 'marathon_speedrun', 'solutionhunt_speedrun')
  */
 function getArchiveKey(mode, speedrunEnabled) {
-  const modeKey = mode === 'daily' ? 'daily' : 'marathon';
+  const modeKey = mode === 'daily' ? 'daily' : mode === 'marathon' ? 'marathon' : 'solutionhunt';
   const variantKey = speedrunEnabled ? 'speedrun' : 'standard';
   return `${modeKey}_${variantKey}`;
 }
@@ -28,7 +28,7 @@ function getArchiveKey(mode, speedrunEnabled) {
  * Save solution words to archive for a specific date
  * This should be called when a game is completed (for streak-tracked modes)
  * @param {Object} params
- * @param {string} params.mode - 'daily' or 'marathon'
+ * @param {string} params.mode - 'daily', 'marathon', or 'solutionhunt'
  * @param {boolean} params.speedrunEnabled - Whether speedrun is enabled
  * @param {string} params.dateString - Date string (YYYY-MM-DD)
  * @param {string[]} params.solutions - Array of solution words
@@ -36,8 +36,8 @@ function getArchiveKey(mode, speedrunEnabled) {
  */
 export async function saveArchiveSolution({ mode, speedrunEnabled, dateString, solutions, numBoards }) {
   try {
-    // Only save for streak-tracked modes: daily 1-board, marathon (any)
-    const shouldSave = (mode === 'daily' && numBoards === 1) || mode === 'marathon';
+    // Only save for streak-tracked modes: daily 1-board, marathon (any), solutionhunt (any)
+    const shouldSave = (mode === 'daily' && numBoards === 1) || mode === 'marathon' || mode === 'solutionhunt';
     if (!shouldSave) return;
 
     const archiveKey = getArchiveKey(mode, speedrunEnabled);
@@ -61,7 +61,7 @@ export async function saveArchiveSolution({ mode, speedrunEnabled, dateString, s
 /**
  * Load solution words from archive for a specific date
  * @param {Object} params
- * @param {string} params.mode - 'daily' or 'marathon'
+ * @param {string} params.mode - 'daily', 'marathon', or 'solutionhunt'
  * @param {boolean} params.speedrunEnabled - Whether speedrun is enabled
  * @param {string} params.dateString - Date string (YYYY-MM-DD)
  * @returns {Promise<string[] | null>} Array of solution words or null if not found
@@ -93,7 +93,7 @@ export async function loadArchiveSolution({ mode, speedrunEnabled, dateString })
  * This stores the game progress so users can continue playing archived games
  * @param {Object} params
  * @param {string} params.uid - User ID
- * @param {string} params.mode - 'daily' or 'marathon'
+ * @param {string} params.mode - 'daily', 'marathon', or 'solutionhunt'
  * @param {boolean} params.speedrunEnabled - Whether speedrun is enabled
  * @param {string} params.dateString - Date string (YYYY-MM-DD)
  * @param {Object} params.gameState - Game state object (boards, currentGuess, etc.)
@@ -118,7 +118,7 @@ export async function saveArchiveGameState({ uid, mode, speedrunEnabled, dateStr
  * Load archive game state for a user
  * @param {Object} params
  * @param {string} params.uid - User ID
- * @param {string} params.mode - 'daily' or 'marathon'
+ * @param {string} params.mode - 'daily', 'marathon', or 'solutionhunt'
  * @param {boolean} params.speedrunEnabled - Whether speedrun is enabled
  * @param {string} params.dateString - Date string (YYYY-MM-DD)
  * @returns {Promise<Object | null>} Game state or null if not found
@@ -192,7 +192,7 @@ export function isDateInArchiveWindow(dateString) {
  * Clean up old archive data (older than 14 days)
  * This can be called periodically to clean up old data
  * @param {Object} params
- * @param {string} params.mode - 'daily' or 'marathon'
+ * @param {string} params.mode - 'daily', 'marathon', or 'solutionhunt'
  * @param {boolean} params.speedrunEnabled - Whether speedrun is enabled
  */
 export async function cleanupOldArchive({ mode, speedrunEnabled }) {

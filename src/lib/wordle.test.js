@@ -110,7 +110,7 @@ describe('colorForStatus', () => {
   it('returns expected hex colors for tile statuses', () => {
     expect(colorForStatus('green')).toBe('#50a339');
     expect(colorForStatus('yellow')).toBe('#B1A04C');
-    expect(colorForStatus('grey')).toBe('#3A3A3C');
+    expect(colorForStatus('grey')).toBe('#252526');
     expect(colorForStatus('none')).toBe('#3A3A3C');
     expect(colorForStatus('unknown')).toBe('#3A3A3C');
   });
@@ -120,7 +120,7 @@ describe('colorForMiniCell', () => {
   it('returns expected hex colors for mini-cell statuses', () => {
     expect(colorForMiniCell('green')).toBe('#50a339');
     expect(colorForMiniCell('yellow')).toBe('#B1A04C');
-    expect(colorForMiniCell('grey')).toBe('#3A3A3C');
+    expect(colorForMiniCell('grey')).toBe('#252526');
     expect(colorForMiniCell('none')).toBe('#212121');
     expect(colorForMiniCell('unknown')).toBe('#212121');
   });

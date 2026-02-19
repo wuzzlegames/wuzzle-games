@@ -52,6 +52,11 @@ export default function MultiplayerGameView({
   onUpdateConfig,
   onUpdateRoomName,
   countdownRemaining,
+  // Solution Hunt props
+  isSolutionHuntGame = false,
+  showSolutionHuntModal = false,
+  setShowSolutionHuntModal,
+  filteredSolutionWords = [],
 }) {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const gameState = multiplayerGame?.gameState;
@@ -828,6 +833,34 @@ export default function MultiplayerGameView({
             </div>
 
             {/* Rematch status text */}
+
+            {/* Solution Hunt: View Possible Words button - show above boards like in SinglePlayerGameView */}
+            {isSolutionHuntGame && gameState.status === "playing" && setShowSolutionHuntModal && (
+              <div style={{ width: "100%", marginBottom: 12 }}>
+                <button
+                  type="button"
+                  onClick={() => setShowSolutionHuntModal(true)}
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    fontSize: 14,
+                    fontWeight: 600,
+                    border: "none",
+                    borderRadius: 8,
+                    background: "#50a339",
+                    color: "#ffffff",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 8,
+                  }}
+                >
+                  <span>📋</span>
+                  <span>View Possible Words ({filteredSolutionWords.length})</span>
+                </button>
+              </div>
+            )}
 
             {/* Boards: local player only */}
             <div

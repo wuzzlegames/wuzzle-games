@@ -98,7 +98,7 @@ export const GAME_MODES = {
     name: 'Solution Hunt',
     route: '/game/solutionhunt',
     component: GameSinglePlayer,
-    supportsSpeedrun: false, // No speedrun variant - this is a learning/practice mode
+    supportsSpeedrun: true, // Speedrun variant available
     supportsBoards: false, // Always 1 board
     minBoards: 1,
     maxBoards: 1,
@@ -106,13 +106,13 @@ export const GAME_MODES = {
     isMultiplayer: false,
     // Feature flags for mode-specific capabilities
     features: {
-      speedrun: false,
+      speedrun: true,
       multiBoard: false,
       streaks: { minBoards: 1, maxBoards: 1 }, // Streaks for 1-board only
-      leaderboard: false, // No leaderboard for this mode
+      leaderboard: true, // Leaderboard for speedrun variant
       sharing: true,
       comments: true,
-      timer: false, // No timer
+      timer: true, // Timer for speedrun
       persistence: true, // Local and remote persistence
       solutionHint: true, // Shows possible remaining words
     },

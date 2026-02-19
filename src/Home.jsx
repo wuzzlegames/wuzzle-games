@@ -147,6 +147,10 @@ export default function Home({
   const handleSolutionHunt = useCallback(() => {
     navigate('/game/solutionhunt');
   }, [navigate]);
+
+  const handleSolutionHuntSpeedrun = useCallback(() => {
+    navigate('/game/solutionhunt/speedrun');
+  }, [navigate]);
   
   const handleMarathonStandard = useCallback(() => {
     navigate(`/game/marathon`);
@@ -310,6 +314,16 @@ export default function Home({
                 desc="See all possible remaining words as you guess. Great for learning."
                 buttonText="Play Solution Hunt"
                 onClick={handleSolutionHunt}
+                variant="green"
+                modeVariant="daily"
+                titleRight="1 board"
+              />
+
+              <ModeRow
+                title="Solution Hunt (speedrun)"
+                desc="Solution Hunt with timer. Unlimited guesses, see remaining words."
+                buttonText="Speedrun Solution Hunt"
+                onClick={handleSolutionHuntSpeedrun}
                 variant="green"
                 modeVariant="daily"
                 titleRight="1 board"

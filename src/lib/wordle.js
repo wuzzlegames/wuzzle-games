@@ -95,14 +95,14 @@ export function mergeStatus(oldStatus, newStatus) {
 export function colorForStatus(status) {
   if (status === "green") return "#50a339";
   if (status === "yellow") return "#B1A04C";
-  if (status === "grey") return "#3A3A3C";
+  if (status === "grey") return "#252526";  // darker grey for absent letters
   return "#3A3A3C";
 }
 
 export function colorForMiniCell(status) {
   if (status === "green") return "#50a339";
   if (status === "yellow") return "#B1A04C";
-  if (status === "grey") return "#3A3A3C";
+  if (status === "grey") return "#252526";  // darker grey for absent letters
   return "#212121";
 }
 

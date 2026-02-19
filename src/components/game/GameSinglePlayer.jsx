@@ -313,7 +313,7 @@ export default function GameSinglePlayer({
       return makeMarathonKey(speedrunEnabled);
     }
     if (mode === "solutionhunt") {
-      return makeSolutionHuntKey();
+      return makeSolutionHuntKey(speedrunEnabled);
     }
     return makeDailyKey(numBoards, speedrunEnabled);
   }, [mode, speedrunEnabled, numBoards]);

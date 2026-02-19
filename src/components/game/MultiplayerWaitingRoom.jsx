@@ -30,7 +30,18 @@ export default function MultiplayerWaitingRoom({
     maxPlayers,
     isPublic,
     speedrun,
+    variant: gameVariant,
+    solutionHunt,
   } = gameState || {};
+
+  // Determine effective variant from game state
+  // Now supports: 'standard', 'speedrun', 'solutionhunt', 'solutionhunt_speedrun'
+  const effectiveVariant = gameVariant || (
+    solutionHunt && speedrun ? 'solutionhunt_speedrun' :
+    solutionHunt ? 'solutionhunt' :
+    speedrun ? 'speedrun' :
+    'standard'
+  );
 
   const playersMap = playersMapRaw || null;
   const currentUserId = authUserId || null;
@@ -93,20 +104,18 @@ export default function MultiplayerWaitingRoom({
   const boards = Math.max(1, boardsLive || 1);
   const maxPlayersConfig = Number.isFinite(maxPlayers) ? maxPlayers : 2;
   const isPublicConfig = isPublic === true;
-  const isSpeedrunConfig = !!speedrun;
-
   // Draft state for host editing of room settings.
   const [isEditingConfig, setIsEditingConfig] = React.useState(false);
   const [boardsDraft, setBoardsDraft] = React.useState(boards);
   const [maxPlayersDraft, setMaxPlayersDraft] = React.useState(maxPlayersConfig);
   const [isPublicDraft, setIsPublicDraft] = React.useState(isPublicConfig);
-  const [isSpeedrunDraft, setIsSpeedrunDraft] = React.useState(isSpeedrunConfig);
+  const [variantDraft, setVariantDraft] = React.useState(effectiveVariant);
   
   // Optimistic state for immediate UI feedback
   const [boardsOptimistic, setBoardsOptimistic] = React.useState(boards);
   const [maxPlayersOptimistic, setMaxPlayersOptimistic] = React.useState(maxPlayersConfig);
   const [isPublicOptimistic, setIsPublicOptimistic] = React.useState(isPublicConfig);
-  const [isSpeedrunOptimistic, setIsSpeedrunOptimistic] = React.useState(isSpeedrunConfig);
+  const [variantOptimistic, setVariantOptimistic] = React.useState(effectiveVariant);
   const [isSavingConfig, setIsSavingConfig] = React.useState(false);
   const [configError, setConfigError] = React.useState(null);
 
@@ -114,13 +123,13 @@ export default function MultiplayerWaitingRoom({
     setBoardsDraft(boards);
     setMaxPlayersDraft(maxPlayersConfig);
     setIsPublicDraft(isPublicConfig);
-    setIsSpeedrunDraft(isSpeedrunConfig);
+    setVariantDraft(effectiveVariant);
     // Sync optimistic state with live values when server updates come in
     setBoardsOptimistic(boards);
     setMaxPlayersOptimistic(maxPlayersConfig);
     setIsPublicOptimistic(isPublicConfig);
-    setIsSpeedrunOptimistic(isSpeedrunConfig);
-  }, [boards, maxPlayersConfig, isPublicConfig, isSpeedrunConfig]);
+    setVariantOptimistic(effectiveVariant);
+  }, [boards, maxPlayersConfig, isPublicConfig, effectiveVariant]);
 
   // Expiry countdown based on createdAt and current time.
   const timeoutMs =
@@ -253,8 +262,19 @@ export default function MultiplayerWaitingRoom({
 
               {!isEditingConfig && (
                 <div className="waitingRoomSettingsSummary">
-                  Boards: <strong>{boardsOptimistic}</strong> · Mode:{' '}
-                  <strong>{isSpeedrunOptimistic ? 'Speedrun' : 'Standard'}</strong> ·
+                  {(variantOptimistic === 'standard' || variantOptimistic === 'speedrun') && (
+                    <>Boards: <strong>{boardsOptimistic}</strong> · </>
+                  )}
+                  Mode:{' '}
+                  <strong>
+                    {variantOptimistic === 'speedrun'
+                      ? 'Standard Speedrun'
+                      : variantOptimistic === 'solutionhunt'
+                      ? 'Solution Hunt'
+                      : variantOptimistic === 'solutionhunt_speedrun'
+                      ? 'Solution Hunt Speedrun'
+                      : 'Standard'}
+                  </strong> ·
                   Max players: <strong>{maxPlayersOptimistic}</strong> · Visibility:{' '}
                   <strong>{isPublicOptimistic ? 'Public' : 'Private'}</strong>
                   {isSavingConfig && <span className="waitingRoomSavingIndicator"> (saving...)</span>}
@@ -266,26 +286,44 @@ export default function MultiplayerWaitingRoom({
                 <div className="waitingRoomSettingsEditForm">
                   <div className="waitingRoomSettingsRow">
                     <label className="waitingRoomSettingsField">
-                      <div className="waitingRoomSettingsFieldLabel">Boards</div>
+                      <div className="waitingRoomSettingsFieldLabel">Game Mode</div>
                       <select
                         className="waitingRoomSelect"
-                        value={boardsDraft}
-                        onChange={(e) =>
-                          setBoardsDraft(
-                            Math.min(
-                              MAX_BOARDS,
-                              Math.max(1, parseInt(e.target.value, 10) || 1),
-                            ),
-                          )
-                        }
+                        value={variantDraft}
+                        onChange={(e) => setVariantDraft(e.target.value)}
                       >
-                        {Array.from({ length: MAX_BOARDS }, (_, i) => i + 1).map((n) => (
-                          <option key={n} value={n}>
-                            {n}
-                          </option>
-                        ))}
+                        <option value="standard">Standard (6 guesses)</option>
+                        <option value="speedrun">Standard Speedrun (Unlimited, timed)</option>
+                        <option value="solutionhunt">Solution Hunt (6 guesses)</option>
+                        <option value="solutionhunt_speedrun">Solution Hunt Speedrun (Unlimited, timed)</option>
                       </select>
                     </label>
+                    {(variantDraft === 'standard' || variantDraft === 'speedrun') && (
+                      <label className="waitingRoomSettingsField">
+                        <div className="waitingRoomSettingsFieldLabel">Boards</div>
+                        <select
+                          className="waitingRoomSelect"
+                          value={boardsDraft}
+                          onChange={(e) =>
+                            setBoardsDraft(
+                              Math.min(
+                                MAX_BOARDS,
+                                Math.max(1, parseInt(e.target.value, 10) || 1),
+                              ),
+                            )
+                          }
+                        >
+                          {Array.from({ length: MAX_BOARDS }, (_, i) => i + 1).map((n) => (
+                            <option key={n} value={n}>
+                              {n}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    )}
+                  </div>
+
+                  <div className="waitingRoomSettingsRow">
                     <label className="waitingRoomSettingsField">
                       <div className="waitingRoomSettingsFieldLabel">Max players</div>
                       <select
@@ -307,34 +345,26 @@ export default function MultiplayerWaitingRoom({
                         ))}
                       </select>
                     </label>
-                  </div>
-
-                  <div className="waitingRoomSettingsToggles">
-                    <label className="waitingRoomCheckboxLabel">
-                      <input
-                        type="checkbox"
-                        checked={isSpeedrunDraft}
-                        onChange={(e) => setIsSpeedrunDraft(e.target.checked)}
-                      />
-                      <span>Speedrun mode</span>
-                    </label>
-                    <div className="waitingRoomVisibilityGroup">
-                      <label className="waitingRoomRadioLabel">
-                        <input
-                          type="radio"
-                          checked={isPublicDraft}
-                          onChange={() => setIsPublicDraft(true)}
-                        />
-                        <span>Public</span>
-                      </label>
-                      <label className="waitingRoomRadioLabel">
-                        <input
-                          type="radio"
-                          checked={!isPublicDraft}
-                          onChange={() => setIsPublicDraft(false)}
-                        />
-                        <span>Private</span>
-                      </label>
+                    <div className="waitingRoomSettingsField">
+                      <div className="waitingRoomSettingsFieldLabel">Visibility</div>
+                      <div className="waitingRoomVisibilityGroup">
+                        <label className="waitingRoomRadioLabel">
+                          <input
+                            type="radio"
+                            checked={isPublicDraft}
+                            onChange={() => setIsPublicDraft(true)}
+                          />
+                          <span>Public</span>
+                        </label>
+                        <label className="waitingRoomRadioLabel">
+                          <input
+                            type="radio"
+                            checked={!isPublicDraft}
+                            onChange={() => setIsPublicDraft(false)}
+                          />
+                          <span>Private</span>
+                        </label>
+                      </div>
                     </div>
                   </div>
 
@@ -346,7 +376,7 @@ export default function MultiplayerWaitingRoom({
                         setBoardsDraft(boards);
                         setMaxPlayersDraft(maxPlayersConfig);
                         setIsPublicDraft(isPublicConfig);
-                        setIsSpeedrunDraft(isSpeedrunConfig);
+                        setVariantDraft(effectiveVariant);
                       }}
                       className="waitingRoomSecondaryButton waitingRoomSettingsButton"
                     >
@@ -361,18 +391,21 @@ export default function MultiplayerWaitingRoom({
                         setConfigError(null);
                         
                         // Optimistically update the display immediately
-                        setBoardsOptimistic(boardsDraft);
+                        const isSolutionHuntVariant = variantDraft === 'solutionhunt' || variantDraft === 'solutionhunt_speedrun';
+                        setBoardsOptimistic(isSolutionHuntVariant ? 1 : boardsDraft);
                         setMaxPlayersOptimistic(maxPlayersDraft);
                         setIsPublicOptimistic(isPublicDraft);
-                        setIsSpeedrunOptimistic(isSpeedrunDraft);
+                        setVariantOptimistic(variantDraft);
                         setIsEditingConfig(false);
                         
                         try {
                           await onUpdateConfig({
-                            boards: boardsDraft,
+                            boards: isSolutionHuntVariant ? 1 : boardsDraft,
                             maxPlayers: maxPlayersDraft,
                             isPublic: isPublicDraft,
-                            speedrun: isSpeedrunDraft,
+                            variant: variantDraft,
+                            speedrun: variantDraft === 'speedrun' || variantDraft === 'solutionhunt_speedrun',
+                            solutionHunt: variantDraft === 'solutionhunt' || variantDraft === 'solutionhunt_speedrun',
                           });
                         } catch (err) {
                           // If the request fails, revert the optimistic update
@@ -380,7 +413,7 @@ export default function MultiplayerWaitingRoom({
                           setBoardsOptimistic(boards);
                           setMaxPlayersOptimistic(maxPlayersConfig);
                           setIsPublicOptimistic(isPublicConfig);
-                          setIsSpeedrunOptimistic(isSpeedrunConfig);
+                          setVariantOptimistic(effectiveVariant);
                           // Re-open the form so user can try again or discard
                           setIsEditingConfig(true);
                         } finally {

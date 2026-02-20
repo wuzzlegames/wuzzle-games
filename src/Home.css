@@ -251,15 +251,28 @@
 }
 
 .modeRowTitleSelect {
-  background: transparent;
-  color: #e5e7eb;
-  border: none;
+  /* Explicit dark styling for native <select> (prevents white-on-white rendering) */
+  background: #212121;
+  color: #ffffff;
+  border: 1px solid #3A3A3C;
+  border-radius: 8px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   outline: none;
-  padding: 0;
+  padding: 3px 8px;
   margin: 0 0 0 2px;
+  color-scheme: dark;
+}
+
+.modeRowTitleSelect:focus-visible {
+  border-color: #6d597a;
+  box-shadow: 0 0 0 2px rgba(109, 89, 122, 0.35);
+}
+
+.modeRowTitleSelect option {
+  background: #212121;
+  color: #ffffff;
 }
 
 .modeRowDesc {

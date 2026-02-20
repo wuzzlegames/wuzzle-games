@@ -19,12 +19,48 @@ import { ref, get } from "firebase/database";
 
 const BOARD_OPTIONS = Array.from({ length: MAX_BOARDS }, (_, i) => i + 1);
 
-const ModeRow = React.memo(function ModeRow({ title, desc, buttonText, onClick, variant = "green", titleRight, modeVariant = "daily" }) {
+const ModeRow = React.memo(function ModeRow({
+  title,
+  desc,
+  buttonText,
+  onClick,
+  variant = "green",
+  titleRight,
+  modeVariant = "daily",
+}) {
   const handleKeyDown = (event) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       if (onClick) onClick();
     }
+  };
+
+  const handleTitleRightMouseDownCapture = (event) => {
+    // If the right-side pill contains a <select>, treat the whole pill as
+    // interacting with that select (so we don't trigger the ModeRow click).
+    const select = event.currentTarget.querySelector("select");
+    if (!select) return;
+    event.stopPropagation();
+  };
+
+  const handleTitleRightClickCapture = (event) => {
+    const select = event.currentTarget.querySelector("select");
+    if (!select) return;
+
+    // Prevent clicking the pill from triggering the ModeRow click (navigation).
+    event.stopPropagation();
+
+    // If the user directly clicked the select, let the browser handle it.
+    if (event.target === select || select.contains(event.target)) return;
+
+    // Otherwise, programmatically open the dropdown.
+    if (typeof select.showPicker === "function") {
+      select.showPicker();
+      return;
+    }
+
+    select.focus();
+    select.click();
   };
 
   return (
@@ -39,7 +75,15 @@ const ModeRow = React.memo(function ModeRow({ title, desc, buttonText, onClick, 
       <div className="modeRowText">
         <div className="modeRowTitle">
           {title}
-          {titleRight ? <span className="modeRowTitleRight">{titleRight}</span> : null}
+          {titleRight ? (
+            <span
+              className="modeRowTitleRight"
+              onMouseDownCapture={handleTitleRightMouseDownCapture}
+              onClickCapture={handleTitleRightClickCapture}
+            >
+              {titleRight}
+            </span>
+          ) : null}
         </div>
         <div className="modeRowDesc">{desc}</div>
       </div>

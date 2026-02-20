@@ -75,9 +75,9 @@ describe('Home', () => {
       );
     });
 
-    await screen.findByRole('heading', { name: /daily puzzles/i });
+    await screen.findByRole('button', { name: /play daily/i });
 
-    const select = screen.getByLabelText(/simultaneous words/i);
+    const select = screen.getAllByLabelText(/number of words/i)[0];
     const options = Array.from(select.querySelectorAll('option'));
     expect(options).toHaveLength(32);
     expect(options[0]).toHaveTextContent('1');
@@ -96,7 +96,7 @@ describe('Home', () => {
       );
     });
 
-    await screen.findByRole('heading', { name: /daily puzzles/i });
+    await screen.findByRole('button', { name: /play daily/i });
 
     const playDailyBtn = screen.getByRole('button', { name: /play daily/i });
     const speedrunDailyBtn = screen.getByRole('button', { name: /speedrun daily/i });
@@ -122,7 +122,7 @@ describe('Home', () => {
       );
     });
 
-    await screen.findByRole('heading', { name: /daily puzzles/i });
+    await screen.findByRole('button', { name: /play daily/i });
 
     fireEvent.click(screen.getByRole('button', { name: /mock sign up complete/i }));
 

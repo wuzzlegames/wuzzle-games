@@ -48,7 +48,7 @@ export default function WordleMarathonLanding() {
         />
         <link
           rel="canonical"
-          href="https://wisdom-githb.github.io/wuzzle-games/wuzzle-marathon/"
+          href="https://wuzzlegames.com/wuzzle-marathon/"
         />
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>

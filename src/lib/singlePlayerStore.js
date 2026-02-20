@@ -98,6 +98,24 @@ export async function saveSolvedState({ authUser, database, solvedKey, value }) 
 }
 
 /**
+ * Firebase strips empty arrays (e.g. `guesses: []` becomes missing/null).
+ * Re-hydrate board-level arrays so the state passes validation.
+ */
+function normalizeGameState(state) {
+  if (!state || typeof state !== 'object' || !Array.isArray(state.boards)) return state;
+  return {
+    ...state,
+    boards: state.boards.map((b) => {
+      if (!b || typeof b !== 'object') return b;
+      return {
+        ...b,
+        guesses: Array.isArray(b.guesses) ? b.guesses : [],
+      };
+    }),
+  };
+}
+
+/**
  * Load an in-progress game state with server-first semantics and conflict resolution.
  * Validates state structure and resolves conflicts using timestamps.
  */
@@ -117,7 +135,7 @@ export async function loadGameState({ authUser, database, gameStateKey }) {
       );
       const snap = await get(stateRef);
       if (snap.exists()) {
-        remoteState = snap.val() || null;
+        remoteState = normalizeGameState(snap.val() || null);
         // Validate remote state
         if (remoteState) {
           const validation = validateGameState(remoteState);
@@ -135,7 +153,7 @@ export async function loadGameState({ authUser, database, gameStateKey }) {
   }
 
   // Load local state
-  localState = loadJSON(gameStateKey, null);
+  localState = normalizeGameState(loadJSON(gameStateKey, null));
   if (localState) {
     // Validate local state
     const validation = validateGameState(localState);

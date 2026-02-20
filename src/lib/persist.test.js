@@ -69,9 +69,9 @@ describe('key helpers', () => {
     expect(key).toBe('mw:game:marathon:standard:2024-01-02');
   });
 
-  it('marathonMetaKey encodes mode and speedrun but not date', () => {
-    expect(marathonMetaKey(false)).toBe('mw:meta:marathon:standard');
-    expect(marathonMetaKey(true)).toBe('mw:meta:marathon:speedrun');
+  it('marathonMetaKey encodes mode, speedrun, and date', () => {
+    expect(marathonMetaKey(false, '2024-01-03')).toBe('mw:meta:marathon:standard:2024-01-03');
+    expect(marathonMetaKey(true, '2024-01-03')).toBe('mw:meta:marathon:speedrun:2024-01-03');
   });
 
   it('makeSolvedKey encodes mode-specific info', () => {

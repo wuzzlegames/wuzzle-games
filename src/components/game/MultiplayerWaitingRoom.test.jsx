@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 vi.mock('../../hooks/useUserBadges', () => ({
   useUserBadges: () => ({ userBadges: {}, loading: false, error: null }),
@@ -8,6 +9,10 @@ vi.mock('../../hooks/useUserBadges', () => ({
 }));
 
 import MultiplayerWaitingRoom from './MultiplayerWaitingRoom';
+
+function Wrapper({ children }) {
+  return <MemoryRouter>{children}</MemoryRouter>;
+}
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -30,6 +35,7 @@ describe('MultiplayerWaitingRoom', () => {
         authUserId="host-id"
         onShareCode={onShareCode}
       />,
+      { wrapper: Wrapper },
     );
 
     expect(screen.getByText('Waiting for players to join...')).toBeInTheDocument();
@@ -54,6 +60,7 @@ describe('MultiplayerWaitingRoom', () => {
         isHost
         authUserId="alice-id"
       />,
+      { wrapper: Wrapper },
     );
 
     // UserCard shows Alice with Host badge and (You); Bob as guest
@@ -82,6 +89,7 @@ describe('MultiplayerWaitingRoom', () => {
         isHost={false}
         authUserId="bob-id"
       />,
+      { wrapper: Wrapper },
     );
 
     // Guest should see UserCards: Alice with Host badge, Bob with (You)
@@ -112,6 +120,7 @@ describe('MultiplayerWaitingRoom', () => {
         onReady={onReady}
         onStartGame={onStartGame}
       />,
+      { wrapper: Wrapper },
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Ready' }));
@@ -163,6 +172,7 @@ describe('MultiplayerWaitingRoom', () => {
         friendRequestSent={false}
         friends={[]}
       />,
+      { wrapper: Wrapper },
     );
 
     // The button has title "Add Bob as friend"; callback receives (name, id)
@@ -212,6 +222,7 @@ describe('MultiplayerWaitingRoom', () => {
         friendRequestSent={false}
         friends={[{ id: 'bob-id', name: 'Bob' }]}
       />,
+      { wrapper: Wrapper },
     );
 
     expect(screen.queryByTitle('Add Bob as friend')).not.toBeInTheDocument();

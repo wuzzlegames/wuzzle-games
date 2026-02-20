@@ -29,10 +29,26 @@ function toHeadElements(helmet) {
     .flat()
     .filter(Boolean);
 
+  // vite-prerender-plugin assumes non-children prop values are strings (it calls .replace).
+  // react-helmet-async includes boolean props like data-rh/data-react-helmet, so normalise.
+  const normaliseProps = (props) => {
+    const out = {};
+    Object.keys(props || {}).forEach((k) => {
+      const v = props[k];
+      if (v == null) return;
+      if (k === 'children' || k === 'textContent') {
+        out[k] = v;
+      } else {
+        out[k] = typeof v === 'string' ? v : String(v);
+      }
+    });
+    return out;
+  };
+
   return new Set(
     reactEls.map((el) => ({
       type: el.type,
-      props: el.props,
+      props: normaliseProps(el.props || {}),
     }))
   );
 }
@@ -43,7 +59,7 @@ export async function prerender(data) {
 
   const html = renderToString(
     <HelmetProvider context={helmetContext}>
-      <StaticRouter location={url} basename="/wuzzle-games">
+      <StaticRouter location={url} basename="">
         <App />
       </StaticRouter>
     </HelmetProvider>

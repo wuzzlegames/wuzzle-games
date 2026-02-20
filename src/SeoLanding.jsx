@@ -5,8 +5,8 @@ import "./SeoLanding.css";
 
 // Hard-code the canonical origin for deterministic prerender output.
 // (Using window.location breaks during SSR/prerender.)
-const SITE_ORIGIN = "https://wisdom-githb.github.io";
-const SITE_BASE = "/wuzzle-games";
+const SITE_ORIGIN = "https://wuzzlegames.com";
+const SITE_BASE = "";
 
 function absUrl(pathname) {
   const clean = pathname.startsWith("/") ? pathname : `/${pathname}`;

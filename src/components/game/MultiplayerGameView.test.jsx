@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import MultiplayerGameView from './MultiplayerGameView';
 
@@ -93,14 +94,16 @@ describe('MultiplayerGameView unauthenticated multiplayer gating', () => {
     const onBack = vi.fn();
 
     render(
-      <Suspense fallback={null}>
-        <MultiplayerGameView
+      <MemoryRouter>
+        <Suspense fallback={null}>
+          <MultiplayerGameView
           {...baseProps}
           authUser={null}
           authLoading={false}
           onBack={onBack}
-        />
-      </Suspense>,
+          />
+        </Suspense>
+      </MemoryRouter>,
     );
 
     // Wait for any lazy AuthModal/Suspense work to settle
@@ -125,14 +128,16 @@ describe('MultiplayerGameView unauthenticated multiplayer gating', () => {
 
   it('opens the AuthModal when Sign In is clicked', async () => {
     render(
-      <Suspense fallback={null}>
-        <MultiplayerGameView
+      <MemoryRouter>
+        <Suspense fallback={null}>
+          <MultiplayerGameView
           {...baseProps}
           authUser={null}
           authLoading={false}
           onBack={vi.fn()}
-        />
-      </Suspense>,
+          />
+        </Suspense>
+      </MemoryRouter>,
     );
 
     const signInButton = screen.getByRole('button', { name: 'Sign In' });
@@ -148,15 +153,17 @@ describe('MultiplayerGameView connection / error handling', () => {
     const onBack = vi.fn();
 
     render(
-      <Suspense fallback={null}>
-        <MultiplayerGameView
+      <MemoryRouter>
+        <Suspense fallback={null}>
+          <MultiplayerGameView
           {...baseProps}
           authUser={{ uid: 'user-1' }}
           authLoading={false}
           onBack={onBack}
           multiplayerGame={{ gameState: null, error: 'Game not found or has expired.', loading: false }}
-        />
-      </Suspense>,
+          />
+        </Suspense>
+      </MemoryRouter>,
     );
 
     // "Game not found or has expired." is treated as room-closed, so UI shows that message
@@ -183,8 +190,9 @@ describe('MultiplayerGameView waiting room', () => {
     };
 
     render(
-      <Suspense fallback={null}>
-        <MultiplayerGameView
+      <MemoryRouter>
+        <Suspense fallback={null}>
+          <MultiplayerGameView
           {...baseProps}
           authUser={{ uid: 'host-uid' }}
           authLoading={false}
@@ -192,8 +200,9 @@ describe('MultiplayerGameView waiting room', () => {
           multiplayerGame={{ gameState, error: null, loading: false }}
           waitingNowMs={gameState.createdAt + 5_000}
           initialNumBoards={1}
-        />
-      </Suspense>,
+          />
+        </Suspense>
+      </MemoryRouter>,
     );
 
     // The waiting room should show the room name heading and game code box,
@@ -223,8 +232,9 @@ describe('MultiplayerGameView in active multiplayer game', () => {
     };
 
     render(
-      <Suspense fallback={null}>
-        <MultiplayerGameView
+      <MemoryRouter>
+        <Suspense fallback={null}>
+          <MultiplayerGameView
           {...baseProps}
           authUser={{ uid: 'host-uid' }}
           authLoading={false}
@@ -240,8 +250,9 @@ describe('MultiplayerGameView in active multiplayer game', () => {
           ]}
           maxTurns={6}
           waitingNowMs={gameState.createdAt + 5000}
-        />
-      </Suspense>,
+          />
+        </Suspense>
+      </MemoryRouter>,
     );
 
     // Summary header

@@ -45,7 +45,7 @@ describe('generateShareText', () => {
       'Solved!',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -94,7 +94,7 @@ describe('generateShareText', () => {
       'Not solved!',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -145,7 +145,7 @@ describe('generateShareText', () => {
       'Solved!',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -176,7 +176,7 @@ describe('generateShareText', () => {
       'Solved: 2/2',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -207,7 +207,7 @@ describe('generateShareText', () => {
       'Solved: 0/2',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -244,7 +244,7 @@ describe('generateShareText', () => {
       'Solved: 5/5',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -291,7 +291,7 @@ describe('generateShareText', () => {
       'Guesses: 5',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -322,7 +322,7 @@ describe('generateShareText', () => {
       'Guesses used: 6',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -368,7 +368,7 @@ describe('generateShareText', () => {
       'Total guesses used: 16/30',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -414,7 +414,7 @@ describe('generateShareText', () => {
       'Total guesses used: 9/13',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -460,7 +460,7 @@ describe('generateShareText', () => {
       'Total guesses used: 23/30',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);
@@ -513,7 +513,7 @@ describe('generateShareText', () => {
       'Total time: 00:51.9',
       '',
       'Play Wuzzle Games!',
-      'https://wisdom-githb.github.io/wuzzle-games/',
+      'https://wuzzlegames.com/',
     ].join('\n');
 
     expect(text).toBe(expected);

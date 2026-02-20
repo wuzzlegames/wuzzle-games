@@ -12,19 +12,64 @@
  */
 export const ALL_BADGES = [
   {
-    id: 'registered',
-    name: 'Wuzzle Games Member',
-    description: 'Earned by creating an account and joining the community. Welcome to Wuzzle Games!',
-  },
-  {
-    id: 'daily_player',
-    name: 'Daily Player',
-    description: 'Earned by completing at least one game of Daily Wuzzle Games.',
-  },
-  {
     id: 'premium_member',
     name: 'Premium Member',
-    description: 'Unlocked by subscribing to Wuzzle Games Premium. Access to themed wordles, custom colors, and more!',
+    description: 'Earn this badge by subscribing to Wuzzle Games Premium.',
+  },
+  {
+    id: 'first_solve',
+    name: 'First solve',
+    description: 'Earn this badge by solving any Wuzzle Games puzzle for the first time.',
+  },
+  {
+    id: 'speedrun_beginner',
+    name: 'Speedrun beginner',
+    description: 'Earn this badge by completing any Speedrun puzzle for the first time.',
+  },
+  {
+    id: 'multiboard_starter',
+    name: 'Multiboard starter',
+    description: 'Earn this badge by winning a Wuzzle Games puzzle with at least 2 boards.',
+  },
+  {
+    id: 'daily_standard_hot_streak',
+    name: 'Daily Standard Hot streak',
+    description: 'Earn this badge by winning 10 Daily Standard puzzles in a row.',
+  },
+  {
+    id: 'daily_standard_wildfire_streak',
+    name: 'Daily Standard Wildfire streak',
+    description: 'Earn this badge by winning 20 Daily Standard puzzles in a row.',
+  },
+  {
+    id: 'daily_standard_legendary_streak',
+    name: 'Daily Standard Legendary streak',
+    description: 'Earn this badge by winning 50 Daily Standard puzzles in a row.',
+  },
+  {
+    id: 'daily_standard_century_streak',
+    name: 'Daily Standard Century streak',
+    description: 'Earn this badge by winning 100 Daily Standard puzzles in a row.',
+  },
+  {
+    id: 'daily_speedrun_hot_streak',
+    name: 'Daily Speedrun Hot streak',
+    description: 'Earn this badge by winning 10 Daily Speedrun puzzles in a row.',
+  },
+  {
+    id: 'daily_speedrun_wildfire_streak',
+    name: 'Daily Speedrun Wildfire streak',
+    description: 'Earn this badge by winning 20 Daily Speedrun puzzles in a row.',
+  },
+  {
+    id: 'daily_speedrun_legendary_streak',
+    name: 'Daily Speedrun Legendary streak',
+    description: 'Earn this badge by winning 50 Daily Speedrun puzzles in a row.',
+  },
+  {
+    id: 'daily_speedrun_century_streak',
+    name: 'Daily Speedrun Century streak',
+    description: 'Earn this badge by winning 100 Daily Speedrun puzzles in a row.',
   },
   {
     id: 'party_starter',

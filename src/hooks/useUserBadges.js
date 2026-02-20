@@ -1,69 +1,58 @@
-import { useState, useEffect, useRef } from 'react';
-import { ref, get, set } from 'firebase/database';
+import { useState, useEffect } from 'react';
+import { ref, get } from 'firebase/database';
 import { database } from '../config/firebase';
 
-const REGISTERED_BADGE_ID = 'registered';
-
 /**
- * Fetches the user's badges from Firebase and ensures the "registered" badge
- * is granted to all signed-in users.
+ * Fetches the signed-in user's badges from Firebase.
  *
  * @param {{ uid: string } | null} user - Current auth user
- * @returns {{ userBadges: Record<string, boolean>; loading: boolean; error: string | null }}
+ * @returns {{ userBadges: Record<string, unknown>; loading: boolean; error: string | null }}
  */
 export function useUserBadges(user) {
-  const [userBadges, setUserBadges] = useState(/** @type {Record<string, boolean>} */ ({}));
+  const [userBadges, setUserBadges] = useState(/** @type {Record<string, unknown>} */ ({}));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(/** @type {string | null} */ (null));
-  const ensuredRegisteredRef = useRef(false);
 
   useEffect(() => {
     if (!user?.uid) {
       setUserBadges({});
       setLoading(false);
       setError(null);
-      ensuredRegisteredRef.current = false;
       return;
     }
 
     let isMounted = true;
 
-    async function loadAndEnsureBadges() {
+    async function loadBadges() {
       setLoading(true);
       setError(null);
       try {
         const badgesRef = ref(database, `users/${user.uid}/badges`);
         const snap = await get(badgesRef);
-        const data = (snap.val() || {});
+        const data = snap.val() || {};
         const badges = typeof data === 'object' && !Array.isArray(data) ? data : {};
-
-        const hasRegistered = badges[REGISTERED_BADGE_ID] === true || badges[REGISTERED_BADGE_ID] != null;
-        if (!hasRegistered && !ensuredRegisteredRef.current) {
-          ensuredRegisteredRef.current = true;
-          await set(badgesRef, { ...badges, [REGISTERED_BADGE_ID]: true });
-          setUserBadges({ ...badges, [REGISTERED_BADGE_ID]: true });
-        } else {
-          setUserBadges(badges);
-        }
+        if (isMounted) setUserBadges(badges);
       } catch (err) {
         if (isMounted) {
           setError(err?.message || 'Failed to load badges');
           setUserBadges({});
         }
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     }
 
-    loadAndEnsureBadges();
-    return () => { isMounted = false; };
+    loadBadges();
+    return () => {
+      isMounted = false;
+    };
   }, [user?.uid]);
 
   return { userBadges, loading, error };
 }
 
 /**
- * Fetches badges for a given user (e.g. another player). Read-only, no "ensure" logic.
+ * Fetches badges for a given user (e.g. another player). Read-only.
  * Requires Firebase rules to allow reading users/{uid}/badges when auth != null.
  *
  * @param {string | null} uid - User ID to fetch badges for
@@ -87,16 +76,18 @@ export function useBadgesForUser(uid) {
       .then((snap) => {
         const data = snap.val() || {};
         const badges = typeof data === 'object' && !Array.isArray(data) ? data : {};
-        setUserBadges(badges);
+        if (isMounted) setUserBadges(badges);
       })
       .catch(() => {
         if (isMounted) setUserBadges({});
       })
       .finally(() => {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       });
 
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [uid]);
 
   return { userBadges, loading };

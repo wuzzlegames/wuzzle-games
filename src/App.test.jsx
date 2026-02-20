@@ -53,7 +53,7 @@ describe('App routing', () => {
       );
     });
 
-    expect(await screen.findByRole('heading', { name: /daily/i })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /play daily/i })).toBeInTheDocument();
   });
 
   it('navigates unknown paths back to home', async () => {
@@ -68,6 +68,6 @@ describe('App routing', () => {
       );
     });
 
-    expect(await screen.findByRole('heading', { name: /daily/i })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /play daily/i })).toBeInTheDocument();
   });
 });

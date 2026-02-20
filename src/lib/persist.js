@@ -58,9 +58,10 @@ export function makeSolutionHuntKey(speedrunEnabled = false, dateString = null) 
   return `${PREFIX}game:solutionhunt:${speedrunEnabled ? 'speedrun' : 'standard'}:${date}`;
 }
 
-export function marathonMetaKey(speedrunEnabled) {
-  // Marathon meta doesn't reset daily, only on reset all
-  return `${PREFIX}meta:marathon:${speedrunEnabled ? "speedrun" : "standard"}`;
+export function marathonMetaKey(speedrunEnabled, dateString = null) {
+  // Marathon meta resets daily along with game boards and solved state.
+  const date = dateString || getCurrentDateString();
+  return `${PREFIX}meta:marathon:${speedrunEnabled ? "speedrun" : "standard"}:${date}`;
 }
 
 export function makeSolvedKey(mode, numBoards, speedrunEnabled, marathonIndex = null, dateString = null) {

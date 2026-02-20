@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wisdom-githb.github.io/wuzzle-games/sitemap.xml
+Sitemap: https://wuzzlegames.com/sitemap.xml

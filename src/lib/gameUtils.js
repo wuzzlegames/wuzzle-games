@@ -129,7 +129,7 @@ export function generateShareText(
 
     lines.push("");
     lines.push("Play Wuzzle Games!");
-    lines.push("https://wisdom-githb.github.io/wuzzle-games/");
+    lines.push("https://wuzzlegames.com/");
 
     return lines.join("\n");
   }
@@ -197,7 +197,7 @@ export function generateShareText(
 
   lines.push("");
   lines.push("Play Wuzzle Games!");
-  lines.push("https://wisdom-githb.github.io/wuzzle-games/");
+  lines.push("https://wuzzlegames.com/");
 
   return lines.join("\n");
 }

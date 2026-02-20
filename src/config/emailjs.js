@@ -5,7 +5,7 @@
 // 2. Go to Email Services and add a new service (Gmail, Outlook, etc.)
 // 3. Go to Email Templates and create a new template:
 //    - Template Name: feedback_template
-//    - Subject: feedback for better-wordle
+//    - Subject: feedback for wuzzlegames.com
 //    - To Email: abhijeetsridhar14@gmail.com
 //    - Content: {{message}}
 // 4. Go to Account > API Keys and copy your Public Key
@@ -14,11 +14,11 @@
 // Note: These are public keys and safe to expose in client-side code
 
 export const EMAILJS_CONFIG = {
-  SERVICE_ID: "gmail-better-wordle",
-  TEMPLATE_ID: "feedback_better_wordle",
+  SERVICE_ID: "gmail-wuzzle-games",
+  TEMPLATE_ID: "feedback_wuzzle_games",
   PUBLIC_KEY: "jIpS9TFRU6hC_kPiN",
   TO_EMAIL: "abhijeetsridhar14@gmail.com",
-  SUBJECT: "feedback for better-wordle",
+  SUBJECT: "feedback for wuzzlegames.com",
 };
 
 // Check if EmailJS is configured

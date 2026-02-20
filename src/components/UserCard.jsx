@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import BadgeIcon from "./BadgeIcon";
 import Modal from "./Modal";
 import "./UserCard.css";
@@ -7,7 +7,7 @@ import "./UserCard.css";
 const PREMIUM_BADGE_DEF = {
   id: 'premium_member',
   name: 'Premium Member',
-  description: 'Unlocked by subscribing to Wuzzle Games Premium.',
+  description: 'Earn this badge by subscribing to Wuzzle Games Premium.',
 };
 
 /**
@@ -23,6 +23,8 @@ const PREMIUM_BADGE_DEF = {
  * @param {function} [onClick] - Optional click handler for main part (e.g. navigate to profile).
  * @param {string} [className] - Additional CSS class
  * @param {string} [size] - 'sm' | 'md' (default: 'md')
+ * @param {string} [friendStatus] - 'self' | 'friend' | 'none' (default: 'none')
+ * @param {function} [onAddFriend] - Callback to send a friend request from the badges modal
  */
 export default function UserCard({
   username,
@@ -34,11 +36,25 @@ export default function UserCard({
   onClick,
   className = "",
   size = "md",
+  friendStatus = "none",
+  onAddFriend,
 }) {
   const displayName = username || "Player";
   const suffix = isYou ? " (You)" : "";
   const isMainClickable = !!(href || onClick);
   const [badgesModalOpen, setBadgesModalOpen] = useState(false);
+  const [addFriendState, setAddFriendState] = useState("idle"); // idle | sending | sent | error
+
+  const handleAddFriend = useCallback(async () => {
+    if (!onAddFriend || addFriendState === "sending" || addFriendState === "sent") return;
+    setAddFriendState("sending");
+    try {
+      await onAddFriend();
+      setAddFriendState("sent");
+    } catch {
+      setAddFriendState("error");
+    }
+  }, [onAddFriend, addFriendState]);
 
   const latestEarned = earnedBadges.length > 0 ? earnedBadges[0] : null;
   const hasEarnedBadges = earnedBadges.length > 0;
@@ -74,7 +90,7 @@ export default function UserCard({
   );
 
   const baseClass = `userCard userCard--${size} ${className}`.trim();
-  const badgesModalTitle = isYou ? "Your badges" : "Badges";
+  const badgesModalTitle = isYou ? "Your Badges" : `${displayName}'s Badges`;
 
   return (
     <div className={baseClass} role="presentation">
@@ -115,6 +131,25 @@ export default function UserCard({
               <h2 id="userCard-badges-modal-title" className="userCard-badgesModalTitle">
                 {badgesModalTitle}
               </h2>
+              {friendStatus === "friend" && (
+                <div className="userCard-friendStatusLabel">✓ Friends</div>
+              )}
+              {friendStatus !== "self" && friendStatus !== "friend" && onAddFriend && (
+                <button
+                  type="button"
+                  className="userCard-addFriendButton"
+                  onClick={handleAddFriend}
+                  disabled={addFriendState === "sending" || addFriendState === "sent"}
+                >
+                  {addFriendState === "sending"
+                    ? "Sending..."
+                    : addFriendState === "sent"
+                    ? "✓ Request Sent"
+                    : addFriendState === "error"
+                    ? "Retry"
+                    : "+ Add Friend"}
+                </button>
+              )}
               <div className="userCard-badgesModalList">
                 {earnedBadges.map((b) => (
                   <div key={b.id} className="userCard-badgesModalItem">

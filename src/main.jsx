@@ -5,10 +5,10 @@ import { HelmetProvider } from 'react-helmet-async'
 import App from './App.jsx'
 import './index.css'
 
-// Get base URL from environment or use /wuzzle-games/ for GitHub Pages
-// React Router basename should not have trailing slash
-const rawBaseUrl = import.meta.env.BASE_URL || '/wuzzle-games/';
-const baseUrl = rawBaseUrl.endsWith('/') ? rawBaseUrl.slice(0, -1) : rawBaseUrl;
+// Get base URL from Vite.
+// React Router basename should not have trailing slash.
+const rawBaseUrl = import.meta.env.BASE_URL || '/';
+const baseUrl = rawBaseUrl === '/' ? '' : (rawBaseUrl.endsWith('/') ? rawBaseUrl.slice(0, -1) : rawBaseUrl);
 
 // Handle 404 redirects from GitHub Pages
 // When 404.html redirects to index.html, it stores the original path in sessionStorage

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://wisdom-githb.github.io/wuzzle-games/</loc>
+    <loc>https://wuzzlegames.com/</loc>
   </url>
   <url>
-    <loc>https://wisdom-githb.github.io/wuzzle-games/game/</loc>
+    <loc>https://wuzzlegames.com/game/</loc>
   </url>
   <url>
-    <loc>https://wisdom-githb.github.io/wuzzle-games/leaderboard/</loc>
+    <loc>https://wuzzlegames.com/leaderboard/</loc>
   </url>
   <url>
-    <loc>https://wisdom-githb.github.io/wuzzle-games/profile/</loc>
+    <loc>https://wuzzlegames.com/profile/</loc>
   </url>
   <url>
-    <loc>https://wisdom-githb.github.io/wuzzle-games/faq/</loc>
+    <loc>https://wuzzlegames.com/faq/</loc>
   </url>
 
   <!-- SEO landing pages (long-tail intent) -->
   <url>
-    <loc>https://wisdom-githb.github.io/wuzzle-games/multiplayer-wuzzle/</loc>
+    <loc>https://wuzzlegames.com/multiplayer-wuzzle/</loc>
   </url>
   <url>
-    <loc>https://wisdom-githb.github.io/wuzzle-games/multi-board-wuzzle/</loc>
+    <loc>https://wuzzlegames.com/multi-board-wuzzle/</loc>
   </url>
   <url>
-    <loc>https://wisdom-githb.github.io/wuzzle-games/wuzzle-speedrun/</loc>
+    <loc>https://wuzzlegames.com/wuzzle-speedrun/</loc>
   </url>
   <url>
-    <loc>https://wisdom-githb.github.io/wuzzle-games/wuzzle-marathon/</loc>
+    <loc>https://wuzzlegames.com/wuzzle-marathon/</loc>
   </url>
 </urlset>

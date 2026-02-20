@@ -167,10 +167,47 @@
 }
 
 .userCard-badgesModalTitle {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   font-size: 18px;
   font-weight: 600;
   color: #e4e4e7;
+}
+
+/* "+ Add Friend" button inside the badges modal */
+.userCard-addFriendButton {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #e56b6f;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.userCard-addFriendButton:hover:not(:disabled) {
+  background: #d45a5e;
+}
+
+.userCard-addFriendButton:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+/* "✓ Friends" status label */
+.userCard-friendStatusLabel {
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(80, 163, 57, 0.15);
+  color: #50a339;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
 }
 
 .userCard-badgesModalList {

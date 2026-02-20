@@ -29,7 +29,7 @@ import { useBoardLayout } from "../../hooks/useBoardLayout";
 import { useStageTimer } from "../../hooks/useStageTimer";
 import { loadStreakRemoteAware, saveStreakRemoteAware, saveSolvedState } from "../../lib/singlePlayerStore";
 import { addPendingLeaderboard } from "../../lib/pendingLeaderboard";
-import { grantBadge } from "../../lib/badgeService";
+import { grantBadges } from "../../lib/badgeService";
 import { clampBoards } from "../../lib/validation";
 import { logError } from "../../lib/errorUtils";
 import { filterWordsByClues } from "../../lib/wordFilter";
@@ -115,7 +115,11 @@ export default function GameSinglePlayer({
 
   // Load marathon meta for current speedrun/daily config (standard and speedrun are separate).
   const marathonMeta = loadMarathonMeta(speedrunEnabled);
-  const marathonIndex = marathonMeta.index || 0;
+  let marathonIndex = marathonMeta.index || 0;
+  // Safety: clamp if index is somehow past the end (e.g. levels config changed).
+  if (mode === "marathon" && marathonIndex >= marathonLevels.length) {
+    marathonIndex = 0;
+  }
   const marathonCumulativeMs = marathonMeta.cumulativeMs || 0;
   const marathonStageTimes = marathonMeta.stageTimes || [];
 
@@ -660,6 +664,16 @@ export default function GameSinglePlayer({
       };
       saveSolvedState({ authUser, database, solvedKey, value: solvedState });
 
+      // Earn badges related to completing puzzles.
+      if (authUser?.uid) {
+        const newlyEarned = ["first_solve"];
+        if (speedrunEnabled) newlyEarned.push("speedrun_beginner");
+        if (mode !== "marathon" && numBoards >= 2) newlyEarned.push("multiboard_starter");
+        grantBadges({ database, uid: authUser.uid, badgeIds: newlyEarned }).catch((err) => {
+          logError(err, 'GameSinglePlayer.grantBadges.onSolve');
+        });
+      }
+
       const isMarathonComplete =
         mode === "marathon" && marathonIndex >= marathonLevels.length - 1;
 
@@ -686,6 +700,30 @@ export default function GameSinglePlayer({
             });
 
             setStreakLabel(buildStreakLabel(mode, speedrunEnabled, streakInfo));
+
+            // Earn streak badges (daily only).
+            if (authUser?.uid && mode === 'daily' && numBoards === 1) {
+              const currentStreak = typeof streakInfo?.current === 'number' ? streakInfo.current : 0;
+              const badgeIds = [];
+
+              if (speedrunEnabled) {
+                if (currentStreak >= 10) badgeIds.push('daily_speedrun_hot_streak');
+                if (currentStreak >= 20) badgeIds.push('daily_speedrun_wildfire_streak');
+                if (currentStreak >= 50) badgeIds.push('daily_speedrun_legendary_streak');
+                if (currentStreak >= 100) badgeIds.push('daily_speedrun_century_streak');
+              } else {
+                if (currentStreak >= 10) badgeIds.push('daily_standard_hot_streak');
+                if (currentStreak >= 20) badgeIds.push('daily_standard_wildfire_streak');
+                if (currentStreak >= 50) badgeIds.push('daily_standard_legendary_streak');
+                if (currentStreak >= 100) badgeIds.push('daily_standard_century_streak');
+              }
+
+              if (badgeIds.length > 0) {
+                grantBadges({ database, uid: authUser.uid, badgeIds }).catch((err) => {
+                  logError(err, 'GameSinglePlayer.grantBadges.streak');
+                });
+              }
+            }
 
             // Save solution words to archive for streak-tracked modes
             // Only save for regular games (not archive games) - archive games already have solutions saved
@@ -788,11 +826,6 @@ export default function GameSinglePlayer({
         })();
       }
 
-      if (mode === "daily" && authUser) {
-        grantBadge({ database, uid: authUser.uid, badgeId: "daily_player" }).catch((err) => {
-          logError(err, 'GameSinglePlayer.grantBadge');
-        });
-      }
 
       const wouldSubmitSpeedrun =
         speedrunEnabled && allSolvedNow && (mode === "daily" || isMarathonComplete);

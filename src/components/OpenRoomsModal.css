@@ -5,11 +5,66 @@
   box-sizing: border-box;
 }
 
+.openRoomsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
 .openRoomsTitle {
-  margin: 0 0 16px 0;
+  margin: 0;
   font-size: 20px;
   font-weight: bold;
   color: #ffffff;
+}
+
+.openRoomsCodeJoin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.openRoomsCodeInput {
+  width: 100px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #3A3A3C;
+  background: #372F41;
+  color: #ffffff;
+  font-size: 14px;
+  text-align: center;
+  letter-spacing: 2px;
+  font-family: monospace;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.openRoomsCodeInput:focus {
+  border-color: #6d597a;
+}
+
+.openRoomsCodeInput--error {
+  border-color: #ED2939;
+}
+
+.openRoomsCodeBtn {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+.openRoomsCodeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.openRoomsCodeError {
+  color: #f06272;
+  font-size: 12px;
+  margin-bottom: 8px;
 }
 
 .openRoomsStatus {

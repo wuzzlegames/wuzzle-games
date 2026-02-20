@@ -2,7 +2,12 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { act } from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import MultiplayerChat from './MultiplayerChat';
+
+function Wrapper({ children }) {
+  return <MemoryRouter>{children}</MemoryRouter>;
+}
 
 const mockOnValue = vi.fn();
 const mockRef = vi.fn();
@@ -29,6 +34,12 @@ vi.mock('../../hooks/useUserBadges', () => ({
   useBadgesForUser: () => ({ userBadges: {}, loading: false }),
 }));
 
+// MultiplayerChat renders user cards for message authors which can pull in useAuth.
+// Mock it to avoid requiring a Router + Firebase Auth setup in these unit tests.
+vi.mock('../../hooks/useAuth', () => ({
+  useAuth: () => ({ user: null, friends: [], sendFriendRequest: vi.fn() }),
+}));
+
 describe('MultiplayerChat', () => {
   let mockUnsubscribe;
   let mockOnValueCallback;
@@ -53,21 +64,21 @@ describe('MultiplayerChat', () => {
   });
 
   it('renders chat toggle button when gameCode and authUser are provided', () => {
-    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />);
+    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     const toggleButton = screen.getByRole('button');
     expect(toggleButton).toBeInTheDocument();
   });
 
   it('does not render chat when gameCode is missing', () => {
-    render(<MultiplayerChat gameCode={null} authUser={mockAuthUser} />);
+    render(<MultiplayerChat gameCode={null} authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     const toggleButton = screen.queryByRole('button');
     expect(toggleButton).not.toBeInTheDocument();
   });
 
   it('opens and closes chat panel when toggle button is clicked', () => {
-    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />);
+    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     const toggleButton = screen.getByRole('button');
     
@@ -84,7 +95,7 @@ describe('MultiplayerChat', () => {
   });
 
   it('displays messages from Firebase', async () => {
-    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />);
+    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     // Open chat
     const toggleButton = screen.getByRole('button');
@@ -124,7 +135,7 @@ describe('MultiplayerChat', () => {
     mockPush.mockReturnValue(mockPushRef);
     mockSet.mockResolvedValue(undefined);
 
-    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />);
+    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     // Open chat
     const toggleButton = screen.getByRole('button');
@@ -149,7 +160,7 @@ describe('MultiplayerChat', () => {
     mockPush.mockReturnValue({});
     mockSet.mockResolvedValue(undefined);
 
-    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />);
+    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     const toggleButton = screen.getByRole('button');
     fireEvent.click(toggleButton);
@@ -164,7 +175,7 @@ describe('MultiplayerChat', () => {
   });
 
   it('shows unread message count badge when chat is closed', async () => {
-    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />);
+    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     // Wait a bit for the component to initialize
     await act(async () => {
@@ -199,7 +210,7 @@ describe('MultiplayerChat', () => {
   });
 
   it('clears unread count when chat is opened', async () => {
-    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />);
+    render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     // Wait a bit for the component to initialize
     await act(async () => {
@@ -240,7 +251,7 @@ describe('MultiplayerChat', () => {
   });
 
   it('unsubscribes from Firebase on unmount', () => {
-    const { unmount } = render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />);
+    const { unmount } = render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     unmount();
 

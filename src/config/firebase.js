@@ -21,17 +21,6 @@ const firebaseConfig = {
     "https://wuzzle-games-default-rtdb.firebaseio.com",
 };
 
-
-
-if (import.meta.env.MODE === 'development') {
-  console.log('[Firebase] Realtime Database URL:', firebaseConfig.databaseURL);
-  if (!import.meta.env.VITE_FIREBASE_DATABASE_URL) {
-    console.warn(
-      '[Firebase] Realtime Database: VITE_FIREBASE_DATABASE_URL is not set. Set it in .env to the exact URL from Firebase Console (e.g. https://your-project-default-rtdb.firebaseio.com or ...europe-west1.firebasedatabase.app).'
-    );
-  }
-}
-
 // In non-development builds, guard against accidentally shipping a build that
 // still uses placeholder Firebase configuration values. Failing fast here
 // makes misconfiguration obvious rather than causing confusing runtime errors.

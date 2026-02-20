@@ -8,7 +8,7 @@ Guesses: 2/6
 Solved!
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 
 # Daily standard - 1 word - not solved in guess limit - exit
@@ -25,7 +25,7 @@ Guesses: 6/6
 Not solved!
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Daily standard - 1 word - not solved in guess limit - continue - solve
 Wuzzle Games - Daily Standard
@@ -42,7 +42,7 @@ Guesses: 7/6
 Solved!
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Daily standard - multiple words - solve in guess limit
 Wuzzle Games - Daily Standard
@@ -52,7 +52,7 @@ Guesses used: 4/7
 Solved: 2/2
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Daily standard - multiple words - not solved in guess limit - exit
 Wuzzle Games - Daily Standard
@@ -62,7 +62,7 @@ Guesses used: 7/7
 Solved: 0/2
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Daily standard - multiple words - not solved in guess limit - continue - solve
 Wuzzle Games - Daily Standard
@@ -72,7 +72,7 @@ Guesses used: 11/10
 Solved: 5/5
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Daily speedrun - 1 board
 
@@ -88,7 +88,7 @@ Time: 00:15.8
 Guesses: 5
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Daily speedrun - multiple boards
 
@@ -99,7 +99,7 @@ Time: 00:14.3
 Guesses used: 6
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Marathon standard - all stages solved in guess limit
 Wuzzle Games - Marathon Standard
@@ -116,7 +116,7 @@ Guesses used: 4/9
 Total guesses used: 16/30
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Marathon standard - solved stage 1 in guess limit - didnt solve stage 2 (or any) in guess limit - exit.
 Wuzzle Games - Marathon Standard
@@ -133,7 +133,7 @@ Not solved
 Total guesses used: 9/13
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Marathon standard - solved stage 1 in guess limit - didnt solve stage 2 in guess limit - continue - solve.
 Wuzzle Games - Marathon Standard
@@ -150,7 +150,7 @@ Guesses used: 4/9
 Total guesses used: 23/30
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 
 # Marathon speedrun:
 Wuzzle Games - Marathon Speedrun
@@ -167,5 +167,5 @@ Time: 00:13.8
 Total time: 00:51.9
 
 Play Wuzzle Games!
-https://wisdom-githb.github.io/wuzzle-games/
+https://wuzzlegames.com/
 

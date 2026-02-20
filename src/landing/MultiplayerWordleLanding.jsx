@@ -56,7 +56,7 @@ export default function MultiplayerWordleLanding() {
         />
         <link
           rel="canonical"
-          href="https://wisdom-githb.github.io/wuzzle-games/multiplayer-wuzzle/"
+          href="https://wuzzlegames.com/multiplayer-wuzzle/"
         />
         <script type="application/ld+json">
           {JSON.stringify(faqJsonLd)}

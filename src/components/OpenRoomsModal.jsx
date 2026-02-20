@@ -4,6 +4,7 @@ import { ref, onValue, off, remove } from "firebase/database";
 import Modal from "./Modal";
 import { database, auth } from "../config/firebase";
 import { MULTIPLAYER_WAITING_TIMEOUT_MS } from "../lib/multiplayerConfig";
+import { validateGameCode } from "../lib/validation";
 import "./OpenRoomsModal.css";
 
 function formatDuration(ms) {
@@ -22,6 +23,8 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
   const [loading, setLoading] = useState(false);
   const [closingAll, setClosingAll] = useState(false);
   const [nowMs, setNowMs] = useState(Date.now());
+  const [joinCode, setJoinCode] = useState("");
+  const [codeError, setCodeError] = useState("");
 
   // Local clock so age/expiry labels in the modal update while it is open.
   useEffect(() => {
@@ -89,6 +92,16 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
     };
   }, [isOpen, adminMode]);
 
+  const handleJoinByCode = () => {
+    const result = validateGameCode(joinCode);
+    if (!result.isValid) {
+      setCodeError(result.errors.join('. ') || 'Enter a valid 6-digit code');
+      return;
+    }
+    onRequestClose?.();
+    navigate(`/game?mode=multiplayer&code=${result.value}`);
+  };
+
   const handleJoin = (room) => {
     const { code, data } = room;
     if (!code) return;
@@ -150,9 +163,32 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div className="openRoomsModalRoot">
-        <h2 className="openRoomsTitle">
-          Open Rooms
-        </h2>
+        <div className="openRoomsHeader">
+          <h2 className="openRoomsTitle">Open Rooms</h2>
+          <div className="openRoomsCodeJoin">
+            <input
+              type="text"
+              value={joinCode}
+              onChange={(e) => {
+                const v = e.target.value.replace(/\D/g, '').slice(0, 6);
+                setJoinCode(v);
+                setCodeError('');
+              }}
+              placeholder="Room Code"
+              maxLength={6}
+              className={`openRoomsCodeInput${codeError ? ' openRoomsCodeInput--error' : ''}`}
+            />
+            <button
+              type="button"
+              onClick={handleJoinByCode}
+              disabled={joinCode.length !== 6}
+              className="homeBtn homeBtnGreen openRoomsCodeBtn"
+            >
+              Join
+            </button>
+          </div>
+        </div>
+        {codeError && <div className="openRoomsCodeError">{codeError}</div>}
 
         {loading ? (
           <div className="openRoomsStatus openRoomsStatusLoading">

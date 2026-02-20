@@ -9,6 +9,9 @@ import { useAuth } from "./hooks/useAuth";
 
 const FeedbackModal = lazy(() => import("./components/FeedbackModal"));
 const MultiplayerModal = lazy(() => import("./components/MultiplayerModal"));
+const FriendsModal = lazy(() => import("./components/FriendsModal"));
+const SignInRequiredModal = lazy(() => import("./components/SignInRequiredModal"));
+const OpenRoomsModal = lazy(() => import("./components/OpenRoomsModal"));
 import { loadJSON, saveJSON, marathonMetaKey } from "./lib/persist";
 import { loadMarathonMeta } from "./lib/marathonMeta";
 import { database } from "./config/firebase";
@@ -57,7 +60,13 @@ export default function Home({
   const [showVerifyEmailModal, setShowVerifyEmailModal] = useState(false);
   const [verifyEmailAddress, setVerifyEmailAddress] = useState("");
 
-  const { user: authUser } = useAuth();
+  const [activeTab, setActiveTab] = useState("singleplayer");
+  const [showFriendsModal, setShowFriendsModal] = useState(false);
+  const [showOpenRoomsModal, setShowOpenRoomsModal] = useState(false);
+  const [showSignInRequired, setShowSignInRequired] = useState(false);
+  const [showMpVerifyModal, setShowMpVerifyModal] = useState(false);
+
+  const { user: authUser, isVerifiedUser } = useAuth();
 
   // Track separate stage indices for standard and speedrun marathon for display.
   const [marathonStandardIndexUI, setMarathonStandardIndexUI] = useState(0);
@@ -112,8 +121,8 @@ export default function Home({
       const speedrunIndex =
         speedrunMeta && typeof speedrunMeta.index === "number" ? speedrunMeta.index : 0;
 
-      setMarathonStandardIndexUI(standardIndex);
-      setMarathonSpeedrunIndexUI(speedrunIndex);
+      setMarathonStandardIndexUI(standardIndex >= marathonLevels.length ? 0 : standardIndex);
+      setMarathonSpeedrunIndexUI(speedrunIndex >= marathonLevels.length ? 0 : speedrunIndex);
     })();
 
     return () => {
@@ -161,7 +170,46 @@ export default function Home({
     navigate(`/game?mode=marathon&speedrun=true`);
   }, [navigate]);
   
-  const dailyTitleRight = useMemo(() => `${dailyBoards} board${dailyBoards > 1 ? "s" : ""}`, [dailyBoards]);
+  const dailyWordsRight = (
+    <span onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+      Words:&nbsp;
+      <select
+        value={dailyBoards}
+        onChange={(e) => { e.stopPropagation(); setDailyBoards(parseInt(e.target.value, 10)); }}
+        className="modeRowTitleSelect"
+        aria-label="Number of words"
+      >
+        {BOARD_OPTIONS.map((n) => (
+          <option key={n} value={n}>{n}</option>
+        ))}
+      </select>
+    </span>
+  );
+
+  const handleJoinRoom = useCallback(() => {
+    if (!authUser) {
+      setShowSignInRequired(true);
+      return;
+    }
+    if (!isVerifiedUser) {
+      setShowMpVerifyModal(true);
+      return;
+    }
+    setShowOpenRoomsModal(true);
+  }, [authUser, isVerifiedUser]);
+
+  const handleHostRoom = useCallback(() => {
+    setShowMultiplayerConfig(true);
+    setShowMultiplayerModal(true);
+  }, []);
+
+  const handleChallengeFriend = useCallback(() => {
+    if (!authUser) {
+      setShowSignInRequired(true);
+      return;
+    }
+    setShowFriendsModal(true);
+  }, [authUser]);
 
   return (
     <>
@@ -248,146 +296,240 @@ export default function Home({
           />
         </Suspense>
 
+        {showMultiplayerModal && (
+          <Suspense fallback={null}>
+            <MultiplayerModal
+              isOpen
+              onRequestClose={() => {
+                setShowMultiplayerModal(false);
+                setShowMultiplayerConfig(false);
+              }}
+              showConfigFirst={showMultiplayerConfig}
+              onConfigClose={() => {
+                setShowMultiplayerConfig(false);
+                setShowMultiplayerModal(false);
+              }}
+              onConfigOpen={() => setShowMultiplayerConfig(true)}
+            />
+          </Suspense>
+        )}
+
         <Suspense fallback={null}>
-          <MultiplayerModal
-            isOpen={showMultiplayerModal}
-            onRequestClose={() => setShowMultiplayerModal(false)}
-            showConfigFirst={showMultiplayerConfig}
-            onConfigClose={() => setShowMultiplayerConfig(false)}
-            onConfigOpen={() => setShowMultiplayerConfig(true)}
+          <FriendsModal
+            isOpen={showFriendsModal}
+            onRequestClose={() => setShowFriendsModal(false)}
           />
         </Suspense>
 
+        <Suspense fallback={null}>
+          <SignInRequiredModal
+            isOpen={showSignInRequired}
+            onRequestClose={() => setShowSignInRequired(false)}
+            title="Multiplayer Mode"
+            message="You need to sign in to play Multiplayer Mode."
+          />
+        </Suspense>
+
+        <Suspense fallback={null}>
+          <OpenRoomsModal
+            isOpen={showOpenRoomsModal}
+            onRequestClose={() => setShowOpenRoomsModal(false)}
+          />
+        </Suspense>
+
+        <Modal
+          isOpen={showMpVerifyModal}
+          onRequestClose={() => setShowMpVerifyModal(false)}
+          titleId="mp-verify-email-modal-title"
+        >
+          <div style={{ padding: "24px" }}>
+            <h2
+              id="mp-verify-email-modal-title"
+              style={{
+                margin: "0 0 16px 0",
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "#ffffff",
+              }}
+            >
+              Verify your email
+            </h2>
+            <p style={{ marginBottom: "20px", color: "#d7dadc", fontSize: 14 }}>
+              You must verify your email address or sign in with Google to play Multiplayer Mode.
+            </p>
+            <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
+              <button
+                onClick={() => setShowMpVerifyModal(false)}
+                className="homeBtn homeBtnOutline homeBtnLg"
+                style={{ flex: 1, textAlign: "center" }}
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  setShowMpVerifyModal(false);
+                  navigate("/profile");
+                }}
+                className="homeBtn homeBtnGreen homeBtnLg"
+                style={{ flex: 1, textAlign: "center" }}
+              >
+                Go to Profile
+              </button>
+            </div>
+          </div>
+        </Modal>
+
         <main>
-          {/* DAILY */}
-          <section className="panel">
-            <div className="panelTop">
-              <div>
-                <h2 className="panelTitle">Daily Puzzles</h2>
-                <div className="panelDesc">
-                  Choose how many words you want to play simultaneously.
+          <div className="homeTabBar">
+            <button
+              className={`homeTab${activeTab === 'singleplayer' ? ' homeTab--active' : ''}`}
+              onClick={() => setActiveTab('singleplayer')}
+            >
+              Single Player
+            </button>
+            <button
+              className={`homeTab${activeTab === 'multiplayer' ? ' homeTab--active' : ''}`}
+              onClick={() => setActiveTab('multiplayer')}
+            >
+              Multiplayer
+            </button>
+          </div>
+
+          {activeTab === 'singleplayer' && (
+            <section className="panel">
+              <div className="spGrid">
+                <div className="spGridHeaders">
+                  <div className="spGridHeader">Standard</div>
+                  <div className="spGridHeader">Speedrun</div>
+                </div>
+
+                {/* Daily Row */}
+                <div className="spGridRowGroup">
+                  <div className="spGridRow">
+                    <ModeRow
+                      title="Daily (standard)"
+                      desc="Limited turns. No timer. Good for casual play."
+                      buttonText="Play Daily"
+                      onClick={handleDailyStandard}
+                      variant="green"
+                      modeVariant="daily"
+                      titleRight={dailyWordsRight}
+                    />
+                    <ModeRow
+                      title="Daily (speedrun)"
+                      desc="Unlimited guesses. Timer starts immediately."
+                      buttonText="Speedrun Daily"
+                      onClick={handleDailySpeedrun}
+                      variant="green"
+                      modeVariant="speedrun"
+                      titleRight={dailyWordsRight}
+                    />
+                  </div>
+                </div>
+
+                {/* Solution Hunt Row */}
+                <div className="spGridRowGroup">
+                  <div className="spGridRow">
+                    <ModeRow
+                      title="Solution Hunt (standard)"
+                      desc="See all possible remaining words as you guess. Great for learning."
+                      buttonText="Play Solution Hunt"
+                      onClick={handleSolutionHunt}
+                      variant="green"
+                      modeVariant="daily"
+                    />
+                    <ModeRow
+                      title="Solution Hunt (speedrun)"
+                      desc="Solution Hunt with timer. Unlimited guesses, see remaining words."
+                      buttonText="Speedrun Solution Hunt"
+                      onClick={handleSolutionHuntSpeedrun}
+                      variant="green"
+                      modeVariant="speedrun"
+                    />
+                  </div>
+                </div>
+
+                {/* Marathon Row */}
+                <div className="spGridRowGroup">
+                  <div className="spGridRow">
+                    <ModeRow
+                      title="Marathon (standard)"
+                      desc="Play standard marathon. Limited turns. No timer."
+                      buttonText="Play Marathon"
+                      onClick={handleMarathonStandard}
+                      variant="gold"
+                      modeVariant="daily"
+                      titleRight={`Stage ${marathonStandardIndexUI + 1}/${marathonLevels.length}`}
+                    />
+                    <ModeRow
+                      title="Marathon (speedrun)"
+                      desc="Play speedrun marathon. Unlimited guesses, timed cumulative."
+                      buttonText="Speedrun Marathon"
+                      onClick={handleMarathonSpeedrun}
+                      variant="gold"
+                      modeVariant="speedrun"
+                      titleRight={`Stage ${marathonSpeedrunIndexUI + 1}/${marathonLevels.length}`}
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {activeTab === 'multiplayer' && (
+            <section className="panel">
+              <div className="panelTop">
+                <div>
+                  <h2 className="panelTitle">Multiplayer Wordle Battles</h2>
+                  <div className="panelDesc">
+                    Host or join real-time rooms with friends and play together.
+                  </div>
                 </div>
               </div>
 
-              <div className="selector">
-                <label className="label" htmlFor="dailyBoards">
-                  Simultaneous words
-                </label>
-                <select
-                  id="dailyBoards"
-                  value={dailyBoards}
-                  onChange={(e) => setDailyBoards(parseInt(e.target.value, 10))}
-                  className="select"
+              <div className="mpGrid">
+                <div
+                  className="mpGridBtn"
+                  role="button"
+                  tabIndex={0}
+                  onClick={handleJoinRoom}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleJoinRoom(); } }}
                 >
-                  {BOARD_OPTIONS.map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="panelBody">
-              <ModeRow
-                title="Daily (standard)"
-                desc="Limited turns. No timer. Good for casual play."
-                buttonText="Play Daily"
-                onClick={handleDailyStandard}
-                variant="green"
-                modeVariant="daily"
-                titleRight={dailyTitleRight}
-              />
-
-              <ModeRow
-                title="Daily (speedrun)"
-                desc="Unlimited guesses. Timer starts immediately."
-                buttonText="Speedrun Daily"
-                onClick={handleDailySpeedrun}
-                variant="green"
-                modeVariant="daily"
-                titleRight={dailyTitleRight}
-              />
-
-              <ModeRow
-                title="Solution Hunt"
-                desc="See all possible remaining words as you guess. Great for learning."
-                buttonText="Play Solution Hunt"
-                onClick={handleSolutionHunt}
-                variant="green"
-                modeVariant="daily"
-                titleRight="1 board"
-              />
-
-              <ModeRow
-                title="Solution Hunt (speedrun)"
-                desc="Solution Hunt with timer. Unlimited guesses, see remaining words."
-                buttonText="Speedrun Solution Hunt"
-                onClick={handleSolutionHuntSpeedrun}
-                variant="green"
-                modeVariant="daily"
-                titleRight="1 board"
-              />
-            </div>
-          </section>
-
-          {/* MARATHON */}
-          <section className="panel">
-            <div className="panelTop">
-              <div>
-                <h2 className="panelTitle">Marathon Puzzles</h2>
-                <div className="panelDesc">
-                  Solve 1 word, then 2, then 3, ending at 4. Complete all stages to
-                  win.
+                  <div className="mpGridBtnTitle">Join Room</div>
+                  <div className="mpGridBtnDesc">Browse open rooms or enter a room code.</div>
+                </div>
+                <div
+                  className="mpGridBtn"
+                  role="button"
+                  tabIndex={0}
+                  onClick={handleHostRoom}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleHostRoom(); } }}
+                >
+                  <div className="mpGridBtnTitle">Host a Room</div>
+                  <div className="mpGridBtnDesc">Create a new room and configure settings.</div>
+                </div>
+                <div
+                  className="mpGridBtn"
+                  role="button"
+                  tabIndex={0}
+                  onClick={handleChallengeFriend}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleChallengeFriend(); } }}
+                >
+                  <div className="mpGridBtnTitle">Challenge a Friend</div>
+                  <div className="mpGridBtnDesc">Pick a friend and start a battle.</div>
+                </div>
+                <div
+                  className="mpGridBtn mpGridBtn--disabled"
+                  role="button"
+                  tabIndex={-1}
+                  aria-disabled="true"
+                >
+                  <div className="mpGridBtnTitle">Ranked Mode</div>
+                  <div className="mpGridBtnDesc">(Coming Soon)</div>
                 </div>
               </div>
-            </div>
-
-            <div className="panelBody">
-              <ModeRow
-                title="Marathon (standard)"
-                desc="Play standard marathon. Limited turns. No timer."
-                buttonText="Play Marathon"
-                onClick={handleMarathonStandard}
-                variant="gold"
-                modeVariant="marathon"
-                titleRight={`Stage ${marathonStandardIndexUI + 1}/${marathonLevels.length}`}
-              />
-
-              <ModeRow
-                title="Marathon (speedrun)"
-                desc="Play speedrun marathon. Unlimited guesses, timed cumulative."
-                buttonText="Speedrun Marathon"
-                onClick={handleMarathonSpeedrun}
-                variant="gold"
-                modeVariant="marathon"
-                titleRight={`Stage ${marathonSpeedrunIndexUI + 1}/${marathonLevels.length}`}
-              />
-            </div>
-          </section>
-
-          {/* MULTIPLAYER MODE */}
-          <section className="panel">
-            <div className="panelTop">
-              <div>
-                <h2 className="panelTitle">Multiplayer Wordle Battles With Friends</h2>
-                <div className="panelDesc">
-                  Host or join real-time rooms with friends and play together.
-                </div>
-              </div>
-            </div>
-
-            <div className="panelBody">
-              <ModeRow
-                title="Multiplayer Mode"
-                desc="Create a room, invite friends, or join by code."
-                buttonText="Play Multiplayer"
-                onClick={() => setShowMultiplayerModal(true)}
-                variant="gold"
-                modeVariant="pvp"
-              />
-            </div>
-          </section>
+            </section>
+          )}
 
           {/* INTRO (moved to bottom for less visual weight, still visible for SEO) */}
           <section className="homeIntro">

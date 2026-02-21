@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import logoImage from "../../images/logo.png";
 import { useUserBadges, useBadgesForUser } from "../hooks/useUserBadges";
 import { useSubscription } from "../hooks/useSubscription";
 import { useDailyResetTimer } from "../hooks/useDailyResetTimer";
@@ -197,7 +196,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
             }}
           >
             <img
-              src={logoImage}
+              src="/images/logo.png"
               alt="Wuzzle Games"
               style={{ height: 50 }}
             />

@@ -37,7 +37,8 @@ export default function TileRow({
     <div
       style={{
         display: "flex",
-        justifyContent: "space-between",
+        // Use gap for spacing; don't spread tiles across the full row width.
+        justifyContent: "center",
         alignItems: "center",
         gap: tileGap,
         marginBottom: 4,

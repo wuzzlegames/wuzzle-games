@@ -200,7 +200,7 @@ All commands are run from the repository root.
 - `src/components/` contains reusable UI pieces:
   - Generic modals (`Modal`, `FeedbackModal`, `AuthModal`, `OneVOneModal`, `FriendsModal`), header/menu (`HamburgerMenu`), and the on-screen keyboard (`Keyboard`).
 - `src/components/game/` contains game-specific presentation components:
-  - `GameHeader`, `GameToast`, `GameBoard`, `TileRow`, `BoardSelector`, `NextStageBar`, `GamePopup`, `OutOfGuessesPopup`, `OneVOneWaitingRoom`, `OpponentBoardView`.
+  - `GameHeader`, `GameToast`, `GameBoard`, `TileRow`, `BoardSelector`, `NextStageBar`, `GamePopup`, `OutOfGuessesPopup`, `OneVOneWaitingRoom`.
   - These are mostly stateless or thin wrappers that receive all state and callbacks from `Game.jsx`.
 
 ## Notes for future changes

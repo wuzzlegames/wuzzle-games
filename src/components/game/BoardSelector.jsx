@@ -10,9 +10,16 @@ export default function BoardSelector({
   boardRefs,
   isUnlimited,
   speedrunEnabled,
-  statusText
+  statusText,
+  turnsUsed,
+  maxTurns
 }) {
   if (numBoards <= 1) return null;
+
+  const guessesLabel =
+    Number.isFinite(turnsUsed) && Number.isFinite(maxTurns)
+      ? `Guesses used: ${turnsUsed}/${maxTurns}`
+      : null;
 
   return (
     <>
@@ -23,7 +30,7 @@ export default function BoardSelector({
           position: "fixed",
           bottom: 190 + 20,
           left: 20,
-          padding: "6px 12px",
+          padding: "8px 12px",
           borderRadius: 6,
           backgroundColor: "var(--c-bg)",
           border: "1px solid var(--c-text-strong)",
@@ -38,11 +45,19 @@ export default function BoardSelector({
           boxShadow: "0 4px 16px var(--c-bg)",
           transition: "all 0.3s ease",
           outline: "none",
-          whiteSpace: "nowrap"
+          whiteSpace: "normal",
+          textAlign: "center"
         }}
         aria-label={showBoardSelector ? "Close board selection" : "Open board selection"}
       >
-        {showBoardSelector ? "Close" : "Board Selection"}
+        {showBoardSelector ? (
+          "Close"
+        ) : (
+          <span style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
+            {guessesLabel && <span>{guessesLabel}</span>}
+            <span>Select a board</span>
+          </span>
+        )}
       </button>
 
       {/* Board selector popup */}

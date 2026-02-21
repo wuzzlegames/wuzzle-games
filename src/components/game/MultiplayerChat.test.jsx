@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { act } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import MultiplayerChat from './MultiplayerChat';
@@ -42,7 +42,7 @@ vi.mock('../../hooks/useAuth', () => ({
 
 describe('MultiplayerChat', () => {
   let mockUnsubscribe;
-  let mockOnValueCallback;
+  let callbacksByPath;
   const mockAuthUser = {
     uid: 'user-1',
     displayName: 'Test User',
@@ -52,21 +52,27 @@ describe('MultiplayerChat', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUnsubscribe = vi.fn();
-    mockOnValueCallback = null;
+    callbacksByPath = {};
 
-    mockOnValue.mockImplementation((ref, callback) => {
-      mockOnValueCallback = callback;
+    // Return a ref object that preserves its path so tests can target the right subscription.
+    mockRef.mockImplementation((_db, path) => ({ path }));
+
+    // Pass-through so onValue receives the underlying ref object.
+    mockQuery.mockImplementation((refObj) => refObj);
+    mockLimitToLast.mockReturnValue({});
+
+    mockOnValue.mockImplementation((refObj, callback) => {
+      if (refObj && refObj.path) {
+        callbacksByPath[refObj.path] = callback;
+      }
       return mockUnsubscribe;
     });
-    mockRef.mockReturnValue({});
-    mockQuery.mockReturnValue({});
-    mockLimitToLast.mockReturnValue({});
   });
 
   it('renders chat toggle button when gameCode and authUser are provided', () => {
     render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
-    const toggleButton = screen.getByRole('button');
+    const toggleButton = screen.getByLabelText(/open room chat/i);
     expect(toggleButton).toBeInTheDocument();
   });
 
@@ -80,17 +86,15 @@ describe('MultiplayerChat', () => {
   it('opens and closes chat panel when toggle button is clicked', () => {
     render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
-    const toggleButton = screen.getByRole('button');
-    
     // Chat should be closed initially
     expect(screen.queryByPlaceholderText(/Type a message/i)).not.toBeInTheDocument();
 
     // Open chat
-    fireEvent.click(toggleButton);
+    fireEvent.click(screen.getByLabelText(/open room chat/i));
     expect(screen.getByPlaceholderText(/Type a message/i)).toBeInTheDocument();
 
     // Close chat
-    fireEvent.click(toggleButton);
+    fireEvent.click(screen.getByLabelText(/close room chat/i));
     expect(screen.queryByPlaceholderText(/Type a message/i)).not.toBeInTheDocument();
   });
 
@@ -98,20 +102,25 @@ describe('MultiplayerChat', () => {
     render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     // Open chat
-    const toggleButton = screen.getByRole('button');
-    fireEvent.click(toggleButton);
+    fireEvent.click(screen.getByLabelText(/open room chat/i));
+
+    const chatPath = 'multiplayer/TEST123/chat';
+
+    await waitFor(() => {
+      expect(typeof callbacksByPath[chatPath]).toBe('function');
+    });
 
     // Simulate Firebase message data
     const snapshot = {
       exists: () => true,
       val: () => ({
-        'msg1': {
+        msg1: {
           uid: 'user-2',
           name: 'Other User',
           text: 'Hello!',
           createdAt: Date.now() - 1000,
         },
-        'msg2': {
+        msg2: {
           uid: 'user-1',
           name: 'Test User',
           text: 'Hi there!',
@@ -121,7 +130,7 @@ describe('MultiplayerChat', () => {
     };
 
     act(() => {
-      mockOnValueCallback(snapshot);
+      callbacksByPath[chatPath](snapshot);
     });
 
     await waitFor(() => {
@@ -138,21 +147,23 @@ describe('MultiplayerChat', () => {
     render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
     // Open chat
-    const toggleButton = screen.getByRole('button');
-    fireEvent.click(toggleButton);
+    fireEvent.click(screen.getByLabelText(/open room chat/i));
 
     const input = screen.getByPlaceholderText(/Type a message/i);
     fireEvent.change(input, { target: { value: 'Test message' } });
-    
+
     fireEvent.keyDown(input, { key: 'Enter', shiftKey: false });
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalled();
-      expect(mockSet).toHaveBeenCalledWith(mockPushRef, expect.objectContaining({
-        text: 'Test message',
-        uid: 'user-1',
-        name: 'Test User',
-      }));
+      expect(mockSet).toHaveBeenCalledWith(
+        mockPushRef,
+        expect.objectContaining({
+          text: 'Test message',
+          uid: 'user-1',
+          name: 'Test User',
+        }),
+      );
     });
   });
 
@@ -162,8 +173,7 @@ describe('MultiplayerChat', () => {
 
     render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
-    const toggleButton = screen.getByRole('button');
-    fireEvent.click(toggleButton);
+    fireEvent.click(screen.getByLabelText(/open room chat/i));
 
     const input = screen.getByPlaceholderText(/Type a message/i);
     fireEvent.change(input, { target: { value: '   ' } }); // Only whitespace
@@ -177,9 +187,15 @@ describe('MultiplayerChat', () => {
   it('shows unread message count badge when chat is closed', async () => {
     render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
+    const chatPath = 'multiplayer/TEST123/chat';
+
+    await waitFor(() => {
+      expect(typeof callbacksByPath[chatPath]).toBe('function');
+    });
+
     // Wait a bit for the component to initialize
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
     });
 
     // Simulate messages arriving while chat is closed
@@ -188,7 +204,7 @@ describe('MultiplayerChat', () => {
     const snapshot = {
       exists: () => true,
       val: () => ({
-        'msg1': {
+        msg1: {
           uid: 'user-2',
           name: 'Other User',
           text: 'New message!',
@@ -198,23 +214,30 @@ describe('MultiplayerChat', () => {
     };
 
     act(() => {
-      if (mockOnValueCallback) {
-        mockOnValueCallback(snapshot);
-      }
+      callbacksByPath[chatPath](snapshot);
     });
 
-    await waitFor(() => {
-      const badge = screen.queryByText('1');
-      expect(badge).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const toggleButton = screen.getByLabelText(/open room chat/i);
+        expect(within(toggleButton).getByText('1')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('clears unread count when chat is opened', async () => {
     render(<MultiplayerChat gameCode="TEST123" authUser={mockAuthUser} />, { wrapper: Wrapper });
 
+    const chatPath = 'multiplayer/TEST123/chat';
+
+    await waitFor(() => {
+      expect(typeof callbacksByPath[chatPath]).toBe('function');
+    });
+
     // Wait a bit for the component to initialize
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
     });
 
     // Add unread message with timestamp after initialization
@@ -222,7 +245,7 @@ describe('MultiplayerChat', () => {
     const snapshot = {
       exists: () => true,
       val: () => ({
-        'msg1': {
+        msg1: {
           uid: 'user-2',
           name: 'Other User',
           text: 'New message!',
@@ -232,21 +255,23 @@ describe('MultiplayerChat', () => {
     };
 
     act(() => {
-      if (mockOnValueCallback) {
-        mockOnValueCallback(snapshot);
-      }
+      callbacksByPath[chatPath](snapshot);
     });
 
-    await waitFor(() => {
-      expect(screen.queryByText('1')).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const toggleButton = screen.getByLabelText(/open room chat/i);
+        expect(within(toggleButton).getByText('1')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Open chat
-    const toggleButton = screen.getByRole('button');
-    fireEvent.click(toggleButton);
+    fireEvent.click(screen.getByLabelText(/open room chat/i));
 
     await waitFor(() => {
-      expect(screen.queryByText('1')).not.toBeInTheDocument();
+      const toggleButton = screen.getByLabelText(/close room chat/i);
+      expect(within(toggleButton).queryByText('1')).not.toBeInTheDocument();
     });
   });
 
@@ -255,6 +280,7 @@ describe('MultiplayerChat', () => {
 
     unmount();
 
-    expect(mockUnsubscribe).toHaveBeenCalled();
+    // Chat + reactions subscriptions.
+    expect(mockUnsubscribe).toHaveBeenCalledTimes(2);
   });
 });

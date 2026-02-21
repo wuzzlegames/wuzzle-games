@@ -316,6 +316,8 @@ export default function SinglePlayerGameView({
           isUnlimited={isUnlimited}
           speedrunEnabled={speedrunEnabled}
           statusText={statusText}
+          turnsUsed={turnsUsed}
+          maxTurns={maxTurns}
         />
       )}
 

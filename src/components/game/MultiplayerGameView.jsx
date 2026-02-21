@@ -690,97 +690,99 @@ export default function MultiplayerGameView({
               </div>
             )}
             {/* Status bar: boards, guesses, timer */}
-            <div
-              style={{
-                marginBottom: 4,
-                padding: "10px 12px",
-                borderRadius: 8,
-                border: "1px solid var(--c-border)",
-                background: "var(--c-panel)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 12,
-              }}
-            >
-              {/* Left: boards count */}
+            <div style={{ width: "100%", maxWidth: 600, margin: "0 auto" }}>
               <div
                 style={{
-                  fontSize: 12,
-                  color: "var(--c-text)",
-                  textTransform: "uppercase",
-                  letterSpacing: 0.5,
+                  marginBottom: 4,
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  border: "1px solid var(--c-border)",
+                  background: "var(--c-panel)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 12,
                 }}
               >
-                Boards:{" "}
-                <span style={{ fontWeight: "bold" }}>{numBoardsForHeader}</span>
-              </div>
+                {/* Left: boards count */}
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "var(--c-text)",
+                    textTransform: "uppercase",
+                    letterSpacing: 0.5,
+                  }}
+                >
+                  Boards:{" "}
+                  <span style={{ fontWeight: "bold" }}>{numBoardsForHeader}</span>
+                </div>
 
-              {/* Center: big timer for speedrun (shared timer that stops when any player finishes), your guesses for standard */}
-              <div style={{ flex: 1, textAlign: "center" }}>
-                {isSpeedrun ? (
-                  <div
-                    style={{
-                      fontSize: 22,
-                      fontWeight: "bold",
-                      letterSpacing: 1,
-                      color: "var(--c-text-strong)",
-                    }}
-                  >
-                    {(() => {
-                      const inCountdown = countdownRemaining != null && countdownRemaining > 0;
-                      if (inCountdown) return "0:00";
+                {/* Center: big timer for speedrun (shared timer that stops when any player finishes), your guesses for standard */}
+                <div style={{ flex: 1, textAlign: "center" }}>
+                  {isSpeedrun ? (
+                    <div
+                      style={{
+                        fontSize: 22,
+                        fontWeight: "bold",
+                        letterSpacing: 1,
+                        color: "var(--c-text-strong)",
+                      }}
+                    >
+                      {(() => {
+                        const inCountdown = countdownRemaining != null && countdownRemaining > 0;
+                        if (inCountdown) return "0:00";
 
-                      const startedAt = gameState?.startedAt;
-                      const effectiveStart = startedAt != null ? startedAt + SPEEDRUN_COUNTDOWN_MS : null;
+                        const startedAt = gameState?.startedAt;
+                        const effectiveStart = startedAt != null ? startedAt + SPEEDRUN_COUNTDOWN_MS : null;
 
-                      if (gameState?.players && authUser) {
-                        const myPlayer = gameState.players[authUser.uid];
-                        if (myPlayer) {
-                          if (myPlayer.timeMs != null && typeof myPlayer.timeMs === "number") {
-                            return formatElapsedLib(myPlayer.timeMs);
-                          }
-                          if (effectiveStart != null) {
-                            const elapsed = Math.max(0, multiplayerNowMs - effectiveStart);
-                            return formatElapsedLib(elapsed);
+                        if (gameState?.players && authUser) {
+                          const myPlayer = gameState.players[authUser.uid];
+                          if (myPlayer) {
+                            if (myPlayer.timeMs != null && typeof myPlayer.timeMs === "number") {
+                              return formatElapsedLib(myPlayer.timeMs);
+                            }
+                            if (effectiveStart != null) {
+                              const elapsed = Math.max(0, multiplayerNowMs - effectiveStart);
+                              return formatElapsedLib(elapsed);
+                            }
                           }
                         }
-                      }
 
-                      if (effectiveStart != null) {
-                        const elapsed = Math.max(0, multiplayerNowMs - effectiveStart);
-                        return formatElapsedLib(elapsed);
-                      }
-                      return "0:00";
-                    })()}
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      fontSize: 18,
-                      fontWeight: "bold",
-                      color: "var(--c-text-strong)",
-                    }}
-                  >
-                    Your guesses: {myGuesses.length}/{maxTurns}
-                  </div>
-                )}
-              </div>
+                        if (effectiveStart != null) {
+                          const elapsed = Math.max(0, multiplayerNowMs - effectiveStart);
+                          return formatElapsedLib(elapsed);
+                        }
+                        return "0:00";
+                      })()}
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        color: "var(--c-text-strong)",
+                      }}
+                    >
+                      Your guesses: {myGuesses.length}/{maxTurns}
+                    </div>
+                  )}
+                </div>
 
-              {/* Right: guesses descriptor */}
-              <div
-                style={{
-                  fontSize: 12,
-                  color: "var(--c-text)",
-                  textTransform: "uppercase",
-                  letterSpacing: 0.5,
-                  textAlign: "right",
-                }}
-              >
-                Guesses:{" "}
-                <span style={{ fontWeight: "bold" }}>
-                  {isSpeedrun ? "Unlimited" : maxTurns}
-                </span>
+                {/* Right: guesses descriptor */}
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "var(--c-text)",
+                    textTransform: "uppercase",
+                    letterSpacing: 0.5,
+                    textAlign: "right",
+                  }}
+                >
+                  Guesses:{" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    {isSpeedrun ? "Unlimited" : maxTurns}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -836,7 +838,7 @@ export default function MultiplayerGameView({
 
             {/* Solution Hunt: View Possible Words button - show above boards like in SinglePlayerGameView */}
             {isSolutionHuntGame && gameState.status === "playing" && setShowSolutionHuntModal && (
-              <div style={{ width: "100%", marginBottom: 12 }}>
+              <div style={{ width: "100%", maxWidth: 600, margin: "0 auto", marginBottom: 12 }}>
                 <button
                   type="button"
                   onClick={() => setShowSolutionHuntModal(true)}
@@ -862,48 +864,39 @@ export default function MultiplayerGameView({
               </div>
             )}
 
-            {/* Boards: local player only */}
+            {/* Boards: local player only (match single-player sizing) */}
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "24px",
                 width: "100%",
+                maxWidth: 600,
+                margin: "0 auto",
+                display: "grid",
+                gridTemplateColumns: `repeat(auto-fit, minmax(${boards.length >= 16 ? 160 : 180}px, 1fr))`,
+                gap: 16,
               }}
             >
               {boards.map((board, index) => (
-                <div key={index} style={{ width: "100%" }}>
-                  <div
-                    style={{
-                      fontSize: 14,
-                      color: "var(--c-text)",
-                      marginBottom: "8px",
-                      textAlign: "center",
-                    }}
-                  >
-                    Your Board {boards.length > 1 ? `#${index + 1}` : ""}
-                  </div>
-                  <GameBoard
-                    board={board}
-                    index={index}
-                    numBoards={boards.length}
-                    maxTurns={maxTurns}
-                    isUnlimited={isSpeedrun}
-                    currentGuess={currentGuess}
-                    invalidCurrentGuess={invalidCurrentGuess}
-                    revealId={revealId}
-                    isSelected={selectedBoardIndex === index}
-                    onToggleSelect={() =>
-                      setSelectedBoardIndex((prev) => (prev === index ? null : index))
-                    }
-                    boardRef={(el) => {
-                      boardRefs.current[index] = el;
-                    }}
-                    speedrunEnabled={isSpeedrun}
-                    // No turn-based highlighting; multiplayer is free-for-all.
-                    isCurrentTurn={true}
-                  />
-                </div>
+                <GameBoard
+                  key={index}
+                  board={board}
+                  index={index}
+                  numBoards={boards.length}
+                  maxTurns={maxTurns}
+                  isUnlimited={isSpeedrun}
+                  currentGuess={currentGuess}
+                  invalidCurrentGuess={invalidCurrentGuess}
+                  revealId={revealId}
+                  isSelected={selectedBoardIndex === index}
+                  onToggleSelect={() =>
+                    setSelectedBoardIndex((prev) => (prev === index ? null : index))
+                  }
+                  boardRef={(el) => {
+                    boardRefs.current[index] = el;
+                  }}
+                  speedrunEnabled={isSpeedrun}
+                  // No turn-based highlighting; multiplayer is free-for-all.
+                  isCurrentTurn={true}
+                />
               ))}
             </div>
 
@@ -911,6 +904,9 @@ export default function MultiplayerGameView({
             {summaryPlayers.length > 0 && solutionList.length > 0 && (
               <div
                 style={{
+                  width: "100%",
+                  maxWidth: 600,
+                  margin: "0 auto",
                   marginTop: 16,
                   padding: "12px 12px 10px",
                   borderRadius: 8,

@@ -6,6 +6,55 @@
   color: var(--c-text);
 }
 
+/* Multiplayer emoji reactions (shown above the room chat button) */
+.mwMultiplayerReactionsLayer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.mwMultiplayerReactionEmoji {
+  position: fixed;
+  left: 50%;
+  transform: translateX(calc(-50% + var(--mw-reaction-x, 0px)));
+  font-size: 44px;
+  line-height: 1;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.3));
+  will-change: transform, opacity;
+  animation-name: mwMultiplayerReactionFloat;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes mwMultiplayerReactionFloat {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(-50% + var(--mw-reaction-x, 0px))) translateY(0) rotate(0deg)
+      scale(1);
+  }
+  10% {
+    opacity: 1;
+  }
+  25% {
+    transform: translateX(calc(-50% + var(--mw-reaction-x, 0px))) translateY(-30px) rotate(-8deg)
+      scale(1.05);
+  }
+  50% {
+    transform: translateX(calc(-50% + var(--mw-reaction-x, 0px))) translateY(-56px) rotate(9deg)
+      scale(1.08);
+  }
+  75% {
+    transform: translateX(calc(-50% + var(--mw-reaction-x, 0px))) translateY(-86px) rotate(-6deg)
+      scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(calc(-50% + var(--mw-reaction-x, 0px))) translateY(-120px) rotate(0deg)
+      scale(1.12);
+  }
+}
+
 .gameHeader {
   padding: 12px 16px;
   border-bottom: 1px solid var(--c-border);

@@ -1,8 +1,14 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ref, onValue, push, set, query, limitToLast } from "firebase/database";
 import { database } from "../../config/firebase";
 import { logError } from "../../lib/errorUtils";
 import UserCardWithBadges from "../UserCardWithBadges";
+import { KEYBOARD_HEIGHT } from "../../lib/wordle";
+
+// Keep the emoji set consistent with the single-player CommentsSection reactions.
+const REACTION_EMOJIS = ["👍", "❤️", "😂", "😮", "😢"];
+const EMOJI_BUTTON_ICON = "😮";
+const HIDE_EMOJIS_KEY_PREFIX = "mw:multiplayerHideEmojis:";
 
 /**
  * Lightweight real-time chat tied to a specific multiplayer room.
@@ -18,6 +24,22 @@ export default function MultiplayerChat({ gameCode, authUser }) {
   const inputRef = useRef(null);
   const lastViewedTimestampRef = useRef(Date.now());
   const [unreadCount, setUnreadCount] = useState(0);
+
+  // Emoji reactions (broadcast to everyone in the room)
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const emojiButtonRef = useRef(null);
+  const emojiPickerRef = useRef(null);
+
+  const [hideEmojis, setHideEmojis] = useState(false);
+
+  // null = not yet hydrated from Firebase; [] = hydrated but empty.
+  // Using null avoids treating the initial empty state as a "first snapshot",
+  // which could cause older waiting-room emojis to animate when the game view mounts.
+  const [reactionEvents, setReactionEvents] = useState(null);
+  const [floatingReactions, setFloatingReactions] = useState([]);
+  const seenReactionIdsRef = useRef(new Set());
+  const hasHydratedReactionsRef = useRef(false);
+  const floatingTimeoutsRef = useRef([]);
 
   const canChat = useMemo(() => {
     return !!gameCode && !!authUser;
@@ -52,6 +74,154 @@ export default function MultiplayerChat({ gameCode, authUser }) {
       }
     };
   }, [gameCode]);
+
+  // Load emoji visibility preference (local only) per room.
+  useEffect(() => {
+    if (!gameCode) return;
+    try {
+      const raw = window.localStorage.getItem(`${HIDE_EMOJIS_KEY_PREFIX}${gameCode}`);
+      setHideEmojis(raw === "1");
+    } catch {
+      // ignore
+    }
+  }, [gameCode]);
+
+  useEffect(() => {
+    if (!gameCode) return;
+    try {
+      window.localStorage.setItem(`${HIDE_EMOJIS_KEY_PREFIX}${gameCode}`, hideEmojis ? "1" : "0");
+    } catch {
+      // ignore
+    }
+  }, [hideEmojis, gameCode]);
+
+  // Subscribe to emoji reactions for this room (last 100).
+  useEffect(() => {
+    if (!gameCode) return undefined;
+
+    const reactionsRef = ref(database, `multiplayer/${gameCode}/reactions`);
+    const reactionsQuery = query(reactionsRef, limitToLast(100));
+
+    const unsubscribe = onValue(reactionsQuery, (snapshot) => {
+      if (!snapshot.exists()) {
+        setReactionEvents([]);
+        return;
+      }
+
+      const raw = snapshot.val() || {};
+      const list = Object.entries(raw)
+        .map(([id, data]) => ({ id, ...(data || {}) }))
+        .sort((a, b) => {
+          const at = typeof a.createdAt === "number" ? a.createdAt : 0;
+          const bt = typeof b.createdAt === "number" ? b.createdAt : 0;
+          return at - bt;
+        });
+      setReactionEvents(list);
+    });
+
+    return () => {
+      if (typeof unsubscribe === "function") unsubscribe();
+    };
+  }, [gameCode]);
+
+  // Reset reaction state when room changes.
+  useEffect(() => {
+    seenReactionIdsRef.current = new Set();
+    hasHydratedReactionsRef.current = false;
+    setReactionEvents(null);
+    setFloatingReactions([]);
+
+    floatingTimeoutsRef.current.forEach((id) => clearTimeout(id));
+    floatingTimeoutsRef.current = [];
+  }, [gameCode]);
+
+  // Cleanup any pending reaction timeouts on unmount.
+  useEffect(() => {
+    return () => {
+      floatingTimeoutsRef.current.forEach((id) => clearTimeout(id));
+      floatingTimeoutsRef.current = [];
+    };
+  }, []);
+
+  // If the user hides emojis, stop rendering any currently-active animations.
+  useEffect(() => {
+    if (hideEmojis) {
+      setFloatingReactions([]);
+    }
+  }, [hideEmojis]);
+
+  const spawnFloatingReaction = useCallback((id, emoji) => {
+    const x = Math.floor(Math.random() * 81) - 40; // -40..40px
+    const durationMs = 1100 + Math.floor(Math.random() * 250); // ~1.1s - 1.35s
+
+    setFloatingReactions((prev) => {
+      // Avoid duplicates for the same reaction id.
+      if (prev.some((r) => r.id === id)) return prev;
+      return [...prev, { id, emoji, x, durationMs }];
+    });
+
+    const timeoutId = setTimeout(() => {
+      setFloatingReactions((prev) => prev.filter((r) => r.id !== id));
+    }, durationMs);
+
+    floatingTimeoutsRef.current.push(timeoutId);
+  }, []);
+
+  // Turn reaction events into one-time floating animations.
+  // Important: when the client first joins a room, the initial snapshot can include
+  // older reactions. We mark those as "seen" without animating them so the screen
+  // doesn't burst with old emojis.
+  useEffect(() => {
+    // Wait until Firebase has hydrated reactionEvents at least once.
+    if (reactionEvents == null) return;
+
+    const seen = seenReactionIdsRef.current;
+
+    // First snapshot: hydrate seen set, but don't animate.
+    if (!hasHydratedReactionsRef.current) {
+      reactionEvents.forEach((evt) => {
+        if (evt?.id) seen.add(evt.id);
+      });
+      hasHydratedReactionsRef.current = true;
+      return;
+    }
+
+    reactionEvents.forEach((evt) => {
+      if (!evt?.id) return;
+      if (seen.has(evt.id)) return;
+
+      seen.add(evt.id);
+
+      const emoji = evt.emoji;
+      if (typeof emoji !== "string" || !REACTION_EMOJIS.includes(emoji)) return;
+      if (hideEmojis) return;
+
+      spawnFloatingReaction(evt.id, emoji);
+    });
+  }, [reactionEvents, hideEmojis, spawnFloatingReaction]);
+
+  // Close emoji picker when clicking outside.
+  useEffect(() => {
+    if (!isEmojiPickerOpen) return undefined;
+
+    const handler = (e) => {
+      const target = e.target;
+      if (!target) return;
+
+      if (emojiButtonRef.current && emojiButtonRef.current.contains(target)) return;
+      if (emojiPickerRef.current && emojiPickerRef.current.contains(target)) return;
+
+      setIsEmojiPickerOpen(false);
+    };
+
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
+  }, [isEmojiPickerOpen]);
 
   // Auto-scroll to bottom when new messages arrive.
   useEffect(() => {
@@ -91,6 +261,39 @@ export default function MultiplayerChat({ gameCode, authUser }) {
       lastViewedTimestampRef.current = Date.now();
     }
   }, [gameCode, authUser]);
+
+  const sendReaction = useCallback(
+    async (emoji) => {
+      if (!gameCode || !authUser) return;
+      if (!REACTION_EMOJIS.includes(emoji)) return;
+
+      try {
+        const reactionsRef = ref(database, `multiplayer/${gameCode}/reactions`);
+        const newRef = push(reactionsRef);
+        const id = newRef.key;
+        const displayName = authUser.displayName || authUser.email || "Player";
+
+        if (id) {
+          // Optimistically animate locally (and mark as seen so we don't re-animate
+          // when the server echo arrives).
+          seenReactionIdsRef.current.add(id);
+          if (!hideEmojis) {
+            spawnFloatingReaction(id, emoji);
+          }
+        }
+
+        await set(newRef, {
+          emoji,
+          uid: authUser.uid,
+          name: displayName,
+          createdAt: Date.now(),
+        });
+      } catch (err) {
+        logError(err, "MultiplayerChat.sendReaction");
+      }
+    },
+    [authUser, gameCode, hideEmojis, spawnFloatingReaction],
+  );
 
   const handleSend = async (e) => {
     if (e) {
@@ -173,13 +376,145 @@ export default function MultiplayerChat({ gameCode, authUser }) {
 
   return (
     <>
+      {/* Floating emoji reactions layer (bottom-center). */}
+      {!hideEmojis && floatingReactions.length > 0 && (
+        <div className="mwMultiplayerReactionsLayer" aria-hidden="true">
+          {floatingReactions.map((r) => (
+            <div
+              key={r.id}
+              className="mwMultiplayerReactionEmoji"
+              style={{
+                // Start from the bottom of the viewport (not above the keyboard)
+                // per the requested "bottom center of the screen" behavior.
+                bottom: 200,
+                "--mw-reaction-x": `${r.x}px`,
+                animationDuration: `${r.durationMs}ms`,
+              }}
+            >
+              {r.emoji}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Floating emoji picker button - above room chat */}
+      <button
+        ref={emojiButtonRef}
+        type="button"
+        onClick={() => setIsEmojiPickerOpen((prev) => !prev)}
+        style={{
+          position: "fixed",
+          bottom: KEYBOARD_HEIGHT + 20 + 56,
+          right: 20,
+          padding: "8px 14px",
+          borderRadius: 999,
+          backgroundColor: "var(--c-bg)",
+          border: "1px solid var(--c-text-strong)",
+          color: "var(--c-text-strong)",
+          fontSize: 12,
+          fontWeight: "bold",
+          cursor: "pointer",
+          zIndex: 9999,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          boxShadow: "0 4px 16px var(--c-bg)",
+        }}
+        aria-label={isEmojiPickerOpen ? "Close emoji reactions" : "Open emoji reactions"}
+      >
+        <span
+          style={{
+            display: "inline-flex",
+            width: 18,
+            height: 18,
+            borderRadius: "50%",
+            border: "2px solid var(--c-present)",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 10,
+          }}
+        >
+          {EMOJI_BUTTON_ICON}
+        </span>
+        <span>Emojis</span>
+      </button>
+
+      {/* Emoji picker panel */}
+      {isEmojiPickerOpen && (
+        <div
+          ref={emojiPickerRef}
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            position: "fixed",
+            bottom: KEYBOARD_HEIGHT + 20 + 56 + 54,
+            right: 20,
+            width: 220,
+            maxWidth: "90vw",
+            backgroundColor: "var(--c-panel)",
+            borderRadius: 12,
+            border: "1px solid var(--c-border)",
+            boxShadow: "0 8px 24px var(--c-bg)",
+            zIndex: 9998,
+            padding: "10px 10px 8px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+          }}
+        >
+          <div style={{ fontSize: 12, fontWeight: "bold", color: "var(--c-text-strong)" }}>
+            Emoji reactions
+          </div>
+
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {REACTION_EMOJIS.map((emoji) => (
+              <button
+                key={emoji}
+                type="button"
+                onClick={() => sendReaction(emoji)}
+                style={{
+                  border: "1px solid var(--c-border)",
+                  borderRadius: 10,
+                  padding: "8px 10px",
+                  background: "var(--c-bg)",
+                  cursor: "pointer",
+                  fontSize: 18,
+                  lineHeight: 1,
+                }}
+                aria-label={`Send ${emoji}`}
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setHideEmojis((prev) => !prev)}
+            style={{
+              border: "none",
+              borderRadius: 10,
+              padding: "10px 12px",
+              background: "var(--c-accent-2)",
+              color: "var(--c-text-strong)",
+              cursor: "pointer",
+              fontSize: 12,
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: 0.5,
+            }}
+          >
+            {hideEmojis ? "Show emojis" : "Hide emojis"}
+          </button>
+        </div>
+      )}
+
       {/* Floating chat toggle button - bottom right */}
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         style={{
           position: "fixed",
-          bottom: 190 + 20,
+          bottom: KEYBOARD_HEIGHT + 20,
           right: 20,
           padding: "8px 14px",
           borderRadius: 999,
@@ -252,7 +587,7 @@ export default function MultiplayerChat({ gameCode, authUser }) {
           }}
           style={{
             position: "fixed",
-            bottom: 190 + 90,
+            bottom: KEYBOARD_HEIGHT + 90,
             right: 20,
             width: 320,
             maxWidth: "90vw",

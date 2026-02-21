@@ -764,6 +764,8 @@ export default function GameMultiplayer() {
           isUnlimited={false}
           speedrunEnabled={speedrunEnabled}
           statusText={statusText}
+          turnsUsed={turnsUsed}
+          maxTurns={maxTurns}
         />
       )}
 

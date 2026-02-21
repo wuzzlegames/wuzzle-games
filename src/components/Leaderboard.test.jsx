@@ -54,27 +54,27 @@ describe('Leaderboard component', () => {
   it('toggles mode between daily and marathon and passes args to useLeaderboard', async () => {
     const { rerender } = render(<Leaderboard />);
 
-    // Wait for initial lazy/Suspense work to settle
     await screen.findByRole('heading', { name: /speedrun leaderboard/i });
 
     const modeSelect = screen.getAllByRole('combobox')[0];
     expect(modeSelect).toHaveValue('daily');
 
-    // Initial call should be for daily mode, all boards, limit 100
-    expect(useLeaderboard).toHaveBeenCalledWith('daily', null, 100);
+    // Initial call should be for daily mode, default boards=1, limit 100
+    expect(useLeaderboard).toHaveBeenCalledWith('daily', 1, 100);
 
     fireEvent.change(modeSelect, { target: { value: 'marathon' } });
 
     // Re-render to reflect updated hook calls
     rerender(<Leaderboard />);
 
-    // After toggling, mode should be marathon and numBoards reset to null
     expect(modeSelect).toHaveValue('marathon');
     const calls = useLeaderboard.mock.calls;
-    expect(calls.some(([mode, boards, limit]) => mode === 'marathon' && boards === null && limit === 100)).toBe(true);
+    expect(
+      calls.some(([mode, boards, limit]) => mode === 'marathon' && boards === null && limit === 100)
+    ).toBe(true);
   });
 
-  it('shows boards filter only for daily mode and supports "All" vs specific board counts', async () => {
+  it('shows boards filter only for daily mode and supports selecting board counts', async () => {
     render(<Leaderboard />);
 
     await screen.findByRole('heading', { name: /speedrun leaderboard/i });
@@ -83,8 +83,8 @@ describe('Leaderboard component', () => {
     const selects = screen.getAllByRole('combobox');
     const boardsSelect = selects[1];
     expect(boardsSelect).toBeInTheDocument();
-    expect(boardsSelect).toHaveValue('all');
-    expect(screen.getByRole('option', { name: 'All' })).toBeInTheDocument();
+    expect(boardsSelect).toHaveValue('1');
+    expect(screen.getByRole('option', { name: '1' })).toBeInTheDocument();
 
     // Change to a specific board count
     fireEvent.change(boardsSelect, { target: { value: '4' } });
@@ -93,11 +93,11 @@ describe('Leaderboard component', () => {
     const calls = useLeaderboard.mock.calls;
     expect(calls.some(([mode, boards]) => mode === 'daily' && boards === 4)).toBe(true);
 
-    // Switch to marathon mode: boards filter should disappear
+    // Switch to solution hunt mode: boards filter should disappear
     const modeSelect = screen.getAllByRole('combobox')[0];
-    fireEvent.change(modeSelect, { target: { value: 'marathon' } });
+    fireEvent.change(modeSelect, { target: { value: 'solutionhunt' } });
 
-    // After switching to marathon, only one combobox (mode) should remain
+    // After switching away from daily, only one combobox (mode) should remain
     expect(screen.getAllByRole('combobox').length).toBe(1);
   });
 
@@ -131,9 +131,6 @@ describe('Leaderboard component', () => {
     // Second row: rank #2, Bob
     expect(screen.getByText('#2')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
-
-    // Boards
-    expect(screen.getAllByText('3').length).toBeGreaterThanOrEqual(2);
 
     // Time formatting (shared formatElapsed mm:ss.tenths): 12_345 -> 00:12.3, 15_000 -> 00:15.0
     expect(screen.getByText('00:12.3')).toBeInTheDocument();

@@ -28,6 +28,10 @@ vi.mock('../config/firebase', () => ({
   database: {},
 }));
 
+vi.mock('../lib/dailyWords', () => ({
+  getCurrentDateString: () => '2024-01-01',
+}));
+
 import { useLeaderboard, submitSpeedrunScore } from './useLeaderboard';
 
 beforeEach(() => {
@@ -62,8 +66,7 @@ function triggerError(err) {
 }
 
 describe('useLeaderboard', () => {
-  it('filters to current-day timestamps, applies numBoards filter, and sorts correctly', () => {
-    const dayMs = 24 * 60 * 60 * 1000;
+  it('sorts correctly and applies numBoards filter', () => {
     const now = Date.now();
 
     const raw = {
@@ -71,8 +74,7 @@ describe('useLeaderboard', () => {
       b: { userId: 'u2', userName: 'B', numBoards: 3, timeMs: 12000, timestamp: now - 1000 },
       c: { userId: 'u3', userName: 'C', numBoards: 3, timeMs: 11000, timestamp: now + 1000 },
       d: { userId: 'u4', userName: 'D', numBoards: 3, timeMs: 11000, timestamp: now + 2000 },
-      e: { userId: 'u5', userName: 'E', numBoards: 2, timeMs: 8000, timestamp: now - dayMs }, // previous day
-      f: { userId: 'u6', userName: 'F', numBoards: 3, timeMs: 5000, timestamp: now + dayMs },  // next day
+      e: { userId: 'u5', userName: 'E', numBoards: 2, timeMs: 8000, timestamp: now - 5_000 },
     };
 
     const { result, rerender } = renderHook(({ mode, boards }) => useLeaderboard(mode, boards, 10), {
@@ -82,8 +84,9 @@ describe('useLeaderboard', () => {
     // Simulate initial data load
     triggerSnapshot(raw);
 
-    // Current-day filter should remove e and f. Sort by timeMs ascending (faster first), then timestamp for ties.
+    // Sort by timeMs ascending (faster first), then timestamp for ties.
     expect(result.current.entries.map((e) => e.userName)).toEqual([
+      'E', // timeMs 8000
       'A', // timeMs 9000
       'C', // timeMs 11000, earlier timestamp
       'D', // timeMs 11000, later timestamp
@@ -99,7 +102,6 @@ describe('useLeaderboard', () => {
 
     const filtered = result.current.entries;
     expect(filtered.every((e) => e.numBoards === 3)).toBe(true);
-    // Same ordering within that filter
     expect(filtered.map((e) => e.userName)).toEqual(['A', 'C', 'D', 'B']);
   });
 
@@ -176,12 +178,12 @@ describe('submitSpeedrunScore', () => {
       12_345,
     );
 
-    // Correct ref path
-    expect(refMock).toHaveBeenCalledWith(expect.anything(), 'leaderboard/daily');
+    // Correct ref path (daily leaderboard is scoped by date key)
+    expect(refMock).toHaveBeenCalledWith(expect.anything(), 'leaderboard/daily/2024-01-01');
 
     // push called with that ref and returned our mock entryRef
     const pushArgs = pushMock.mock.calls[0];
-    expect(pushArgs[0]).toEqual({ db: {}, path: 'leaderboard/daily' });
+    expect(pushArgs[0]).toEqual({ db: {}, path: 'leaderboard/daily/2024-01-01' });
 
     // set called with entryRef and payload (no score field)
     expect(setMock).toHaveBeenCalledTimes(1);
@@ -193,6 +195,7 @@ describe('submitSpeedrunScore', () => {
       numBoards: 4,
       timeMs: 12_345,
       timestamp: 1_700_000_123_000,
+      dateKey: '2024-01-01',
     });
     expect(entryArg).not.toHaveProperty('score');
 
@@ -210,5 +213,6 @@ describe('submitSpeedrunScore', () => {
     expect(lastEntry.numBoards).toBe(2);
     expect(lastEntry.timeMs).toBe(5_000);
     expect(lastEntry).not.toHaveProperty('score');
+    expect(lastEntry).not.toHaveProperty('dateKey');
   });
 });

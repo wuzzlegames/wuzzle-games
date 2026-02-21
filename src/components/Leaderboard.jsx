@@ -12,10 +12,10 @@ import './Leaderboard.css';
 export default function Leaderboard() {
   const { user } = useAuth();
   const [mode, setMode] = useState('daily');
-  const [numBoards, setNumBoards] = useState(null); // null = all boards
+  const [numBoards, setNumBoards] = useState(1);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
-  const { entries, loading, error } = useLeaderboard(mode, numBoards, 100);
+  const { entries, loading, error } = useLeaderboard(mode, mode === 'daily' ? numBoards : null, 100);
 
   // All possible board counts for filtering (1-32)
   const boardOptions = [
@@ -48,11 +48,13 @@ export default function Leaderboard() {
               className="filterSelect"
               value={mode}
               onChange={(e) => {
-                setMode(e.target.value);
-                setNumBoards(null); // Reset board filter when mode changes
+                const nextMode = e.target.value;
+                setMode(nextMode);
+                setNumBoards(nextMode === 'daily' ? 1 : null);
               }}
             >
               <option value="daily">Daily</option>
+              <option value="solutionhunt">Solution Hunt</option>
               <option value="marathon">Marathon</option>
             </select>
           </div>
@@ -62,15 +64,15 @@ export default function Leaderboard() {
               <label className="filterLabel">Boards:</label>
               <select
                 className="filterSelect"
-                value={numBoards === null ? 'all' : numBoards}
+                value={numBoards}
                 onChange={(e) => {
-                  const value = e.target.value;
-                  setNumBoards(value === 'all' ? null : parseInt(value, 10));
+                  setNumBoards(parseInt(e.target.value, 10));
                 }}
               >
-                <option value="all">All</option>
-                {boardOptions.map(n => (
-                  <option key={n} value={n}>{n}</option>
+                {boardOptions.map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
                 ))}
               </select>
             </div>
@@ -94,7 +96,6 @@ export default function Leaderboard() {
             <div className="leaderboardRow leaderboardHeaderRow">
               <div className="leaderboardRank">Rank</div>
               <div className="leaderboardName">Player</div>
-              <div className="leaderboardBoards">Boards</div>
               <div className="leaderboardTime">Time</div>
             </div>
             {entries.map((entry, index) => {
@@ -113,7 +114,6 @@ export default function Leaderboard() {
                       size="sm"
                     />
                   </div>
-                  <div className="leaderboardBoards">{entry.numBoards ?? "—"}</div>
                   <div className="leaderboardTime">{formatElapsed(entry.timeMs)}</div>
                 </div>
               );

@@ -105,7 +105,7 @@
 
 .leaderboardRow {
   display: grid;
-  grid-template-columns: 60px 1fr 80px 120px;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
   gap: 16px;
   padding: 16px 20px;
   border-bottom: 1px solid var(--c-border);
@@ -159,13 +159,9 @@
   font-weight: normal;
 }
 
-.leaderboardBoards {
-  text-align: center;
-  color: var(--c-text);
-}
-
 .leaderboardTime {
-  text-align: center;
+  justify-self: end;
+  text-align: right;
   font-family: monospace;
   font-weight: 600;
   color: var(--c-text-strong);
@@ -187,7 +183,7 @@
   }
 
   .leaderboardRow {
-    grid-template-columns: 50px 1fr 60px 100px;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
     gap: 8px;
     padding: 12px 12px;
     font-size: 14px;
@@ -201,7 +197,6 @@
     font-size: 13px;
   }
 
-  .leaderboardBoards,
   .leaderboardTime {
     font-size: 12px;
   }

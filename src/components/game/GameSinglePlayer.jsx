@@ -828,7 +828,9 @@ export default function GameSinglePlayer({
 
 
       const wouldSubmitSpeedrun =
-        speedrunEnabled && allSolvedNow && (mode === "daily" || isMarathonComplete);
+        speedrunEnabled &&
+        allSolvedNow &&
+        (mode === "daily" || mode === "solutionhunt" || isMarathonComplete);
       const finalTimeMs = savedPopupTotalMs || finalStageMs;
       const submitNumBoards =
         mode === "marathon"
@@ -842,12 +844,18 @@ export default function GameSinglePlayer({
           userName,
           mode,
           submitNumBoards,
-          finalTimeMs
+          finalTimeMs,
+          dateString
         ).catch((err) => {
           logError(err, 'GameSinglePlayer.submitSpeedrunScore');
         });
       } else if (wouldSubmitSpeedrun && !authUser) {
-        addPendingLeaderboard({ mode, numBoards: submitNumBoards, timeMs: finalTimeMs });
+        addPendingLeaderboard({
+          mode,
+          numBoards: submitNumBoards,
+          timeMs: finalTimeMs,
+          dateKey: dateString,
+        });
       }
 
       clearGameState();

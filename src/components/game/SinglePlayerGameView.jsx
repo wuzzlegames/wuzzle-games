@@ -156,7 +156,16 @@ export default function SinglePlayerGameView({
           </div>
         )}
 
-        <div style={{ padding: "16px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div
+          style={{
+            padding: "16px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+            boxSizing: "border-box",
+          }}
+        >
           {/* Status bar: boards, guesses, timer */}
           <div style={{ width: "100%", maxWidth: 600, marginBottom: 12 }}>
             <GameStatusBar
@@ -264,7 +273,9 @@ export default function SinglePlayerGameView({
           </div>
 
           {showComments && commentThreadId && (
-            <CommentsSection threadId={commentThreadId} />
+            <div style={{ width: "100%", maxWidth: 600 }}>
+              <CommentsSection threadId={commentThreadId} />
+            </div>
           )}
         </div>
       </main>

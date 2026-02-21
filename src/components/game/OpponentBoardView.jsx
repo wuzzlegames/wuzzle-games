@@ -4,10 +4,9 @@ export default function OpponentBoardView({ opponentColors, maxTurns, opponentGu
   const numGuesses = opponentColors ? opponentColors.length : 0;
   const rowsToShow = Math.min(numGuesses + 1, Math.max(maxTurns, numGuesses + 1));
   
-  // Match tile sizing from TileRow component (for 1 board, tileSize = 32, tileMargin = 2)
+  // Match tile sizing from TileRow component (for 1 board, baseTileSize = 32)
   const tileSize = 32;
-  const tileMargin = 2;
-  const rowWidth = 5 * (tileSize + tileMargin * 2);
+  const tileGap = 4;
   
   // Check if opponent solved or failed
   const isSolved = opponentGuesses && solution && opponentGuesses.includes(solution);
@@ -57,18 +56,17 @@ export default function OpponentBoardView({ opponentColors, maxTurns, opponentGu
         return (
           <div
             key={rowIdx}
+            data-testid="opponent-board-row"
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "space-between",
               alignItems: "center",
+              gap: tileGap,
               marginBottom: 4,
               minHeight: `${tileSize + 4}px`,
               flexShrink: 0,
               height: `${tileSize + 4}px`,
               width: "100%",
-              maxWidth: `${rowWidth}px`,
-              marginLeft: "auto",
-              marginRight: "auto"
             }}
           >
             {Array.from({ length: 5 }).map((_, colIdx) => {
@@ -86,7 +84,6 @@ export default function OpponentBoardView({ opponentColors, maxTurns, opponentGu
                   style={{
                     width: tileSize,
                     height: tileSize,
-                    margin: tileMargin,
                     background: bgColor,
                     border: `2px solid ${borderColor}`,
                     borderRadius: 4,

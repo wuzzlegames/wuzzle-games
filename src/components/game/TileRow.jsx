@@ -28,25 +28,23 @@ export default function TileRow({
 
   const greenPattern = getGreenPattern(safeGuesses);
 
-  // Calculate tile size based on number of boards to ensure proper fit
+  // Tile sizing: keep consistent across devices (no viewport-based scaling).
   const tileSize = numBoards >= 16 ? 28 : 32;
-  const tileMargin = numBoards >= 16 ? 1.5 : 2;
-  const rowWidth = 5 * (tileSize + tileMargin * 2);
+  const tileGap = numBoards >= 16 ? 3 : 4;
+  const tileFontSize = numBoards >= 16 ? 16 : 18;
 
   return (
     <div
       style={{
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
+        gap: tileGap,
         marginBottom: 4,
         minHeight: `${tileSize + 4}px`,
         flexShrink: 0,
         height: `${tileSize + 4}px`,
         width: "100%",
-        maxWidth: `${rowWidth}px`,
-        marginLeft: "auto",
-        marginRight: "auto"
       }}
     >
       {Array.from({ length: WORD_LENGTH }).map((__, colIdx) => {
@@ -85,14 +83,13 @@ export default function TileRow({
               style={{
                 width: tileSize,
                 height: tileSize,
-                margin: tileMargin,
                 borderRadius: 4,
                 border: `2px solid ${borderColor}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: "bold",
-                fontSize: numBoards >= 16 ? 16 : 18,
+                fontSize: tileFontSize,
                 backgroundColor: bg,
                 textTransform: "uppercase",
                 color: fg,
@@ -123,14 +120,13 @@ export default function TileRow({
               style={{
                 width: tileSize,
                 height: tileSize,
-                margin: tileMargin,
                 borderRadius: 4,
                 border: "2px solid transparent",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: "bold",
-                fontSize: numBoards >= 16 ? 16 : 18,
+                fontSize: tileFontSize,
                 backgroundColor: bg,
                 textTransform: "uppercase",
                 color: "var(--c-text)",
@@ -158,7 +154,6 @@ export default function TileRow({
             style={{
               width: tileSize,
               height: tileSize,
-              margin: tileMargin
             }}
           >
             <div
@@ -172,7 +167,7 @@ export default function TileRow({
                   backgroundColor: frontBg,
                   border: `2px solid ${frontBorder}`,
                   color: "var(--c-text-strong)",
-                  fontSize: numBoards >= 16 ? 16 : 18
+                  fontSize: tileFontSize
                 }}
               >
                 {displayChar}
@@ -184,7 +179,7 @@ export default function TileRow({
                   backgroundColor: backBg,
                   border: "2px solid transparent",
                   color: "var(--c-text)",
-                  fontSize: numBoards >= 16 ? 16 : 18
+                  fontSize: tileFontSize
                 }}
               >
                 {displayChar}

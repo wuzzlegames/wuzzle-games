@@ -25,7 +25,7 @@ describe('OpponentBoardView', () => {
 
     // rowsToShow = min(numGuesses + 1, max(maxTurns, numGuesses + 1))
     // numGuesses = 2, maxTurns = 6 -> rowsToShow = min(3, 6) = 3
-    const rows = container.querySelectorAll('div[style*="max-width: 180px"]');
+    const rows = renderResult.getAllByTestId('opponent-board-row');
     expect(rows.length).toBe(3);
   });
 

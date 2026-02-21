@@ -17,7 +17,7 @@ export default function GameToast({ message }) {
     borderRadius: 10,
     fontSize: 14,
     fontWeight: "bold",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.55)",
+    boxShadow: "0 10px 30px var(--c-bg)",
     zIndex: 3000,
     pointerEvents: "none",
     maxWidth: "90vw",
@@ -31,14 +31,14 @@ export default function GameToast({ message }) {
 
   const toneStyles = isError
     ? {
-        backgroundColor: "#2b0004",
-        color: "#ff6b6b",
-        border: "1px solid #ff6b6b",
+        backgroundColor: "var(--c-panel)",
+        color: "var(--c-text)",
+        border: "1px solid var(--c-error)",
       }
     : {
-        backgroundColor: "rgba(24,24,27,0.96)",
-        color: "#e5e7eb",
-        border: "1px solid #4b5563",
+        backgroundColor: "var(--c-panel)",
+        color: "var(--c-text)",
+        border: "1px solid var(--c-border)",
       };
 
   return (

@@ -108,20 +108,20 @@ describe('formatElapsed', () => {
 
 describe('colorForStatus', () => {
   it('returns expected hex colors for tile statuses', () => {
-    expect(colorForStatus('green')).toBe('#50a339');
-    expect(colorForStatus('yellow')).toBe('#B1A04C');
-    expect(colorForStatus('grey')).toBe('#252526');
-    expect(colorForStatus('none')).toBe('#3A3A3C');
-    expect(colorForStatus('unknown')).toBe('#3A3A3C');
+    expect(colorForStatus('green')).toBe('var(--c-correct)');
+    expect(colorForStatus('yellow')).toBe('var(--c-present)');
+    expect(colorForStatus('grey')).toBe('var(--c-absent)');
+    expect(colorForStatus('none')).toBe('var(--c-border)');
+    expect(colorForStatus('unknown')).toBe('var(--c-border)');
   });
 });
 
 describe('colorForMiniCell', () => {
   it('returns expected hex colors for mini-cell statuses', () => {
-    expect(colorForMiniCell('green')).toBe('#50a339');
-    expect(colorForMiniCell('yellow')).toBe('#B1A04C');
-    expect(colorForMiniCell('grey')).toBe('#252526');
-    expect(colorForMiniCell('none')).toBe('#212121');
-    expect(colorForMiniCell('unknown')).toBe('#212121');
+    expect(colorForMiniCell('green')).toBe('var(--c-correct)');
+    expect(colorForMiniCell('yellow')).toBe('var(--c-present)');
+    expect(colorForMiniCell('grey')).toBe('var(--c-absent)');
+    expect(colorForMiniCell('none')).toBe('var(--c-bg)');
+    expect(colorForMiniCell('unknown')).toBe('var(--c-bg)');
   });
 });

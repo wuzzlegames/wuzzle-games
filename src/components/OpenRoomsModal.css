@@ -18,7 +18,7 @@
   margin: 0;
   font-size: 20px;
   font-weight: bold;
-  color: #ffffff;
+  color: var(--c-text-strong);
 }
 
 .openRoomsCodeJoin {
@@ -31,9 +31,9 @@
   width: 100px;
   padding: 6px 8px;
   border-radius: 6px;
-  border: 1px solid #3A3A3C;
-  background: #372F41;
-  color: #ffffff;
+  border: 1px solid var(--c-border);
+  background: var(--c-panel);
+  color: var(--c-text-strong);
   font-size: 14px;
   text-align: center;
   letter-spacing: 2px;
@@ -43,11 +43,11 @@
 }
 
 .openRoomsCodeInput:focus {
-  border-color: #6d597a;
+  border-color: var(--c-accent-2);
 }
 
 .openRoomsCodeInput--error {
-  border-color: #ED2939;
+  border-color: var(--c-error);
 }
 
 .openRoomsCodeBtn {
@@ -62,7 +62,7 @@
 }
 
 .openRoomsCodeError {
-  color: #f06272;
+  color: var(--c-text);
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -73,11 +73,11 @@
 }
 
 .openRoomsStatusLoading {
-  color: #d7dadc;
+  color: var(--c-text);
 }
 
 .openRoomsStatusEmpty {
-  color: #818384;
+  color: var(--c-text);
 }
 
 .openRoomsList {
@@ -92,8 +92,8 @@
 .openRoomsItem {
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid #3A3A3C;
-  background: #372F41;
+  border: 1px solid var(--c-border);
+  background: var(--c-panel);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -106,21 +106,21 @@
 }
 
 .openRoomsItemTitle {
-  color: #ffffff;
+  color: var(--c-text-strong);
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 2px;
 }
 
 .openRoomsItemMeta {
-  color: #d7dadc;
+  color: var(--c-text);
   font-size: 12px;
 }
 
 .openRoomsItemExpires {
   margin-top: 4px;
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--c-text);
 }
 
 .openRoomsItemActions {

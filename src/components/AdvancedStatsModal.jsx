@@ -71,10 +71,10 @@ export default function AdvancedStatsModal({
         style={{
           padding: '16px 20px',
           borderRadius: 12,
-          border: locked ? '2px solid #3A3A3C' : '2px solid #3A3A3C',
+          border: locked ? '2px solid var(--c-border)' : '2px solid var(--c-border)',
           background: locked 
-            ? 'linear-gradient(135deg, #372F41 0%, #372F41 100%)' 
-            : 'linear-gradient(135deg, #372F41 0%, #372F41 100%)',
+            ? 'linear-gradient(135deg, var(--c-panel) 0%, var(--c-panel) 100%)' 
+            : 'linear-gradient(135deg, var(--c-panel) 0%, var(--c-panel) 100%)',
           display: 'flex',
           flexDirection: 'column',
           gap: 4,
@@ -85,30 +85,30 @@ export default function AdvancedStatsModal({
         onClick={locked && onClick ? onClick : undefined}
         onMouseEnter={(e) => {
           if (locked && onClick) {
-            e.currentTarget.style.borderColor = '#565758';
+            e.currentTarget.style.borderColor = 'var(--c-border-strong)';
             e.currentTarget.style.opacity = 0.8;
           }
         }}
         onMouseLeave={(e) => {
           if (locked && onClick) {
-            e.currentTarget.style.borderColor = '#3A3A3C';
+            e.currentTarget.style.borderColor = 'var(--c-border)';
             e.currentTarget.style.opacity = 0.6;
           }
         }}
       >
-        <div style={{ fontSize: 12, color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+        <div style={{ fontSize: 12, color: 'var(--c-text)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5 }}>
           {title}
         </div>
-        <div style={{ fontSize: 24, fontWeight: 'bold', color: locked ? '#818384' : '#ffffff' }}>
+        <div style={{ fontSize: 24, fontWeight: 'bold', color: locked ? 'var(--c-text)' : 'var(--c-text-strong)' }}>
           {locked ? '🔒' : value}
         </div>
         {subtitle && (
-          <div style={{ fontSize: 12, color: '#818384', marginTop: 2 }}>
+          <div style={{ fontSize: 12, color: 'var(--c-text)', marginTop: 2 }}>
             {subtitle}
           </div>
         )}
         {locked && (
-          <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 4, fontStyle: 'italic' }}>
+          <div style={{ fontSize: 11, color: 'var(--c-text)', marginTop: 4, fontStyle: 'italic' }}>
             Premium only
           </div>
         )}
@@ -128,15 +128,15 @@ export default function AdvancedStatsModal({
       >
         <div
           style={{
-            backgroundColor: '#372F41',
+            backgroundColor: 'var(--c-panel)',
             borderRadius: 20,
             padding: '40px 32px',
             maxWidth: 800,
             width: '92vw',
             maxHeight: '85vh',
             overflowY: 'auto',
-            boxShadow: '0 25px 70px rgba(0,0,0,0.9)',
-            border: '1px solid #3A3A3C',
+            boxShadow: '0 25px 70px var(--c-bg)',
+            border: '1px solid var(--c-border)',
           }}
         >
           <div style={{ marginBottom: 32, textAlign: 'center' }}>
@@ -147,7 +147,7 @@ export default function AdvancedStatsModal({
                 marginBottom: 8,
                 fontSize: 28,
                 fontWeight: 'bold',
-                color: '#ffffff',
+                color: 'var(--c-text-strong)',
                 letterSpacing: 0.5,
               }}
             >
@@ -156,7 +156,7 @@ export default function AdvancedStatsModal({
             <div
               style={{
                 fontSize: 14,
-                color: '#9ca3af',
+                color: 'var(--c-text)',
                 marginTop: 8,
               }}
             >
@@ -165,7 +165,7 @@ export default function AdvancedStatsModal({
           </div>
 
           {loading && (
-            <div style={{ textAlign: 'center', padding: '40px 20px', color: '#9ca3af' }}>
+            <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--c-text)' }}>
               Loading statistics...
             </div>
           )}
@@ -175,9 +175,9 @@ export default function AdvancedStatsModal({
               style={{
                 padding: '16px 20px',
                 borderRadius: 12,
-                backgroundColor: 'rgba(220, 38, 38, 0.15)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                color: '#f87171',
+                backgroundColor: 'var(--c-bg)',
+                border: '1px solid var(--c-error)',
+                color: 'var(--c-text)',
                 marginBottom: 24,
                 textAlign: 'center',
               }}
@@ -193,9 +193,9 @@ export default function AdvancedStatsModal({
                 <h3 style={{ 
                   fontSize: 18, 
                   fontWeight: 'bold', 
-                  color: '#ffffff', 
+                  color: 'var(--c-text-strong)', 
                   marginBottom: 16,
-                  borderBottom: '1px solid #3A3A3C',
+                  borderBottom: '1px solid var(--c-border)',
                   paddingBottom: 8,
                 }}>
                   Guess Distribution
@@ -219,7 +219,7 @@ export default function AdvancedStatsModal({
                       <div key={guessCount} style={{ textAlign: 'center' }}>
                         <div style={{ 
                           fontSize: 11, 
-                          color: '#9ca3af', 
+                          color: 'var(--c-text)', 
                           marginBottom: 8,
                           fontWeight: '600',
                         }}>
@@ -234,16 +234,16 @@ export default function AdvancedStatsModal({
                         }}>
                           <div style={{
                             height: `${barHeight}%`,
-                          backgroundColor: '#50a339',
+                          backgroundColor: 'var(--c-correct)',
                             borderRadius: '4px 4px 0 0',
                             minHeight: barHeight > 0 ? '4px' : '0',
                             transition: 'all 0.3s ease',
                           }} />
                         </div>
-                        <div style={{ fontSize: 16, fontWeight: 'bold', color: '#ffffff', marginBottom: 4 }}>
+                        <div style={{ fontSize: 16, fontWeight: 'bold', color: 'var(--c-text-strong)', marginBottom: 4 }}>
                           {count}
                         </div>
-                        <div style={{ fontSize: 11, color: '#818384' }}>
+                        <div style={{ fontSize: 11, color: 'var(--c-text)' }}>
                           {percentage}%
                         </div>
                       </div>
@@ -257,9 +257,9 @@ export default function AdvancedStatsModal({
                 <h3 style={{ 
                   fontSize: 18, 
                   fontWeight: 'bold', 
-                  color: '#ffffff', 
+                  color: 'var(--c-text-strong)', 
                   marginBottom: 16,
-                  borderBottom: '1px solid #3A3A3C',
+                  borderBottom: '1px solid var(--c-border)',
                   paddingBottom: 8,
                 }}>
                   Performance Metrics
@@ -344,9 +344,9 @@ export default function AdvancedStatsModal({
                   <h3 style={{ 
                     fontSize: 18, 
                     fontWeight: 'bold', 
-                    color: '#ffffff', 
+                    color: 'var(--c-text-strong)', 
                     marginBottom: 16,
-                    borderBottom: '1px solid #3A3A3C',
+                    borderBottom: '1px solid var(--c-border)',
                     paddingBottom: 8,
                   }}>
                     Time-Based Statistics
@@ -398,7 +398,7 @@ export default function AdvancedStatsModal({
                 <div style={{
                   padding: '24px',
                   textAlign: 'center',
-                  color: '#9ca3af',
+                  color: 'var(--c-text)',
                   fontSize: 14,
                 }}>
                   No statistics available yet. Complete some games to see your stats!
@@ -412,7 +412,7 @@ export default function AdvancedStatsModal({
             justifyContent: 'center', 
             gap: 12,
             paddingTop: 24,
-            borderTop: '1px solid #3A3A3C',
+            borderTop: '1px solid var(--c-border)',
             marginTop: 32,
           }}>
             <button
@@ -420,9 +420,9 @@ export default function AdvancedStatsModal({
               style={{
                 padding: '14px 32px',
                 borderRadius: 12,
-                border: '2px solid #3A3A3C',
+                border: '2px solid var(--c-border)',
                 background: 'transparent',
-                color: '#d7dadc',
+                color: 'var(--c-text)',
                 fontSize: 14,
                 fontWeight: '600',
                 cursor: 'pointer',
@@ -431,13 +431,13 @@ export default function AdvancedStatsModal({
                 transition: 'all 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#565758';
-                e.currentTarget.style.color = '#ffffff';
-                e.currentTarget.style.background = 'rgba(58, 58, 60, 0.3)';
+                e.currentTarget.style.borderColor = 'var(--c-border-strong)';
+                e.currentTarget.style.color = 'var(--c-text-strong)';
+                e.currentTarget.style.background = 'var(--c-panel)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = '#3a3a3c';
-                e.currentTarget.style.color = '#d7dadc';
+                e.currentTarget.style.borderColor = 'var(--c-border)';
+                e.currentTarget.style.color = 'var(--c-text)';
                 e.currentTarget.style.background = 'transparent';
               }}
             >

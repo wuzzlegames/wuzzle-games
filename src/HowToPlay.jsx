@@ -6,11 +6,11 @@ import "./HowToPlay.css";
 const FeedbackModal = lazy(() => import("./components/FeedbackModal"));
 
 // Color constants matching the game
-const GREEN = "#50a339";
-const YELLOW = "#B1A04C";
-const GRAY = "#3A3A3C";
-const DARK_BG = "#372F41";
-const BORDER = "#3A3A3C";
+const GREEN = "var(--c-correct)";
+const YELLOW = "var(--c-present)";
+const GRAY = "var(--c-border)";
+const DARK_BG = "var(--c-panel)";
+const BORDER = "var(--c-border)";
 
 // Example: Solution is CLOUD, guess is DRONE
 // O is in correct position (green), D is in word but wrong position (yellow), R/N/E are not in word (gray)
@@ -25,8 +25,8 @@ function ExampleTile({ letter, color, size = 40 }) {
         width: size,
         height: size,
         backgroundColor: color,
-        border: `1px solid ${color === GRAY ? BORDER : color === GREEN ? "#538d4e" : "#b59f3b"}`,
-        color: "#ffffff",
+        border: `1px solid ${color === GRAY ? BORDER : color === GREEN ? "var(--c-correct)" : "var(--c-present)"}`,
+        color: "var(--c-text-strong)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -55,16 +55,16 @@ function ExampleBoard({ title, rows, size = 40, isSelected = false }) {
     <div
       className="exampleBoard"
       style={{
-        border: isSelected ? "2px solid #facc15" : `1px solid ${BORDER}`,
+        border: isSelected ? "2px solid var(--c-accent-2)" : `1px solid ${BORDER}`,
         borderRadius: 8,
         padding: 12,
         background: DARK_BG,
-        boxShadow: isSelected ? "0 0 0 1px rgba(250,204,21,0.53)" : "none",
+        boxShadow: isSelected ? "0 0 0 2px var(--c-present)" : "none",
         minWidth: 220,
       }}
     >
       {title && (
-        <div style={{ fontSize: 12, color: "#d7dadc", marginBottom: 8, textAlign: "center" }}>
+        <div style={{ fontSize: 12, color: "var(--c-text)", marginBottom: 8, textAlign: "center" }}>
           {title}
         </div>
       )}
@@ -76,7 +76,7 @@ function ExampleBoard({ title, rows, size = 40, isSelected = false }) {
 }
 
 function KeyboardKey({ letter, colors = [], showGrid = false, gridCols = 2, gridRows = 2 }) {
-  const baseColor = colors.length > 0 && !showGrid ? colors[0] : "#818384";
+  const baseColor = colors.length > 0 && !showGrid ? colors[0] : "var(--c-text)";
   
   // Calculate square cell size: grid height is 22px, gap is 2px
   // For 2 columns: (22 - 2) / 2 = 10px per cell
@@ -98,8 +98,8 @@ function KeyboardKey({ letter, colors = [], showGrid = false, gridCols = 2, grid
         justifyContent: "center",
         fontSize: 14,
         fontWeight: "bold",
-        color: "#ffffff",
-        border: "1px solid rgba(0,0,0,0.2)",
+        color: "var(--c-text-strong)",
+        border: "1px solid var(--c-bg)",
       }}
     >
       <span>{letter}</span>
@@ -123,7 +123,7 @@ function KeyboardKey({ letter, colors = [], showGrid = false, gridCols = 2, grid
               style={{
                 backgroundColor: color,
                 borderRadius: 2,
-                border: "1px solid rgba(0, 0, 0, 0.25)",
+                border: "1px solid var(--c-bg)",
                 width: cellSize,
                 height: cellSize,
               }}
@@ -233,7 +233,7 @@ export default function HowToPlay() {
               <div className="colorItem">
                 <div className="colorBox" style={{ backgroundColor: GRAY }} />
                 <div>
-                  <strong>R, N, E</strong> are <span style={{ color: "#818384" }}>gray</span> – they're not in the word.
+                  <strong>R, N, E</strong> are <span style={{ color: "var(--c-text)" }}>gray</span> – they're not in the word.
                 </div>
               </div>
             </div>
@@ -307,7 +307,7 @@ export default function HowToPlay() {
                 {Object.entries(keyboardExample).map(([letter, colors]) => (
                   <div key={letter} style={{ textAlign: "center" }}>
                     <KeyboardKey letter={letter} colors={colors} showGrid={true} gridCols={2} gridRows={2} />
-                    <div style={{ fontSize: 11, color: "#818384", marginTop: 4 }}>
+                    <div style={{ fontSize: 11, color: "var(--c-text)", marginTop: 4 }}>
                       {letter}
                     </div>
                   </div>

@@ -88,16 +88,16 @@ function Board({
 
               const color = row ? row.colors[colIdx] : undefined;
 
-              let bg = "#212121";
-              if (color === "green") bg = "#50a339";
-              else if (color === "yellow") bg = "#B1A04C";
-              else if (color === "grey") bg = "#3A3A3C";
+              let bg = "var(--c-bg)";
+              if (color === "green") bg = "var(--c-correct)";
+              else if (color === "yellow") bg = "var(--c-present)";
+              else if (color === "grey") bg = "var(--c-absent)";
 
-              let borderColor = row ? "transparent" : isCurrentRow ? "#565758" : "#3A3A3C";
+              let borderColor = row ? "transparent" : isCurrentRow ? "var(--c-border-strong)" : "var(--c-border)";
 
               if (isInvalidRow) {
-                borderColor = "#ef4444";
-                bg = "#2a0f10";
+                borderColor = "var(--c-error)";
+                bg = "var(--c-panel)";
               }
 
               return (
@@ -107,7 +107,8 @@ function Board({
                   style={{
                     backgroundColor: bg,
                     borderColor,
-                    color: isPlaceholder ? "rgba(255,255,255,0.45)" : "#ffffff"
+                    color: isInvalidRow ? "var(--c-error)" : "var(--c-bg)",
+                    opacity: isPlaceholder ? 0.65 : 1,
                   }}
                 >
                   {displayChar}

@@ -1,15 +1,15 @@
 .seoRoot {
   min-height: 100vh;
-  background: #212121;
-  color: #ffffff;
+  background: var(--c-bg);
+  color: var(--c-text-strong);
   padding: 18px 12px;
 }
 
 .seoCard {
   max-width: 920px;
   margin: 0 auto;
-  background: #372F41;
-  border: 1px solid #3A3A3C;
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
   border-radius: 14px;
   padding: 18px 18px 14px;
 }
@@ -19,12 +19,12 @@
   gap: 8px;
   align-items: center;
   font-size: 12px;
-  color: #d7dadc;
+  color: var(--c-text);
   margin-bottom: 10px;
 }
 
 .seoBreadcrumb a {
-  color: #eaac8b;
+  color: var(--c-text);
   text-decoration: underline;
 }
 
@@ -37,7 +37,7 @@
 
 .seoIntro {
   margin: 0 0 16px 0;
-  color: #d7dadc;
+  color: var(--c-text);
   line-height: 1.6;
   font-size: 14px;
 }
@@ -56,8 +56,8 @@
   padding: 10px 14px;
   border-radius: 10px;
   border: 1px solid transparent;
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
   text-decoration: none;
   font-weight: 700;
   font-size: 13px;
@@ -70,9 +70,9 @@
 }
 
 .seoBtnOutline {
-  background: #355070;
-  border-color: #3A3A3C;
-  color: #ffffff;
+  background: var(--c-panel);
+  border-color: var(--c-border);
+  color: var(--c-text-strong);
 }
 
 .seoSection {
@@ -86,7 +86,7 @@
 
 .seoSection p,
 .seoSection li {
-  color: #d7dadc;
+  color: var(--c-text);
   line-height: 1.65;
   font-size: 14px;
 }
@@ -98,7 +98,7 @@
 }
 
 .seoFaq details {
-  border-top: 1px solid #3A3A3C;
+  border-top: 1px solid var(--c-border);
   padding: 10px 0;
 }
 
@@ -109,7 +109,7 @@
 .seoFaq summary {
   cursor: pointer;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--c-text-strong);
 }
 
 .seoFaq p {
@@ -119,16 +119,16 @@
 .seoFooter {
   margin-top: 18px;
   padding-top: 12px;
-  border-top: 1px solid #3A3A3C;
+  border-top: 1px solid var(--c-border);
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
   font-size: 12px;
-  color: #d7dadc;
+  color: var(--c-text);
 }
 
 .seoFooter a {
-  color: #eaac8b;
+  color: var(--c-text);
   text-decoration: underline;
 }

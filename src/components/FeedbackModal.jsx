@@ -84,7 +84,7 @@ function FeedbackModal({ isOpen, onRequestClose }) {
             margin: "0 0 16px 0",
             fontSize: 20,
             fontWeight: "bold",
-            color: "#ffffff",
+            color: "var(--c-text-strong)",
           }}
         >
           Send Feedback
@@ -94,7 +94,7 @@ function FeedbackModal({ isOpen, onRequestClose }) {
           style={{
             margin: "0 0 20px 0",
             fontSize: 14,
-            color: "#d7dadc",
+            color: "var(--c-text)",
             lineHeight: 1.5,
           }}
         >
@@ -114,9 +114,9 @@ function FeedbackModal({ isOpen, onRequestClose }) {
               width: "100%",
               padding: "12px",
               borderRadius: 8,
-              border: "1px solid #3A3A3C",
-              background: "#212121",
-              color: "#ffffff",
+              border: "1px solid var(--c-border)",
+              background: "var(--c-bg)",
+              color: "var(--c-text-strong)",
               fontSize: 14,
               outline: "none",
               resize: "vertical",
@@ -132,8 +132,8 @@ function FeedbackModal({ isOpen, onRequestClose }) {
                 padding: "12px",
                 marginBottom: "16px",
                 borderRadius: 8,
-                background: "#50a339",
-                color: "#ffffff",
+                background: "var(--c-correct)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 textAlign: "center",
               }}
@@ -148,8 +148,8 @@ function FeedbackModal({ isOpen, onRequestClose }) {
                 padding: "12px",
                 marginBottom: "16px",
                 borderRadius: 8,
-                background: "#c45858",
-                color: "#ffffff",
+                background: "var(--c-error)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 textAlign: "center",
               }}

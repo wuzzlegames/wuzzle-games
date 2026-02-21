@@ -130,7 +130,7 @@ describe('GameBoard', () => {
     );
 
     const containerDiv = container.firstChild;
-    expect(containerDiv).toHaveStyle({ border: '2px solid #B1A04C' });
+    expect(containerDiv).toHaveStyle({ border: '2px solid var(--c-present)' });
 
     fireEvent.click(containerDiv);
     expect(onToggleSelect).toHaveBeenCalledTimes(1);
@@ -154,7 +154,7 @@ describe('GameBoard', () => {
       />
     );
 
-    expect(container.firstChild).toHaveStyle({ border: '1px solid #3a3a3c' });
+    expect(container.firstChild).toHaveStyle({ border: '1px solid var(--c-border)' });
   });
 
   it('renders the correct number of TileRow children based on guesses and maxTurns', () => {

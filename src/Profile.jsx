@@ -425,7 +425,7 @@ export default function Profile() {
                       <summary className="profileDetailsSummary">Game streaks</summary>
                     {streakLoadError ? (
                       <div className="profileField" style={{ paddingTop: 12 }}>
-                        <div style={{ color: "#f87171", fontSize: 14, marginBottom: 8 }}>
+                        <div style={{ color: "var(--c-text)", fontSize: 14, marginBottom: 8, border: "1px solid var(--c-error)", borderRadius: 8, padding: "8px 10px", background: "var(--c-bg)" }}>
                           {streakLoadError}
                         </div>
                         <button
@@ -439,7 +439,7 @@ export default function Profile() {
                     ) : (
                       <div style={{ paddingTop: 12 }}>
                     <div className="profileField">
-                      <label style={{ fontSize: 12, color: "#9ca3af" }}>
+                      <label style={{ fontSize: 12, color: "var(--c-text)" }}>
                         Streaks are tied to your account and sync across devices once you're signed in.
                       </label>
                     </div>
@@ -681,7 +681,7 @@ export default function Profile() {
                     </div>
 
                     {/* Cross-Mode Comparison Button */}
-                    <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #3A3A3C' }}>
+                    <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid var(--c-border)' }}>
                       <button
                         type="button"
                         onClick={() => setShowCrossModeComparison(true)}
@@ -697,7 +697,7 @@ export default function Profile() {
                       </button>
                       <div style={{ 
                         fontSize: 12, 
-                        color: '#9ca3af', 
+                        color: 'var(--c-text)', 
                         marginTop: 8, 
                         textAlign: 'center' 
                       }}>
@@ -724,20 +724,20 @@ export default function Profile() {
                           <p className="profileBadgesEmpty">Loading subscription details...</p>
                         )}
                         {premiumDetailsError && (
-                          <div style={{ color: "#f87171", fontSize: 14, marginBottom: 12 }}>
+                          <div style={{ color: "var(--c-text)", fontSize: 14, marginBottom: 12, border: "1px solid var(--c-error)", borderRadius: 8, padding: "8px 10px", background: "var(--c-bg)" }}>
                             {premiumDetailsError}
                           </div>
                         )}
                         {!premiumDetailsLoading && premiumDetails?.type === "stripe" && (
                           <>
                             <div className="profileField" style={{ marginBottom: 12 }}>
-                              <label style={{ color: "#9ca3af", fontSize: 12 }}>Plan</label>
+                              <label style={{ color: "var(--c-text)", fontSize: 12 }}>Plan</label>
                               <div className="profileValue" style={{ marginTop: 4 }}>
                                 {premiumDetails.intervalLabel || "Recurring"}
                               </div>
                             </div>
                             <div className="profileField" style={{ marginBottom: 12 }}>
-                              <label style={{ color: "#9ca3af", fontSize: 12 }}>
+                              <label style={{ color: "var(--c-text)", fontSize: 12 }}>
                                 Days remaining until renewal
                               </label>
                               <div className="profileValue" style={{ marginTop: 4 }}>
@@ -745,7 +745,7 @@ export default function Profile() {
                               </div>
                             </div>
                             <div className="profileField" style={{ marginBottom: 12 }}>
-                              <label style={{ color: "#9ca3af", fontSize: 12 }}>Auto-renew</label>
+                              <label style={{ color: "var(--c-text)", fontSize: 12 }}>Auto-renew</label>
                               <div className="profileValue profileInlineField" style={{ marginTop: 4 }}>
                                 <span style={{ marginRight: 12 }}>
                                   {premiumDetails.cancelAtPeriodEnd ? "Off" : "On"}
@@ -784,8 +784,8 @@ export default function Profile() {
                                   style={{
                                     padding: "10px 16px",
                                     fontSize: 14,
-                                    color: "#f87171",
-                                    borderColor: "#f87171",
+                                    color: "var(--c-text)",
+                                    borderColor: "var(--c-error)",
                                     cursor: cancellingSubscription ? "not-allowed" : "pointer",
                                     opacity: cancellingSubscription ? 0.8 : 1,
                                   }}
@@ -800,7 +800,7 @@ export default function Profile() {
                           <>
                             {premiumDetails.currentPeriodEnd && (
                               <div className="profileField" style={{ marginBottom: 12 }}>
-                                <label style={{ color: "#9ca3af", fontSize: 12 }}>
+                                <label style={{ color: "var(--c-text)", fontSize: 12 }}>
                                   Premium until
                                 </label>
                                 <div className="profileValue" style={{ marginTop: 4 }}>
@@ -809,14 +809,14 @@ export default function Profile() {
                               </div>
                             )}
                             <div className="profileField" style={{ marginBottom: 12 }}>
-                              <label style={{ color: "#9ca3af", fontSize: 12 }}>
+                              <label style={{ color: "var(--c-text)", fontSize: 12 }}>
                                 Days remaining
                               </label>
                               <div className="profileValue" style={{ marginTop: 4 }}>
                                 {premiumDetails.daysRemaining ?? 0} days
                               </div>
                             </div>
-                            <div style={{ fontSize: 13, color: "#9ca3af" }}>
+                            <div style={{ fontSize: 13, color: "var(--c-text)" }}>
                               This is a gift subscription; it will not renew.
                             </div>
                           </>
@@ -927,7 +927,7 @@ export default function Profile() {
                 marginBottom: "24px",
                 fontSize: 20,
                 fontWeight: "bold",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
               }}
             >
               {confirmAutoRenewModal?.newCancelAtPeriodEnd ? "Turn off auto-renew?" : "Turn on auto-renew?"}
@@ -936,7 +936,7 @@ export default function Profile() {
               style={{
                 margin: 0,
                 marginBottom: "12px",
-                color: "#d7dadc",
+                color: "var(--c-text)",
                 fontSize: 14,
               }}
             >
@@ -951,9 +951,9 @@ export default function Profile() {
                   flex: 1,
                   padding: "12px",
                   borderRadius: 8,
-                  border: "1px solid #3A3A3C",
+                  border: "1px solid var(--c-border)",
                   background: "transparent",
-                  color: "#ffffff",
+                  color: "var(--c-text-strong)",
                   fontSize: 14,
                   fontWeight: "bold",
                   cursor: "pointer",
@@ -973,8 +973,8 @@ export default function Profile() {
                   padding: "12px",
                   borderRadius: 8,
                   border: "none",
-                  background: "#e56b6f",
-                  color: "#ffffff",
+                  background: "var(--c-accent-1)",
+                  color: "var(--c-text-strong)",
                   fontSize: 14,
                   fontWeight: "bold",
                   cursor: "pointer",
@@ -998,7 +998,7 @@ export default function Profile() {
                 marginBottom: "24px",
                 fontSize: 20,
                 fontWeight: "bold",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
               }}
             >
               Cancel subscription?
@@ -1007,7 +1007,7 @@ export default function Profile() {
               style={{
                 margin: 0,
                 marginBottom: "12px",
-                color: "#d7dadc",
+                color: "var(--c-text)",
                 fontSize: 14,
               }}
             >
@@ -1020,9 +1020,9 @@ export default function Profile() {
                   flex: 1,
                   padding: "12px",
                   borderRadius: 8,
-                  border: "1px solid #3A3A3C",
+                  border: "1px solid var(--c-border)",
                   background: "transparent",
-                  color: "#ffffff",
+                  color: "var(--c-text-strong)",
                   fontSize: 14,
                   fontWeight: "bold",
                   cursor: "pointer",
@@ -1040,8 +1040,8 @@ export default function Profile() {
                   padding: "12px",
                   borderRadius: 8,
                   border: "none",
-                  background: "#e56b6f",
-                  color: "#ffffff",
+                  background: "var(--c-accent-1)",
+                  color: "var(--c-text-strong)",
                   fontSize: 14,
                   fontWeight: "bold",
                   cursor: "pointer",

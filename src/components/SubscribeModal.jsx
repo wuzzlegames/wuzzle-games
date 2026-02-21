@@ -172,13 +172,13 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
     >
       <div
         style={{
-          backgroundColor: '#372F41',
+          backgroundColor: 'var(--c-panel)',
           borderRadius: 16,
           padding: 32,
           maxWidth: 480,
           width: '92vw',
           textAlign: 'center',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.8)',
+          boxShadow: '0 20px 60px var(--c-bg)',
         }}
       >
         <h2
@@ -188,7 +188,7 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
             marginBottom: 16,
             fontSize: 24,
             fontWeight: 'bold',
-            color: '#ffffff',
+            color: 'var(--c-text-strong)',
             letterSpacing: 1,
           }}
         >
@@ -199,7 +199,7 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
           style={{
             marginBottom: 24,
             fontSize: 16,
-            color: '#d7dadc',
+            color: 'var(--c-text)',
             lineHeight: 1.6,
           }}
         >
@@ -223,9 +223,9 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
                   alignItems: 'center',
                   gap: 12,
                   padding: '10px 14px',
-                  backgroundColor: selectedDuration === opt.value ? '#6d597a' : '#372F41',
+                  backgroundColor: selectedDuration === opt.value ? 'var(--c-accent-2)' : 'var(--c-panel)',
                   borderRadius: 8,
-                  border: selectedDuration === opt.value ? '2px solid #50a339' : '1px solid #3A3A3C',
+                  border: selectedDuration === opt.value ? '2px solid var(--c-correct)' : '1px solid var(--c-border)',
                   cursor: 'pointer',
                 }}
               >
@@ -237,13 +237,13 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
                   onChange={() => setSelectedDuration(opt.value)}
                   style={{ cursor: 'pointer' }}
                 />
-                <span style={{ flex: 1, color: '#ffffff', fontWeight: 500 }}>
+                <span style={{ flex: 1, color: 'var(--c-text-strong)', fontWeight: 500 }}>
                   {opt.label}
                 </span>
-                <span style={{ color: '#50a339', fontWeight: 'bold' }}>
+                <span style={{ color: 'var(--c-text-strong)', fontWeight: 'bold' }}>
                   ${opt.pricePerMonth}/month
                   {opt.savings && (
-                    <span style={{ marginLeft: 6, fontSize: 12, color: '#818384' }}>
+                    <span style={{ marginLeft: 6, fontSize: 12, color: 'var(--c-text)' }}>
                       (save {opt.savings})
                     </span>
                   )}
@@ -255,21 +255,21 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
           <div
             style={{
               textAlign: 'left',
-              backgroundColor: '#372F41',
+              backgroundColor: 'var(--c-panel)',
               padding: 16,
               borderRadius: 8,
               marginBottom: 16,
             }}
           >
-            <div style={{ fontSize: 14, color: '#d7dadc', marginBottom: 8 }}>
-              <strong style={{ color: '#50a339' }}>Premium Features:</strong>
+            <div style={{ fontSize: 14, color: 'var(--c-text)', marginBottom: 8 }}>
+              <strong style={{ color: 'var(--c-text-strong)' }}>Premium Features:</strong>
             </div>
             <ul
               style={{
                 margin: 0,
                 paddingLeft: 20,
                 fontSize: 14,
-                color: '#d7dadc',
+                color: 'var(--c-text)',
                 lineHeight: 1.8,
               }}
             >
@@ -280,7 +280,7 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
             </ul>
           </div>
 
-          <div style={{ fontSize: 12, color: '#818384', fontStyle: 'italic' }}>
+          <div style={{ fontSize: 12, color: 'var(--c-text)', fontStyle: 'italic' }}>
             Subscription auto-renews based on plan. Cancel anytime.
           </div>
         </div>
@@ -290,9 +290,9 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
             style={{
               marginBottom: 16,
               padding: 12,
-              backgroundColor: '#7f1d1d',
+              backgroundColor: 'var(--c-error)',
               borderRadius: 8,
-              color: '#fca5a5',
+              color: 'var(--c-text)',
               fontSize: 14,
             }}
           >
@@ -309,9 +309,9 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
               minWidth: 120,
               padding: '14px 0',
               borderRadius: 10,
-              border: '1px solid #3A3A3C',
+              border: '1px solid var(--c-border)',
               background: 'transparent',
-              color: '#ffffff',
+              color: 'var(--c-text-strong)',
               fontSize: 14,
               fontWeight: 'bold',
               cursor: loading || paymentProcessing ? 'not-allowed' : 'pointer',
@@ -332,8 +332,8 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
               padding: '14px 0',
               borderRadius: 10,
               border: 'none',
-              background: paymentProcessing ? '#818384' : '#e56b6f',
-              color: '#ffffff',
+              background: paymentProcessing ? 'var(--c-text)' : 'var(--c-accent-1)',
+              color: 'var(--c-text-strong)',
               fontSize: 14,
               fontWeight: 'bold',
               cursor: loading || paymentProcessing ? 'not-allowed' : 'pointer',
@@ -353,7 +353,7 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
           style={{
             marginTop: 16,
             fontSize: 11,
-            color: '#818384',
+            color: 'var(--c-text)',
             lineHeight: 1.4,
           }}
         >

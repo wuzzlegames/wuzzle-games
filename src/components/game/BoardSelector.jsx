@@ -25,9 +25,9 @@ export default function BoardSelector({
           left: 20,
           padding: "6px 12px",
           borderRadius: 6,
-          backgroundColor: "#212121",
-          border: "1px solid #ffffff",
-          color: "#ffffff",
+          backgroundColor: "var(--c-bg)",
+          border: "1px solid var(--c-text-strong)",
+          color: "var(--c-text-strong)",
           fontSize: 11,
           fontWeight: "bold",
           cursor: "pointer",
@@ -35,7 +35,7 @@ export default function BoardSelector({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          boxShadow: "0 4px 16px rgba(0,0,0,0.7)",
+          boxShadow: "0 4px 16px var(--c-bg)",
           transition: "all 0.3s ease",
           outline: "none",
           whiteSpace: "nowrap"
@@ -52,12 +52,12 @@ export default function BoardSelector({
             position: "fixed",
             bottom: 190 + 90,
             left: 20,
-            backgroundColor: "#372F41",
+            backgroundColor: "var(--c-panel)",
             borderRadius: 12,
             padding: "16px",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.8)",
+            boxShadow: "0 4px 20px var(--c-bg)",
             zIndex: 9998,
-            border: "1px solid #3A3A3C",
+            border: "1px solid var(--c-border)",
             maxWidth: "90vw",
             minWidth: 200
           }}
@@ -65,7 +65,7 @@ export default function BoardSelector({
           <div className="flexColumn flexGap12">
             {/* Status text (only show if not speedrun mode) */}
             {!speedrunEnabled && statusText && (
-              <div style={{ fontSize: 14, color: "#d7dadc", fontWeight: "bold", marginBottom: 4 }}>
+              <div style={{ fontSize: 14, color: "var(--c-text)", fontWeight: "bold", marginBottom: 4 }}>
                 {statusText}
               </div>
             )}
@@ -91,15 +91,15 @@ export default function BoardSelector({
                     style={{
                       padding: "6px 12px",
                       borderRadius: 6,
-                      border: isSelected ? "2px solid #B1A04C" : "1px solid #3A3A3C",
+                      border: isSelected ? "2px solid var(--c-present)" : "1px solid var(--c-border)",
                       background: isSolved
-                        ? "#50a339"
+                        ? "var(--c-correct)"
                         : isDead
-                        ? "#3A3A3C"
+                        ? "var(--c-border)"
                         : isSelected
-                        ? "#372F41"
+                        ? "var(--c-panel)"
                         : "transparent",
-                      color: isSolved || isDead ? "#ffffff" : "#ffffff",
+                      color: isSolved || isDead ? "var(--c-text-strong)" : "var(--c-text-strong)",
                       fontSize: 13,
                       fontWeight: "bold",
                       cursor: "pointer",

@@ -59,7 +59,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
             justifyContent: "center",
             border: "none",
             background: "transparent",
-            color: "#ffffff",
+            color: "var(--c-text-strong)",
             cursor: "pointer"
           }}
           title="Menu"
@@ -72,12 +72,12 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
               position: "absolute",
               top: "calc(100% + 4px)",
               right: 0,
-              background: "#372F41",
-              border: "1px solid #3A3A3C",
+              background: "var(--c-panel)",
+              border: "1px solid var(--c-border)",
               borderRadius: "8px",
               minWidth: "140px",
               zIndex: 1000,
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.5)"
+              boxShadow: "0 4px 12px var(--c-bg)"
             }}
           >
             <button
@@ -90,16 +90,16 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 padding: "10px 16px",
                 background: "transparent",
                 border: "none",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
                 fontSize: "13px",
                 textAlign: "left",
                 cursor: "pointer",
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3A3A3C"
+                borderBottom: "1px solid var(--c-border)"
               }}
-              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
+              onMouseEnter={(e) => e.target.style.background = "var(--c-accent-2)"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               Home
@@ -114,16 +114,16 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 padding: "10px 16px",
                 background: "transparent",
                 border: "none",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
                 fontSize: "13px",
                 textAlign: "left",
                 cursor: "pointer",
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3A3A3C"
+                borderBottom: "1px solid var(--c-border)"
               }}
-              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
+              onMouseEnter={(e) => e.target.style.background = "var(--c-accent-2)"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               How to Play
@@ -142,16 +142,16 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 padding: "10px 16px",
                 background: "transparent",
                 border: "none",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
                 fontSize: "13px",
                 textAlign: "left",
                 cursor: "pointer",
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3A3A3C"
+                borderBottom: "1px solid var(--c-border)"
               }}
-              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
+              onMouseEnter={(e) => e.target.style.background = "var(--c-accent-2)"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               Profile
@@ -175,19 +175,19 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 padding: "10px 16px",
                 background: "transparent",
                 border: "none",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
                 fontSize: "13px",
                 textAlign: "left",
                 cursor: "pointer",
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3A3A3C",
+                borderBottom: "1px solid var(--c-border)",
                 position: "relative",
                 display: "flex",
                 alignItems: "center"
               }}
-              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
+              onMouseEnter={(e) => e.target.style.background = "var(--c-accent-2)"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               Friends
@@ -197,8 +197,8 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                   width: "20px",
                   height: "20px",
                   borderRadius: "50%",
-                  background: "#ED2939",
-                  color: "#ffffff",
+                  background: "var(--c-error)",
+                  color: "var(--c-text-strong)",
                   fontSize: "11px",
                   fontWeight: "bold",
                   display: "flex",
@@ -228,19 +228,19 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 padding: "10px 16px",
                 background: "transparent",
                 border: "none",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
                 fontSize: "13px",
                 textAlign: "left",
                 cursor: "pointer",
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3A3A3C",
+                borderBottom: "1px solid var(--c-border)",
                 position: "relative",
                 display: "flex",
                 alignItems: "center",
               }}
-              onMouseEnter={(e) => (e.target.style.background = "#6d597a")}
+              onMouseEnter={(e) => (e.target.style.background = "var(--c-accent-2)")}
               onMouseLeave={(e) => (e.target.style.background = "transparent")}
             >
               Challenges
@@ -251,8 +251,8 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                     width: "20px",
                     height: "20px",
                     borderRadius: "50%",
-                    background: "#B1A04C",
-                    color: "#212121",
+                    background: "var(--c-present)",
+                    color: "var(--c-text)",
                     fontSize: "11px",
                     fontWeight: "bold",
                     display: "flex",
@@ -278,16 +278,16 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 padding: "10px 16px",
                 background: "transparent",
                 border: "none",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
                 fontSize: "13px",
                 textAlign: "left",
                 cursor: "pointer",
                 fontWeight: "600",
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease",
-                borderBottom: "1px solid #3A3A3C",
+                borderBottom: "1px solid var(--c-border)",
               }}
-              onMouseEnter={(e) => (e.target.style.background = "#6d597a")}
+              onMouseEnter={(e) => (e.target.style.background = "var(--c-accent-2)")}
               onMouseLeave={(e) => (e.target.style.background = "transparent")}
             >
               Open Rooms
@@ -304,16 +304,16 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                   padding: "10px 16px",
                   background: "transparent",
                   border: "none",
-                  color: "#ffffff",
+                  color: "var(--c-text-strong)",
                   fontSize: "13px",
                   textAlign: "left",
                   cursor: "pointer",
                   fontWeight: "600",
                   letterSpacing: "0.3px",
                   transition: "all 0.2s ease",
-                  borderBottom: "1px solid #3A3A3C",
+                  borderBottom: "1px solid var(--c-border)",
                 }}
-                onMouseEnter={(e) => (e.target.style.background = "#6d597a")}
+                onMouseEnter={(e) => (e.target.style.background = "var(--c-accent-2)")}
                 onMouseLeave={(e) => (e.target.style.background = "transparent")}
               >
                 View all rooms
@@ -329,7 +329,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 padding: "10px 16px",
                 background: "transparent",
                 border: "none",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
                 fontSize: "13px",
                 textAlign: "left",
                 cursor: "pointer",
@@ -337,7 +337,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 letterSpacing: "0.3px",
                 transition: "all 0.2s ease"
               }}
-              onMouseEnter={(e) => e.target.style.background = "#6d597a"}
+              onMouseEnter={(e) => e.target.style.background = "var(--c-accent-2)"}
               onMouseLeave={(e) => e.target.style.background = "transparent"}
             >
               Feedback
@@ -400,7 +400,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
               margin: "0 0 16px 0",
               fontSize: 20,
               fontWeight: "bold",
-              color: "#ffffff",
+              color: "var(--c-text-strong)",
             }}
           >
             Challenges
@@ -410,7 +410,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
             <div
               style={{
                 padding: "24px 8px 16px",
-                color: "#818384",
+                color: "var(--c-text)",
                 fontSize: 14,
               }}
             >
@@ -424,7 +424,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                   margin: "8px 0 8px",
                   fontSize: 14,
                   fontWeight: "bold",
-                  color: "#d7dadc",
+                  color: "var(--c-text)",
                   textAlign: "left",
                 }}
               >
@@ -434,7 +434,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 <div
                   style={{
                     padding: "8px 0 12px",
-                    color: "#818384",
+                    color: "var(--c-text)",
                     fontSize: 12,
                   }}
                 >
@@ -459,8 +459,8 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                         style={{
                           padding: "10px 12px",
                           borderRadius: 8,
-                        border: "1px solid #3A3A3C",
-                        background: "#372F41",
+                        border: "1px solid var(--c-border)",
+                        background: "var(--c-panel)",
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
@@ -475,10 +475,10 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                               size="sm"
                             />
                           </div>
-                          <div style={{ color: "#d7dadc", fontSize: 12 }}>
+                          <div style={{ color: "var(--c-text)", fontSize: 12 }}>
                             {ch.boards || 1} board{(ch.boards || 1) > 1 ? "s" : ""} · {ch.speedrun ? "Speedrun" : "Standard"}
                             {expired && (
-                              <span style={{ marginLeft: 8, fontSize: 11, color: "#818384", fontWeight: "600" }}>Expired</span>
+                              <span style={{ marginLeft: 8, fontSize: 11, color: "var(--c-text)", fontWeight: "600" }}>Expired</span>
                             )}
                           </div>
                         </div>
@@ -497,7 +497,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                               padding: "6px 10px",
                               fontSize: 11,
                               borderRadius: 6,
-                              color: "#818384",
+                              color: "var(--c-text)",
                             }}
                           >
                             Dismiss
@@ -536,7 +536,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                   margin: "8px 0 8px",
                   fontSize: 14,
                   fontWeight: "bold",
-                  color: "#d7dadc",
+                  color: "var(--c-text)",
                   textAlign: "left",
                 }}
               >
@@ -546,7 +546,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 <div
                   style={{
                     padding: "8px 0 12px",
-                    color: "#818384",
+                    color: "var(--c-text)",
                     fontSize: 12,
                   }}
                 >
@@ -571,8 +571,8 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                         style={{
                           padding: "10px 12px",
                           borderRadius: 8,
-                        border: "1px solid #3A3A3C",
-                        background: "#372F41",
+                        border: "1px solid var(--c-border)",
+                        background: "var(--c-panel)",
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
@@ -587,10 +587,10 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                               size="sm"
                             />
                           </div>
-                          <div style={{ color: "#d7dadc", fontSize: 12 }}>
+                          <div style={{ color: "var(--c-text)", fontSize: 12 }}>
                             {ch.boards || 1} board{(ch.boards || 1) > 1 ? "s" : ""} · {ch.variant === 'solutionhunt' ? 'Solution Hunt' : ch.variant === 'speedrun' || ch.speedrun ? 'Speedrun' : 'Standard'}
                             {expired && (
-                              <span style={{ marginLeft: 8, fontSize: 11, color: "#818384", fontWeight: "600" }}>Expired</span>
+                              <span style={{ marginLeft: 8, fontSize: 11, color: "var(--c-text)", fontWeight: "600" }}>Expired</span>
                             )}
                           </div>
                         </div>
@@ -656,7 +656,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                               padding: "6px 10px",
                               fontSize: 11,
                               borderRadius: 6,
-                              color: "#818384",
+                              color: "var(--c-text)",
                             }}
                           >
                             Dismiss

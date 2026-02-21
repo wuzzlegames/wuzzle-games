@@ -8,8 +8,8 @@
   padding: 10px 16px;
   border-radius: 8px;
   border: none;
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
   font-weight: bold;
   font-size: 13px;
   cursor: pointer;

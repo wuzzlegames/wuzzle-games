@@ -1,0 +1,18 @@
+:root {
+  /* Palette */
+  --c-bg: #2F415A;
+  --c-panel: #465D7C;
+  --c-absent: #8FA7C0;
+  --c-present: #F4A261;
+  --c-correct: #61D061;
+  --c-error: #D64550;
+  --c-accent-1: #FF6F61;
+  --c-accent-2: #909BFF;
+  --c-white: #FFFFFF;
+
+  /* Semantic aliases (must remain within the palette) */
+  --c-text: var(--c-white);
+  --c-text-strong: var(--c-white);
+  --c-border: var(--c-absent);
+  --c-border-strong: var(--c-accent-2);
+}

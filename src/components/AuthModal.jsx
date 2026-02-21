@@ -104,10 +104,10 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
     >
       <div style={{ position: 'relative', padding: '8px 0', textAlign: 'left' }}>
         <div style={{ marginBottom: '24px' }}>
-          <h2 id="auth-modal-title" style={{ margin: 0, marginBottom: '8px', fontSize: '24px', fontWeight: 'bold', color: '#ffffff' }}>
+          <h2 id="auth-modal-title" style={{ margin: 0, marginBottom: '8px', fontSize: '24px', fontWeight: 'bold', color: 'var(--c-text-strong)' }}>
             {isForgotPassword ? 'Reset Password' : isSignUp ? 'Create Account' : 'Sign In'}
           </h2>
-          <p style={{ margin: 0, fontSize: '14px', color: '#d7dadc' }}>
+          <p style={{ margin: 0, fontSize: '14px', color: 'var(--c-text)' }}>
             {isForgotPassword
               ? 'Enter your email to receive a reset link'
               : isSignUp 
@@ -121,10 +121,10 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
             style={{
               padding: '12px',
               marginBottom: '16px',
-              backgroundColor: '#372F41',
-              border: '1px solid #ED2939',
+              backgroundColor: 'var(--c-panel)',
+              border: '1px solid var(--c-error)',
               borderRadius: '6px',
-              color: '#ED2939',
+              color: 'var(--c-text)',
               fontSize: '14px'
             }}
           >
@@ -137,10 +137,10 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
             style={{
               padding: '12px',
               marginBottom: '16px',
-              backgroundColor: '#372F41',
-              border: '1px solid #50a339',
+              backgroundColor: 'var(--c-panel)',
+              border: '1px solid var(--c-correct)',
               borderRadius: '6px',
-              color: '#50a339',
+              color: 'var(--c-text)',
               fontSize: '14px',
             }}
           >
@@ -155,10 +155,10 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
             width: '100%',
             padding: '12px',
             marginBottom: '16px',
-            backgroundColor: '#4285f4',
+            backgroundColor: 'var(--c-accent-2)',
             border: 'none',
             borderRadius: '6px',
-            color: '#ffffff',
+            color: 'var(--c-text-strong)',
             fontSize: '16px',
             fontWeight: 'bold',
             cursor: loading ? 'not-allowed' : 'pointer',
@@ -172,28 +172,28 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
             <path
               d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
-              fill="#4285F4"
+              fill="var(--c-accent-2)"
             />
             <path
               d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"
-              fill="#34A853"
+              fill="var(--c-correct)"
             />
             <path
               d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.348 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"
-              fill="#FBBC05"
+              fill="var(--c-present)"
             />
             <path
               d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z"
-              fill="#EA4335"
+              fill="var(--c-error)"
             />
           </svg>
           {loading ? 'Signing in...' : 'Continue with Google'}
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-          <div style={{ flex: 1, height: '1px', backgroundColor: '#3A3A3C' }} />
-          <span style={{ padding: '0 12px', color: '#818384', fontSize: '14px' }}>or</span>
-          <div style={{ flex: 1, height: '1px', backgroundColor: '#3A3A3C' }} />
+          <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--c-border)' }} />
+          <span style={{ padding: '0 12px', color: 'var(--c-text)', fontSize: '14px' }}>or</span>
+          <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--c-border)' }} />
         </div>
 
         <form onSubmit={handleEmailSubmit}>
@@ -207,10 +207,10 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
               style={{
                 width: '100%',
                 padding: '12px',
-                backgroundColor: '#212121',
-                border: '1px solid #3A3A3C',
+                backgroundColor: 'var(--c-bg)',
+                border: '1px solid var(--c-border)',
                 borderRadius: '6px',
-                color: '#ffffff',
+                color: 'var(--c-text-strong)',
                 fontSize: '16px',
                 boxSizing: 'border-box'
               }}
@@ -228,10 +228,10 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
                 style={{
                   width: '100%',
                   padding: '12px',
-                  backgroundColor: '#212121',
-                  border: '1px solid #3A3A3C',
+                  backgroundColor: 'var(--c-bg)',
+                  border: '1px solid var(--c-border)',
                   borderRadius: '6px',
-                  color: '#ffffff',
+                  color: 'var(--c-text-strong)',
                   fontSize: '16px',
                   boxSizing: 'border-box'
                 }}
@@ -248,7 +248,7 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#e56b6f',
+                  color: 'var(--c-text)',
                   cursor: loading ? 'not-allowed' : 'pointer',
                   fontSize: '13px',
                   textDecoration: 'underline',
@@ -300,7 +300,7 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#e56b6f',
+                color: 'var(--c-text)',
                 cursor: loading ? 'not-allowed' : 'pointer',
                 fontSize: '14px',
                 textDecoration: 'underline'
@@ -315,7 +315,7 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#e56b6f',
+                color: 'var(--c-text)',
                 cursor: loading ? 'not-allowed' : 'pointer',
                 fontSize: '14px',
                 textDecoration: 'underline'
@@ -336,7 +336,7 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
             right: '0',
             background: 'none',
             border: 'none',
-            color: '#818384',
+            color: 'var(--c-text)',
             fontSize: '24px',
             cursor: 'pointer',
             padding: '0',

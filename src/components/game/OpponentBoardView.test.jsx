@@ -89,14 +89,14 @@ describe('OpponentBoardView', () => {
 
     const tiles = container.querySelectorAll('div[style*="width: 32px"]');
 
-    // First tile: color=2 -> green
-    expect(tiles[0].style.background).toBe('rgb(80, 163, 57)');
+    // First tile: color=2 -> correct (green)
+    expect(tiles[0].style.background).toBe('var(--c-correct)');
 
-    // Second tile: color=1 -> yellow-ish
-    expect(tiles[1].style.background).toBe('rgb(177, 160, 76)');
+    // Second tile: color=1 -> present (orange)
+    expect(tiles[1].style.background).toBe('var(--c-present)');
 
-    // Third tile: color=0 -> gray
-    expect(tiles[2].style.background).toBe('rgb(58, 58, 60)');
+    // Third tile: color=0 -> absent/neutral
+    expect(tiles[2].style.background).toBe('var(--c-border)');
   });
 
   it('shows letters only when playerSolved is true and hideLetters is false', () => {

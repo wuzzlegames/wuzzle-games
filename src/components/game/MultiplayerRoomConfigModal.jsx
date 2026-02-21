@@ -23,13 +23,13 @@ export default function MultiplayerRoomConfigModal({
             marginBottom: "24px",
             fontSize: 20,
             fontWeight: "bold",
-            color: "#ffffff",
+            color: "var(--c-text-strong)",
           }}
         >
           {isHost ? "Multiplayer Room Configuration" : "Next Game Configuration"}
         </h2>
         {!isHost && (
-          <p style={{ margin: 0, marginBottom: "16px", fontSize: 14, color: "#818384" }}>
+          <p style={{ margin: 0, marginBottom: "16px", fontSize: 14, color: "var(--c-text)" }}>
             View the configuration for the next rematch. Only the host can change these settings.
           </p>
         )}
@@ -40,7 +40,7 @@ export default function MultiplayerRoomConfigModal({
               style={{
                 display: "block",
                 marginBottom: "8px",
-                color: "#d7dadc",
+                color: "var(--c-text)",
                 fontSize: 14,
               }}
             >
@@ -55,9 +55,9 @@ export default function MultiplayerRoomConfigModal({
                 width: "100%",
                 padding: "10px",
                 borderRadius: 6,
-                border: "1px solid #3A3A3C",
-                background: isHost ? "#372F41" : "#212121",
-                color: isHost ? "#ffffff" : "#818384",
+                border: "1px solid var(--c-border)",
+                background: isHost ? "var(--c-panel)" : "var(--c-bg)",
+                color: isHost ? "var(--c-text-strong)" : "var(--c-text)",
                 fontSize: 14,
                 cursor: isHost ? "pointer" : "not-allowed",
                 opacity: isHost ? 1 : 0.6,
@@ -77,7 +77,7 @@ export default function MultiplayerRoomConfigModal({
                 style={{
                   display: "block",
                   marginBottom: "8px",
-                  color: "#d7dadc",
+                  color: "var(--c-text)",
                   fontSize: 14,
                 }}
               >
@@ -92,9 +92,9 @@ export default function MultiplayerRoomConfigModal({
                   width: "100%",
                   padding: "10px",
                   borderRadius: 6,
-                  border: "1px solid #3A3A3C",
-                  background: isHost ? "#372F41" : "#212121",
-                  color: isHost ? "#ffffff" : "#818384",
+                  border: "1px solid var(--c-border)",
+                  background: isHost ? "var(--c-panel)" : "var(--c-bg)",
+                  color: isHost ? "var(--c-text-strong)" : "var(--c-text)",
                   fontSize: 14,
                   cursor: isHost ? "pointer" : "not-allowed",
                   opacity: isHost ? 1 : 0.6,
@@ -116,9 +116,9 @@ export default function MultiplayerRoomConfigModal({
                 flex: 1,
                 padding: "12px",
                 borderRadius: 8,
-                border: "1px solid #3A3A3C",
+                border: "1px solid var(--c-border)",
                 background: "transparent",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",
@@ -134,8 +134,8 @@ export default function MultiplayerRoomConfigModal({
                   padding: "12px",
                   borderRadius: 8,
                   border: "none",
-                  background: "#e56b6f",
-                  color: "#ffffff",
+                  background: "var(--c-accent-1)",
+                  color: "var(--c-text-strong)",
                   fontSize: 14,
                   fontWeight: "bold",
                   cursor: "pointer",
@@ -149,9 +149,9 @@ export default function MultiplayerRoomConfigModal({
                   flex: 1,
                   padding: "12px",
                   borderRadius: 8,
-                  border: "1px solid #3A3A3C",
+                  border: "1px solid var(--c-border)",
                   background: "transparent",
-                  color: "#818384",
+                  color: "var(--c-text)",
                   fontSize: 14,
                   fontWeight: "bold",
                   textAlign: "center",

@@ -67,14 +67,16 @@ export default function TileRow({
 
         // Input/current row (no flip, no reveal coloring)
         if (!row) {
-          let bg = "#212121";
-          let borderColor = isCurrentRow ? "#565758" : "#3A3A3C";
-          let fg = isPlaceholder ? "rgba(255,255,255,0.45)" : "#ffffff";
+          let bg = "var(--c-bg)";
+          let borderColor = isCurrentRow ? "var(--c-border-strong)" : "var(--c-border)";
+          let fg = "var(--c-text-strong)";
+          let opacity = isPlaceholder ? 0.65 : 1;
 
           if (isInvalidRow) {
-            borderColor = "#ef4444";
-            bg = "#2a0f10";
-            fg = "#ffffff";
+            borderColor = "var(--c-error)";
+            bg = "var(--c-panel)";
+            fg = "var(--c-text)";
+            opacity = 1;
           }
 
           return (
@@ -94,6 +96,7 @@ export default function TileRow({
                 backgroundColor: bg,
                 textTransform: "uppercase",
                 color: fg,
+                opacity,
                 flexShrink: 0,
                 boxSizing: "border-box"
               }}
@@ -130,7 +133,7 @@ export default function TileRow({
                 fontSize: numBoards >= 16 ? 16 : 18,
                 backgroundColor: bg,
                 textTransform: "uppercase",
-                color: "#ffffff",
+                color: "var(--c-text)",
                 flexShrink: 0,
                 boxSizing: "border-box"
               }}
@@ -141,8 +144,8 @@ export default function TileRow({
         }
 
         // Newest revealed row: flip only for active (unsolved) boards
-        const frontBg = "#212121";
-        const frontBorder = "#3A3A3C";
+        const frontBg = "var(--c-bg)";
+        const frontBorder = "var(--c-border)";
         const backBg = bgForColor(color);
 
         // Tiles flip sequentially with a delay per tile
@@ -168,7 +171,7 @@ export default function TileRow({
                 style={{
                   backgroundColor: frontBg,
                   border: `2px solid ${frontBorder}`,
-                  color: "#ffffff",
+                  color: "var(--c-text-strong)",
                   fontSize: numBoards >= 16 ? 16 : 18
                 }}
               >
@@ -180,7 +183,7 @@ export default function TileRow({
                 style={{
                   backgroundColor: backBg,
                   border: "2px solid transparent",
-                  color: "#ffffff",
+                  color: "var(--c-text)",
                   fontSize: numBoards >= 16 ? 16 : 18
                 }}
               >

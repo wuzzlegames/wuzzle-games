@@ -8,7 +8,7 @@
   border-radius: 10px;
   font-size: 14px;
   font-weight: bold;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 10px 30px var(--c-bg);
   z-index: 4000;
   max-width: 90vw;
   text-align: left;
@@ -17,9 +17,9 @@
   justify-content: flex-start;
   gap: 0;
   backdrop-filter: blur(6px);
-  background-color: rgba(33, 33, 33, 0.96);
-  color: #e5e7eb;
-  border: 1px solid #50a339;
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  border: 1px solid var(--c-correct);
   cursor: pointer;
   pointer-events: auto;
   overflow: hidden;
@@ -32,7 +32,7 @@
   flex-shrink: 0;
   width: 48px;
   min-width: 48px;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--c-bg);
   border-radius: 10px 0 0 10px;
 }
 

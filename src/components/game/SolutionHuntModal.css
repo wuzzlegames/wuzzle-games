@@ -12,7 +12,7 @@
   margin: 0;
   font-size: 20px;
   font-weight: bold;
-  color: #ffffff;
+  color: var(--c-text-strong);
 }
 
 .solutionHuntStats {
@@ -23,8 +23,9 @@
 
 .solutionHuntCount {
   font-size: 14px;
-  color: #d7dadc;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--c-text);
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
   padding: 6px 12px;
   border-radius: 16px;
 }
@@ -39,10 +40,10 @@
   width: 100%;
   padding: 12px 40px 12px 16px;
   font-size: 16px;
-  border: 2px solid #565656;
+  border: 2px solid var(--c-border);
   border-radius: 8px;
-  background: #2d2d2d;
-  color: #ffffff;
+  background: var(--c-panel);
+  color: var(--c-text-strong);
   outline: none;
   transition: border-color 0.2s;
   text-transform: uppercase;
@@ -50,13 +51,13 @@
 }
 
 .solutionHuntSearch:focus {
-  border-color: #50a339;
+  border-color: var(--c-correct);
 }
 
 .solutionHuntSearch::placeholder {
   text-transform: none;
   letter-spacing: normal;
-  color: #888888;
+  color: var(--c-text);
 }
 
 .solutionHuntSearchClear {
@@ -66,8 +67,8 @@
   height: 28px;
   border: none;
   border-radius: 50%;
-  background: #565656;
-  color: #ffffff;
+  background: var(--c-border);
+  color: var(--c-text-strong);
   font-size: 18px;
   cursor: pointer;
   display: flex;
@@ -77,7 +78,7 @@
 }
 
 .solutionHuntSearchClear:hover {
-  background: #777777;
+  background: var(--c-border-strong);
 }
 
 .solutionHuntWordGrid {
@@ -98,14 +99,14 @@
   letter-spacing: 1px;
   border: none;
   border-radius: 6px;
-  background: #3a3a3c;
-  color: #ffffff;
+  background: var(--c-border);
+  color: var(--c-text-strong);
   cursor: pointer;
   transition: background-color 0.15s, transform 0.1s;
 }
 
 .solutionHuntWord:hover {
-  background: #50a339;
+  background: var(--c-correct);
   transform: scale(1.02);
 }
 
@@ -116,7 +117,7 @@
 .solutionHuntEmpty {
   padding: 32px 16px;
   text-align: center;
-  color: #888888;
+  color: var(--c-text);
   font-size: 14px;
 }
 
@@ -126,13 +127,13 @@
   align-items: center;
   gap: 12px;
   padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--c-border);
 }
 
 .solutionHuntHint {
   margin: 0;
   font-size: 12px;
-  color: #888888;
+  color: var(--c-text);
 }
 
 .solutionHuntCloseBtn {
@@ -141,14 +142,14 @@
   font-weight: 600;
   border: none;
   border-radius: 8px;
-  background: #565656;
-  color: #ffffff;
+  background: var(--c-border);
+  color: var(--c-text-strong);
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .solutionHuntCloseBtn:hover {
-  background: #666666;
+  background: var(--c-border-strong);
 }
 
 /* Scrollbar styling for the word grid */
@@ -157,15 +158,15 @@
 }
 
 .solutionHuntWordGrid::-webkit-scrollbar-track {
-  background: #2d2d2d;
+  background: var(--c-panel);
   border-radius: 4px;
 }
 
 .solutionHuntWordGrid::-webkit-scrollbar-thumb {
-  background: #565656;
+  background: var(--c-border);
   border-radius: 4px;
 }
 
 .solutionHuntWordGrid::-webkit-scrollbar-thumb:hover {
-  background: #777777;
+  background: var(--c-border-strong);
 }

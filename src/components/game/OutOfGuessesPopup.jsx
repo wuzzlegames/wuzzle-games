@@ -45,7 +45,7 @@ export default function OutOfGuessesPopup({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.82)",
+        backgroundColor: "var(--c-bg)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -54,20 +54,20 @@ export default function OutOfGuessesPopup({
     >
       <div
         style={{
-          backgroundColor: "#372F41",
+          backgroundColor: "var(--c-panel)",
           borderRadius: 16,
           padding: 24,
           maxWidth: 520,
           width: "92vw",
           textAlign: "center",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.8)"
+          boxShadow: "0 20px 60px var(--c-bg)"
         }}
       >
         <h2 style={{ margin: 0, marginBottom: 10, fontSize: 20, fontWeight: "bold" }}>
           All guesses used
         </h2>
 
-        <div style={{ marginBottom: 16, fontSize: 14, color: "#d7dadc", lineHeight: 1.4 }}>
+        <div style={{ marginBottom: 16, fontSize: 14, color: "var(--c-text)", lineHeight: 1.4 }}>
           You reached the max turns ({maxTurns}). Do you want to end the game, continue with unlimited guesses?
         </div>
 
@@ -79,9 +79,9 @@ export default function OutOfGuessesPopup({
               minWidth: 160,
               padding: "12px 0",
               borderRadius: 10,
-              border: "1px solid #3A3A3C",
+              border: "1px solid var(--c-border)",
               background: "transparent",
-              color: "#ffffff",
+              color: "var(--c-text-strong)",
               fontSize: 14,
               fontWeight: "bold",
               cursor: "pointer",
@@ -100,8 +100,8 @@ export default function OutOfGuessesPopup({
               padding: "12px 0",
               borderRadius: 10,
               border: "none",
-              background: "#B1A04C",
-              color: "#212121",
+              background: "var(--c-present)",
+              color: "var(--c-text)",
               fontSize: 14,
               fontWeight: "bold",
               cursor: "pointer",
@@ -121,8 +121,8 @@ export default function OutOfGuessesPopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#e56b6f",
-                color: "#ffffff",
+                background: "var(--c-accent-1)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",

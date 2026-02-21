@@ -93,17 +93,17 @@ export function mergeStatus(oldStatus, newStatus) {
 }
 
 export function colorForStatus(status) {
-  if (status === "green") return "#50a339";
-  if (status === "yellow") return "#B1A04C";
-  if (status === "grey") return "#252526";  // darker grey for absent letters
-  return "#3A3A3C";
+  if (status === "green") return "var(--c-correct)";
+  if (status === "yellow") return "var(--c-present)";
+  if (status === "grey") return "var(--c-absent)";
+  return "var(--c-border)";
 }
 
 export function colorForMiniCell(status) {
-  if (status === "green") return "#50a339";
-  if (status === "yellow") return "#B1A04C";
-  if (status === "grey") return "#252526";  // darker grey for absent letters
-  return "#212121";
+  if (status === "green") return "var(--c-correct)";
+  if (status === "yellow") return "var(--c-present)";
+  if (status === "grey") return "var(--c-absent)";
+  return "var(--c-bg)";
 }
 
 export function buildLetterMapFromGuesses(guesses) {

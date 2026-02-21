@@ -1,7 +1,7 @@
 .stats-page {
   min-height: 100vh;
-  background: #212121;
-  color: #ffffff;
+  background: var(--c-bg);
+  color: var(--c-text-strong);
 }
 
 .stats-main {
@@ -21,7 +21,7 @@
 .stats-back {
   background: none;
   border: none;
-  color: #818384;
+  color: var(--c-text);
   font-size: 14px;
   cursor: pointer;
   padding: 4px 0;
@@ -29,7 +29,7 @@
 }
 
 .stats-back:hover {
-  color: #d7dadc;
+  color: var(--c-text);
 }
 
 .stats-header {
@@ -42,13 +42,13 @@
   font-size: 32px;
   font-weight: 800;
   letter-spacing: 0.5px;
-  color: #ffffff;
+  color: var(--c-text-strong);
 }
 
 .stats-subtitle {
   margin: 0 0 24px 0;
   font-size: 16px;
-  color: #9ca3af;
+  color: var(--c-text);
   font-weight: 500;
 }
 
@@ -63,9 +63,9 @@
 .stats-mode-tab {
   padding: 10px 16px;
   border-radius: 10px;
-  border: 2px solid #3A3A3C;
-  background: #372F41;
-  color: #d7dadc;
+  border: 2px solid var(--c-border);
+  background: var(--c-panel);
+  color: var(--c-text);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -73,26 +73,27 @@
 }
 
 .stats-mode-tab:hover {
-  border-color: #6d597a;
-  color: #ffffff;
-  background: rgba(109, 89, 122, 0.4);
+  border-color: var(--c-accent-2);
+  color: var(--c-text-strong);
+  background: var(--c-bg);
 }
 
 .stats-mode-tab--active {
-  border-color: #50a339;
-  background: rgba(80, 163, 57, 0.15);
-  color: #ffffff;
+  border-color: var(--c-correct);
+  background: var(--c-bg);
+  color: var(--c-text-strong);
 }
 
 .stats-mode-tab--active:hover {
-  border-color: #50a339;
-  background: rgba(80, 163, 57, 0.25);
+  border-color: var(--c-correct);
+  background: var(--c-bg);
+  filter: brightness(1.05);
 }
 
 .stats-premium-cta {
   margin: 0;
   font-size: 14px;
-  color: #9ca3af;
+  color: var(--c-text);
 }
 
 .stats-subscribe-btn {
@@ -100,8 +101,8 @@
   padding: 6px 14px;
   border-radius: 8px;
   border: none;
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -117,14 +118,14 @@
 .stats-empty {
   text-align: center;
   padding: 48px 24px;
-  color: #9ca3af;
+  color: var(--c-text);
   font-size: 16px;
 }
 
 .stats-error {
-  color: #ED2939;
-  background: rgba(237, 41, 57, 0.1);
-  border: 1px solid rgba(237, 41, 57, 0.3);
+  color: var(--c-text);
+  background: var(--c-bg);
+  border: 1px solid var(--c-error);
   border-radius: 12px;
   margin-bottom: 24px;
 }
@@ -138,7 +139,7 @@
   margin-bottom: 0;
   padding: 16px 0;
   font-size: 14px;
-  color: #818384;
+  color: var(--c-text);
 }
 
 .stats-section {
@@ -148,17 +149,17 @@
 .stats-section-stage {
   margin-top: 32px;
   padding-top: 24px;
-  border-top: 1px solid #3A3A3C;
+  border-top: 1px solid var(--c-border);
 }
 
 .stats-section-title {
   margin: 0 0 20px 0;
   font-size: 20px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--c-text-strong);
   letter-spacing: 0.3px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #3A3A3C;
+  border-bottom: 1px solid var(--c-border);
 }
 
 /* Horizontal guess distribution chart: Y = guess count, X = number of games */
@@ -168,7 +169,7 @@
 
 .stats-chart-x-label {
   font-size: 11px;
-  color: #818384;
+  color: var(--c-text);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -202,23 +203,23 @@
 
 .stats-chart-y-label {
   font-size: 13px;
-  color: #d7dadc;
+  color: var(--c-text);
   font-weight: 600;
   flex-shrink: 0;
 }
 
 .stats-chart-bar-track {
   height: 24px;
-  background: #372F41;
+  background: var(--c-panel);
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid #3A3A3C;
+  border: 1px solid var(--c-border);
   min-width: 0;
 }
 
 .stats-chart-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #50a339 0%, #50a339 100%);
+  background: linear-gradient(90deg, var(--c-correct) 0%, var(--c-correct) 100%);
   border-radius: 5px;
   min-width: 4px;
   transition: width 0.3s ease;
@@ -234,12 +235,12 @@
 .stats-chart-bar-count {
   font-size: 16px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--c-text-strong);
 }
 
 .stats-chart-bar-pct {
   font-size: 11px;
-  color: #818384;
+  color: var(--c-text);
 }
 
 /* Stat cards grid */
@@ -252,13 +253,13 @@
 .stats-card {
   padding: 20px;
   border-radius: 14px;
-  border: 2px solid #3A3A3C;
-  background: linear-gradient(180deg, #372F41 0%, #372F41 100%);
+  border: 2px solid var(--c-border);
+  background: linear-gradient(180deg, var(--c-panel) 0%, var(--c-panel) 100%);
   transition: border-color 0.2s, opacity 0.2s;
 }
 
 .stats-card--locked {
-  border-color: #3A3A3C;
+  border-color: var(--c-border);
   opacity: 0.85;
 }
 
@@ -267,13 +268,13 @@
 }
 
 .stats-card--clickable:hover {
-  border-color: #6d597a;
+  border-color: var(--c-accent-2);
   opacity: 1;
 }
 
 .stats-card__label {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--c-text);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -283,23 +284,23 @@
 .stats-card__value {
   font-size: 26px;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--c-text-strong);
   line-height: 1.2;
 }
 
 .stats-card--locked .stats-card__value {
-  color: #818384;
+  color: var(--c-text);
 }
 
 .stats-card__subtitle {
   font-size: 12px;
-  color: #818384;
+  color: var(--c-text);
   margin-top: 4px;
 }
 
 .stats-card__premium {
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--c-text);
   font-style: italic;
   margin-top: 8px;
 }
@@ -316,19 +317,19 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 14px;
-  background: #372F41;
+  background: var(--c-panel);
   border-radius: 10px;
-  border: 1px solid #3A3A3C;
+  border: 1px solid var(--c-border);
 }
 
 .stats-time-by-guess-label {
   font-size: 13px;
-  color: #d7dadc;
+  color: var(--c-text);
   font-weight: 600;
 }
 
 .stats-time-by-guess-value {
   font-size: 14px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--c-text-strong);
 }

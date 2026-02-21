@@ -87,8 +87,8 @@ export default function SinglePlayerGameView({
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#212121",
-        color: "#ffffff",
+        backgroundColor: "var(--c-bg)",
+        color: "var(--c-text-strong)",
       }}
     >
       {inRouter && (
@@ -103,7 +103,7 @@ export default function SinglePlayerGameView({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "rgba(18, 18, 19, 0.95)",
+            backgroundColor: "var(--c-bg)",
             zIndex: 9999,
           }}
           aria-live="polite"
@@ -114,7 +114,7 @@ export default function SinglePlayerGameView({
               fontSize: 48,
               fontWeight: "bold",
               letterSpacing: 4,
-              color: "#ffffff",
+              color: "var(--c-text-strong)",
               textAlign: "center",
             }}
           >
@@ -144,7 +144,7 @@ export default function SinglePlayerGameView({
             style={{
               padding: "0 16px 8px",
               fontSize: 12,
-              color: "#d7dadc",
+              color: "var(--c-text)",
               textTransform: "uppercase",
               fontWeight: "normal",
               whiteSpace: "nowrap",
@@ -180,8 +180,8 @@ export default function SinglePlayerGameView({
                 marginBottom: 12,
                 padding: "12px 16px",
                 borderRadius: 8,
-                backgroundColor: "#3a3a3c",
-                color: "#ffffff",
+                backgroundColor: "var(--c-border)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
               }}
             >
@@ -216,8 +216,8 @@ export default function SinglePlayerGameView({
                   fontWeight: 600,
                   border: "none",
                   borderRadius: 8,
-                  background: "#50a339",
-                  color: "#ffffff",
+                  background: "var(--c-correct)",
+                  color: "var(--c-text-strong)",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",

@@ -286,7 +286,7 @@ export default function Home({
                 margin: "0 0 16px 0",
                 fontSize: 20,
                 fontWeight: "bold",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
               }}
             >
               Verify your email
@@ -295,7 +295,7 @@ export default function Home({
               style={{
                 margin: "0 0 12px 0",
                 fontSize: 14,
-                color: "#d7dadc",
+                color: "var(--c-text)",
                 lineHeight: 1.5,
               }}
             >
@@ -310,7 +310,7 @@ export default function Home({
               style={{
                 margin: "0 0 16px 0",
                 fontSize: 14,
-                color: "#d7dadc",
+                color: "var(--c-text)",
                 lineHeight: 1.5,
               }}
 >
@@ -393,12 +393,12 @@ export default function Home({
                 margin: "0 0 16px 0",
                 fontSize: 20,
                 fontWeight: "bold",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
               }}
             >
               Verify your email
             </h2>
-            <p style={{ marginBottom: "20px", color: "#d7dadc", fontSize: 14 }}>
+            <p style={{ marginBottom: "20px", color: "var(--c-text)", fontSize: 14 }}>
               You must verify your email address or sign in with Google to play Multiplayer Mode.
             </p>
             <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>

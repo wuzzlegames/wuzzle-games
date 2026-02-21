@@ -161,7 +161,7 @@ export default function CommentsSection({ threadId }) {
       style={{
         marginTop: 24,
         paddingTop: 16,
-        borderTop: "1px solid #3a3a3c",
+        borderTop: "1px solid var(--c-border)",
       }}
     >
       <h3
@@ -181,7 +181,7 @@ export default function CommentsSection({ threadId }) {
         <div style={{ marginBottom: 8 }}>
           <label
             htmlFor="comment-username"
-            style={{ display: "block", fontSize: 12, marginBottom: 4, color: "#d7dadc" }}
+            style={{ display: "block", fontSize: 12, marginBottom: 4, color: "var(--c-text)" }}
           >
             Username
           </label>
@@ -197,9 +197,9 @@ export default function CommentsSection({ threadId }) {
               width: "100%",
               padding: "8px 10px",
               borderRadius: 8,
-              border: "1px solid #3A3A3C",
-              backgroundColor: "#212121",
-              color: "#ffffff",
+              border: "1px solid var(--c-border)",
+              backgroundColor: "var(--c-bg)",
+              color: "var(--c-text-strong)",
               fontSize: 14,
             }}
           />
@@ -208,7 +208,7 @@ export default function CommentsSection({ threadId }) {
         <div style={{ marginBottom: 8 }}>
           <label
             htmlFor="comment-text"
-            style={{ display: "block", fontSize: 12, marginBottom: 4, color: "#d7dadc" }}
+            style={{ display: "block", fontSize: 12, marginBottom: 4, color: "var(--c-text)" }}
           >
             Comment
           </label>
@@ -221,9 +221,9 @@ export default function CommentsSection({ threadId }) {
               width: "100%",
               padding: "8px 10px",
               borderRadius: 8,
-              border: "1px solid #3A3A3C",
-              backgroundColor: "#212121",
-              color: "#ffffff",
+              border: "1px solid var(--c-border)",
+              backgroundColor: "var(--c-bg)",
+              color: "var(--c-text-strong)",
               fontSize: 14,
               resize: "vertical",
             }}
@@ -231,7 +231,7 @@ export default function CommentsSection({ threadId }) {
         </div>
 
         {submitError && (
-          <div style={{ color: "#f87171", fontSize: 12, marginBottom: 6 }}>
+          <div style={{ color: "var(--c-text)", fontSize: 12, marginBottom: 6, border: "1px solid var(--c-error)", borderRadius: 8, padding: "6px 8px", background: "var(--c-bg)" }}>
             {submitError}
           </div>
         )}
@@ -245,9 +245,9 @@ export default function CommentsSection({ threadId }) {
             border: "none",
             backgroundColor:
               isSubmitting || !comment.trim() || !username.trim()
-                ? "#3A3A3C"
-                : "#e56b6f",
-            color: "#ffffff",
+                ? "var(--c-border)"
+                : "var(--c-accent-1)",
+            color: "var(--c-text-strong)",
             fontSize: 14,
             fontWeight: "bold",
             cursor:
@@ -264,7 +264,7 @@ export default function CommentsSection({ threadId }) {
 
       <div>
         {comments.length === 0 ? (
-          <div style={{ fontSize: 13, color: "#9ca3af" }}>
+          <div style={{ fontSize: 13, color: "var(--c-text)" }}>
             No comments yet. Be the first to share your thoughts about this puzzle.
           </div>
         ) : (
@@ -321,8 +321,8 @@ export default function CommentsSection({ threadId }) {
                   style={{
                     padding: "8px 10px",
                     borderRadius: 10,
-                    backgroundColor: "#372F41",
-                    border: "1px solid #3A3A3C",
+                    backgroundColor: "var(--c-panel)",
+                    border: "1px solid var(--c-border)",
                   }}
                 >
                   <div
@@ -345,7 +345,7 @@ export default function CommentsSection({ threadId }) {
                       <div
                         style={{
                           fontSize: 11,
-                          color: "#6b7280",
+                          color: "var(--c-text)",
                           whiteSpace: "nowrap",
                           flexShrink: 0,
                         }}
@@ -358,7 +358,7 @@ export default function CommentsSection({ threadId }) {
                   <div
                     style={{
                       fontSize: 14,
-                      color: "#e5e7eb",
+                      color: "var(--c-text)",
                       whiteSpace: "pre-wrap",
                       marginBottom: 6,
                     }}
@@ -387,11 +387,11 @@ export default function CommentsSection({ threadId }) {
                             borderRadius: 999,
                             padding: "2px 8px",
                             backgroundColor: isMine
-                              ? "#6d597a"
+                              ? "var(--c-accent-2)"
                               : count > 0
-                              ? "#372F41"
-                              : "#372F41",
-                            color: "#e5e7eb",
+                              ? "var(--c-panel)"
+                              : "var(--c-panel)",
+                            color: "var(--c-text)",
                             fontSize: 12,
                             fontWeight: isMine ? "bold" : "normal",
                             cursor: "pointer",

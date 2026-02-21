@@ -23,7 +23,7 @@ if (typeof window !== 'undefined') {
     const normalizedPath = redirectPath.startsWith('/') ? redirectPath : '/' + redirectPath;
     window.history.replaceState(null, '', baseUrl + normalizedPath);
   }
-  
+
   // Normalize URL to handle both with/without trailing slash for root path
   // Vite dev server expects /wuzzle-games/ but React Router might create /wuzzle-games
   const currentPath = window.location.pathname;
@@ -31,6 +31,13 @@ if (typeof window !== 'undefined') {
   if (isRootPath) {
     // Always use trailing slash for root to match Vite's expected base URL
     window.history.replaceState(null, '', baseUrl + '/');
+  }
+
+  // Set <meta name="theme-color"> from the palette so we don't need to hardcode hex in HTML.
+  const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+  if (metaThemeColor) {
+    const bg = getComputedStyle(document.documentElement).getPropertyValue('--c-bg').trim();
+    if (bg) metaThemeColor.setAttribute('content', bg);
   }
 }
 

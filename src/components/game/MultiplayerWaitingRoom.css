@@ -9,8 +9,8 @@
 }
 
 .waitingRoomCard {
-  background: #372F41;
-  border: 1px solid #3A3A3C;
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
   border-radius: 12px;
   padding: 32px;
   max-width: 500px;
@@ -21,7 +21,7 @@
   margin: 0 0 24px 0;
   font-size: 24px;
   font-weight: bold;
-  color: #ffffff;
+  color: var(--c-text-strong);
 }
 
 .waitingRoomTitleInput {
@@ -30,25 +30,25 @@
   padding: 8px 12px;
   font-size: 24px;
   font-weight: bold;
-  color: #ffffff;
-  background: #372F41;
-  border: 1px solid #3A3A3C;
+  color: var(--c-text-strong);
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
   border-radius: 8px;
   box-sizing: border-box;
 }
 
 .waitingRoomTitleInput:hover {
-  border-color: #6d597a;
+  border-color: var(--c-accent-2);
 }
 
 .waitingRoomTitleInput:focus {
   outline: none;
-  border-color: #50a339;
-  box-shadow: 0 0 0 2px rgba(80, 163, 57, 0.25);
+  border-color: var(--c-correct);
+  box-shadow: 0 0 0 2px var(--c-correct);
 }
 
 .waitingRoomTitleInput::placeholder {
-  color: #818384;
+  color: var(--c-text);
 }
 
 .waitingRoomTitleRow {
@@ -67,7 +67,7 @@
 .waitingRoomTitleEditLink {
   background: none;
   border: none;
-  color: #9ca3af;
+  color: var(--c-text);
   font-size: 13px;
   cursor: pointer;
   text-decoration: underline;
@@ -75,7 +75,7 @@
 }
 
 .waitingRoomTitleEditLink:hover {
-  color: #d7dadc;
+  color: var(--c-text);
 }
 
 .waitingRoomTitleEdit {
@@ -104,26 +104,26 @@
 }
 
 .waitingRoomSubtitle {
-  color: #d7dadc;
+  color: var(--c-text);
   margin-bottom: 12px;
   font-size: 16px;
 }
 
 .waitingRoomExpiry {
-  color: #9ca3af;
+  color: var(--c-text);
   margin-bottom: 16px;
   font-size: 12px;
 }
 
 .waitingRoomCodeCard {
-  background: #3A3A3C;
+  background: var(--c-border);
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 16px;
 }
 
 .waitingRoomCodeLabel {
-  color: #818384;
+  color: var(--c-text);
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -131,14 +131,14 @@
 .waitingRoomCodeValue {
   font-size: 36px;
   font-weight: bold;
-  color: #50a339;
+  color: var(--c-text);
   letter-spacing: 8px;
   font-family: monospace;
   margin-bottom: 12px;
 }
 
 .waitingRoomCodeHelp {
-  color: #818384;
+  color: var(--c-text);
   font-size: 12px;
   margin: 0 0 12px 0;
 }
@@ -157,13 +157,13 @@
 
 .waitingRoomSettingsLabel {
   font-size: 13px;
-  color: #d7dadc;
+  color: var(--c-text);
 }
 
 .waitingRoomSettingsEdit {
   border: none;
   background: transparent;
-  color: #9ca3af;
+  color: var(--c-text);
   font-size: 11px;
   cursor: pointer;
   text-decoration: underline;
@@ -171,12 +171,12 @@
 
 .waitingRoomSettingsSummary {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--c-text);
 }
 
 .waitingRoomSettingsEditForm {
   font-size: 12px;
-  color: #d7dadc;
+  color: var(--c-text);
   margin-top: 8px;
   display: flex;
   flex-direction: column;
@@ -200,9 +200,9 @@
   width: 100%;
   padding: 6px 8px;
   border-radius: 6px;
-  border: 1px solid #3A3A3C;
-  background: #212121;
-  color: #ffffff;
+  border: 1px solid var(--c-border);
+  background: var(--c-bg);
+  color: var(--c-text-strong);
   font-size: 12px;
 }
 
@@ -246,8 +246,8 @@
   padding: 14px;
   border-radius: 8px;
   border: none;
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -257,9 +257,9 @@
   width: 100%;
   padding: 14px;
   border-radius: 8px;
-  border: 1px solid #3A3A3C;
-  background: #355070;
-  color: #ffffff;
+  border: 1px solid var(--c-border);
+  background: var(--c-panel);
+  color: var(--c-text-strong);
   font-size: 16px;
   font-weight: bold;
 }
@@ -273,7 +273,7 @@
 }
 
 .waitingRoomPlayersTitle {
-  color: #d7dadc;
+  color: var(--c-text);
   font-size: 14px;
   margin-bottom: 16px;
 }
@@ -287,7 +287,7 @@
 
 .waitingRoomPlayerCard {
   padding: 12px;
-  background: #3A3A3C;
+  background: var(--c-border);
   border-radius: 6px;
   display: flex;
   justify-content: space-between;
@@ -303,13 +303,13 @@
 }
 
 .waitingRoomPlayerName {
-  color: #ffffff;
+  color: var(--c-text-strong);
   font-weight: bold;
 }
 
 .waitingRoomPlayerFriendButton {
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
   border: none;
   border-radius: 4px;
   min-width: 28px;
@@ -326,11 +326,11 @@
 }
 
 .waitingRoomPlayerFriendButton:hover:not(:disabled) {
-  background: #eaac8b;
+  filter: brightness(1.05);
 }
 
 .waitingRoomPlayerFriendButton:disabled {
-  background: #818384;
+  background: var(--c-border);
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -341,11 +341,11 @@
 }
 
 .waitingRoomPlayerReadyOn {
-  color: #50a339;
+  color: var(--c-text);
 }
 
 .waitingRoomPlayerReadyOff {
-  color: #818384;
+  color: var(--c-text);
 }
 
 .waitingRoomReadyButton {
@@ -362,8 +362,8 @@
   padding: 14px;
   border-radius: 8px;
   border: none;
-  background: #B1A04C;
-  color: #ffffff;
+  background: var(--c-present);
+  color: var(--c-text-strong);
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -382,9 +382,9 @@
   width: 100%;
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid #3A3A3C;
-  background: #355070;
-  color: #ffffff;
+  border: 1px solid var(--c-border);
+  background: var(--c-panel);
+  color: var(--c-text-strong);
   font-size: 13px;
   font-weight: bold;
   cursor: pointer;
@@ -403,8 +403,8 @@
 .waitingRoomInviteItem {
   padding: 8px 10px;
   border-radius: 6px;
-  border: 1px solid #3A3A3C;
-  background: #372F41;
+  border: 1px solid var(--c-border);
+  background: var(--c-panel);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -412,7 +412,7 @@
 }
 
 .waitingRoomInviteName {
-  color: #ffffff;
+  color: var(--c-text-strong);
   font-size: 13px;
 }
 
@@ -425,17 +425,18 @@
 }
 
 .waitingRoomSavingIndicator {
-  color: #818384;
+  color: var(--c-text);
   font-size: 12px;
   font-style: italic;
   margin-left: 8px;
 }
 
 .waitingRoomConfigError {
-  color: #ED2939;
+  color: var(--c-text);
   font-size: 12px;
   margin-top: 8px;
   padding: 8px;
-  background: rgba(237, 41, 57, 0.1);
+  background: var(--c-bg);
+  border: 1px solid var(--c-error);
   border-radius: 4px;
 }

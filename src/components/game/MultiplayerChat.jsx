@@ -183,9 +183,9 @@ export default function MultiplayerChat({ gameCode, authUser }) {
           right: 20,
           padding: "8px 14px",
           borderRadius: 999,
-          backgroundColor: "#212121",
-          border: "1px solid #ffffff",
-          color: "#ffffff",
+          backgroundColor: "var(--c-bg)",
+          border: "1px solid var(--c-text-strong)",
+          color: "var(--c-text-strong)",
           fontSize: 12,
           fontWeight: "bold",
           cursor: "pointer",
@@ -193,7 +193,7 @@ export default function MultiplayerChat({ gameCode, authUser }) {
           display: "flex",
           alignItems: "center",
           gap: 8,
-          boxShadow: "0 4px 16px rgba(0,0,0,0.7)",
+          boxShadow: "0 4px 16px var(--c-bg)",
         }}
         aria-label={isOpen ? "Close room chat" : "Open room chat"}
       >
@@ -203,7 +203,7 @@ export default function MultiplayerChat({ gameCode, authUser }) {
             width: 18,
             height: 18,
             borderRadius: "50%",
-            border: "2px solid #50a339",
+            border: "2px solid var(--c-correct)",
             alignItems: "center",
             justifyContent: "center",
             fontSize: 10,
@@ -220,16 +220,16 @@ export default function MultiplayerChat({ gameCode, authUser }) {
                 minWidth: 18,
                 height: 18,
                 borderRadius: "50%",
-                backgroundColor: "#ef4444",
-                color: "#ffffff",
+                backgroundColor: "var(--c-error)",
+                color: "var(--c-text-strong)",
                 fontSize: 10,
                 fontWeight: "bold",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 padding: "0 4px",
-                border: "2px solid #212121",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.5)",
+                border: "2px solid var(--c-bg)",
+                boxShadow: "0 2px 4px var(--c-bg)",
               }}
             >
               {unreadCount > 99 ? "99+" : unreadCount}
@@ -259,17 +259,17 @@ export default function MultiplayerChat({ gameCode, authUser }) {
             maxHeight: "60vh",
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "#372F41",
+            backgroundColor: "var(--c-panel)",
             borderRadius: 12,
-            border: "1px solid #3A3A3C",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.85)",
+            border: "1px solid var(--c-border)",
+            boxShadow: "0 8px 24px var(--c-bg)",
             zIndex: 9998,
           }}
         >
           <div
             style={{
               padding: "8px 12px",
-              borderBottom: "1px solid #2f2f31",
+              borderBottom: "1px solid var(--c-border)",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -280,7 +280,7 @@ export default function MultiplayerChat({ gameCode, authUser }) {
               style={{
                 fontSize: 13,
                 fontWeight: "bold",
-                color: "#ffffff",
+                color: "var(--c-text-strong)",
               }}
             >
               Room chat
@@ -288,7 +288,7 @@ export default function MultiplayerChat({ gameCode, authUser }) {
             <div
               style={{
                 fontSize: 11,
-                color: "#9ca3af",
+                color: "var(--c-text)",
               }}
             >
               Visible to players in this room
@@ -310,7 +310,7 @@ export default function MultiplayerChat({ gameCode, authUser }) {
               <div
                 style={{
                   fontSize: 12,
-                  color: "#9ca3af",
+                  color: "var(--c-text)",
                   textAlign: "center",
                   padding: "8px 0",
                 }}
@@ -340,8 +340,8 @@ export default function MultiplayerChat({ gameCode, authUser }) {
                         maxWidth: "100%",
                         padding: "6px 8px",
                         borderRadius: 8,
-                        backgroundColor: isMe ? "#2563eb" : "#27272a",
-                        color: "#f9fafb",
+                        backgroundColor: isMe ? "var(--c-accent-2)" : "var(--c-panel)",
+                        color: "var(--c-text-strong)",
                         fontSize: 13,
                         wordBreak: "break-word",
                       }}
@@ -361,7 +361,7 @@ export default function MultiplayerChat({ gameCode, authUser }) {
                       <div
                         style={{
                           fontSize: 10,
-                          color: "#6b7280",
+                          color: "var(--c-text)",
                           marginTop: 2,
                         }}
                       >
@@ -385,7 +385,7 @@ export default function MultiplayerChat({ gameCode, authUser }) {
               e.stopPropagation();
             }}
             style={{
-              borderTop: "1px solid #2f2f31",
+              borderTop: "1px solid var(--c-border)",
               padding: "6px 8px",
               display: "flex",
               gap: 6,
@@ -442,9 +442,9 @@ export default function MultiplayerChat({ gameCode, authUser }) {
                 flex: 1,
                 padding: "6px 8px",
                 borderRadius: 999,
-                border: "1px solid #3A3A3C",
-                backgroundColor: "#212121",
-                color: "#ffffff",
+                border: "1px solid var(--c-border)",
+                backgroundColor: "var(--c-bg)",
+                color: "var(--c-text-strong)",
                 fontSize: 13,
                 outline: "none",
               }}
@@ -470,8 +470,8 @@ export default function MultiplayerChat({ gameCode, authUser }) {
                 borderRadius: 999,
                 border: "none",
                 backgroundColor:
-                  !canChat || isSending || !input.trim() ? "#3A3A3C" : "#e56b6f",
-                color: "#ffffff",
+                  !canChat || isSending || !input.trim() ? "var(--c-border)" : "var(--c-accent-1)",
+                color: "var(--c-text-strong)",
                 fontSize: 12,
                 fontWeight: "bold",
                 cursor:

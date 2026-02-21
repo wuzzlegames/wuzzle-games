@@ -5,14 +5,14 @@
   align-items: stretch;
   padding: 0;
   border-radius: 8px;
-  border: 1px solid #3A3A3C;
-  background: #372F41;
+  border: 1px solid var(--c-border);
+  background: var(--c-panel);
   overflow: hidden;
 }
 
 .notificationsModalCard--friendRequest {
-  border-color: #50a339;
-  background: rgba(80, 163, 57, 0.08);
+  border-color: var(--c-correct);
+  background: var(--c-bg);
 }
 
 .notificationsModalCardContent {
@@ -28,12 +28,12 @@
 .notificationsModalCardTitle {
   font-size: 14px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--c-text-strong);
 }
 
 .notificationsModalCardSub {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--c-text);
   line-height: 1.4;
 }
 

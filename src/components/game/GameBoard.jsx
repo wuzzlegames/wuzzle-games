@@ -35,13 +35,13 @@ function GameBoard({
       style={{
         borderRadius: 8,
         border: isSelected
-          ? "2px solid #B1A04C"
-          : "1px solid #3A3A3C",
+          ? "2px solid var(--c-present)"
+          : "1px solid var(--c-border)",
         padding: 8,
-        background: "#372F41",
+        background: "var(--c-panel)",
         cursor: "pointer",
-        // When selected, use a yellow glow and do not stack a separate green effect
-        boxShadow: isSelected ? "0 0 0 1px rgba(250,204,21,0.53)" : "none",
+        // When selected, use the palette's amber and do not stack a separate green effect
+        boxShadow: isSelected ? "0 0 0 2px var(--c-present)" : "none",
         display: "flex",
         flexDirection: "column",
         minWidth: 0,
@@ -56,7 +56,7 @@ function GameBoard({
           alignItems: "center",
           marginBottom: 6,
           fontSize: 12,
-          color: "#d7dadc"
+          color: "var(--c-text)"
         }}
       >
         <span>

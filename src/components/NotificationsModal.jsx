@@ -13,16 +13,16 @@ const buttonStyle = {
   padding: "6px 10px",
   borderRadius: 6,
   border: "none",
-  background: "#e56b6f",
-  color: "#ffffff",
+  background: "var(--c-accent-1)",
+  color: "var(--c-text-strong)",
   fontWeight: "bold",
   fontSize: 11,
   cursor: "pointer",
 };
 const buttonSecondaryStyle = {
   ...buttonStyle,
-  border: "1px solid #3A3A3C",
-  background: "#355070",
+  border: "1px solid var(--c-border)",
+  background: "var(--c-panel)",
 };
 
 /**
@@ -49,7 +49,7 @@ function NotificationReceivedCard({
           style={{
             width: 80,
             minWidth: 80,
-            background: "rgba(0,0,0,0.2)",
+            background: "var(--c-bg)",
             borderRadius: "8px 0 0 8px",
           }}
           aria-hidden
@@ -141,7 +141,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
           <h2 style={{ margin: "0 0 16px 0", fontSize: "22px", fontWeight: "bold" }}>
             Notifications
           </h2>
-          <p style={{ marginBottom: "16px", color: "#d7dadc", fontSize: "14px" }}>
+          <p style={{ marginBottom: "16px", color: "var(--c-text)", fontSize: "14px" }}>
             Verify your email or sign in with Google to see notifications.
           </p>
           <button
@@ -151,8 +151,8 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
               padding: "10px 16px",
               borderRadius: 8,
               border: "none",
-              background: "#e56b6f",
-              color: "#ffffff",
+              background: "var(--c-accent-1)",
+              color: "var(--c-text-strong)",
               fontWeight: "bold",
               fontSize: 13,
               cursor: "pointer",
@@ -178,7 +178,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
         </h2>
 
         {!hasAny ? (
-          <p style={{ color: "#818384", fontSize: "14px", marginBottom: "20px" }}>
+          <p style={{ color: "var(--c-text)", fontSize: "14px", marginBottom: "20px" }}>
             No notifications right now.
           </p>
         ) : (
@@ -186,10 +186,10 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
             {/* Friend requests: badge left, text right, Dismiss + View badges */}
             {hasFriendRequests && (
               <div style={{ marginBottom: "24px" }}>
-                <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "#d7dadc", textAlign: "left" }}>
+                <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "var(--c-text)", textAlign: "left" }}>
                   Friend Requests ({friendRequests.length})
                 </h3>
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #3A3A3C" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid var(--c-border)" }}>
                   {friendRequests.map((request) => (
                     <NotificationReceivedCard
                       key={request.id}
@@ -208,13 +208,13 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
             {/* Incoming challenges: badge left, text right, Dismiss + View badges */}
             {hasChallenges && (
               <div style={{ marginBottom: "24px" }}>
-                <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: "bold", color: "#d7dadc", textAlign: "left" }}>
+                <h3 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: "bold", color: "var(--c-text)", textAlign: "left" }}>
                   Challenges
                 </h3>
-                <p style={{ margin: "0 0 12px 0", fontSize: 11, color: "#818384", textAlign: "left" }}>
+                <p style={{ margin: "0 0 12px 0", fontSize: 11, color: "var(--c-text)", textAlign: "left" }}>
                   Challenges expire 30 minutes after they&apos;re sent. Dismiss expired ones to clear them.
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #3A3A3C" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid var(--c-border)" }}>
                   {incomingChallenges.map((ch) => {
                     const expired = isChallengeExpired(ch);
                     const subline = `${ch.boards || 1} board${(ch.boards || 1) > 1 ? "s" : ""} · ${ch.speedrun ? "Speedrun" : "Standard"} · ${expired ? "Expired" : "Active"}`;
@@ -237,10 +237,10 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
             {/* Sent challenges: keep current UI (Cancel/Dismiss only) */}
             {hasSentChallenges && (
               <div style={{ marginBottom: "24px" }}>
-                <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "#d7dadc", textAlign: "left" }}>
+                <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "var(--c-text)", textAlign: "left" }}>
                   Sent challenges
                 </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid #3A3A3C" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid var(--c-border)" }}>
                   {sentChallenges.map((ch) => {
                     const expired = isChallengeExpired(ch);
                     return (
@@ -249,8 +249,8 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                         style={{
                           padding: "10px 12px",
                           borderRadius: 8,
-                          border: "1px solid #3A3A3C",
-                          background: "#372F41",
+                          border: "1px solid var(--c-border)",
+                          background: "var(--c-panel)",
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
@@ -258,12 +258,12 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                         }}
                       >
                         <div style={{ textAlign: "left", flex: 1 }}>
-                          <div style={{ color: "#ffffff", fontWeight: "600", fontSize: 13 }}>
+                          <div style={{ color: "var(--c-text-strong)", fontWeight: "600", fontSize: 13 }}>
                             Challenge to {ch.toUserName || "friend"}
                           </div>
-                          <div style={{ color: "#d7dadc", fontSize: 12 }}>
+                          <div style={{ color: "var(--c-text)", fontSize: 12 }}>
                             {ch.boards || 1} board{(ch.boards || 1) > 1 ? "s" : ""} · {ch.speedrun ? "Speedrun" : "Standard"}
-                            <span style={{ marginLeft: 8, fontSize: 11, color: expired ? "#818384" : "#50a339", fontWeight: "600" }}>
+                            <span style={{ marginLeft: 8, fontSize: 11, color: expired ? "var(--c-text)" : "var(--c-correct)", fontWeight: "600" }}>
                               {expired ? "Expired" : "Active"}
                             </span>
                           </div>
@@ -280,9 +280,9 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                           style={{
                             padding: "6px 10px",
                             borderRadius: 6,
-                            border: "1px solid #3A3A3C",
-                            background: "#355070",
-                            color: expired ? "#818384" : "#ffffff",
+                            border: "1px solid var(--c-border)",
+                            background: "var(--c-panel)",
+                            color: expired ? "var(--c-text)" : "var(--c-text-strong)",
                             fontWeight: "bold",
                             fontSize: 11,
                             cursor: "pointer",
@@ -307,8 +307,8 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
               padding: "10px 16px",
               borderRadius: 8,
               border: "none",
-              background: "#e56b6f",
-              color: "#ffffff",
+              background: "var(--c-accent-1)",
+              color: "var(--c-text-strong)",
               fontWeight: "bold",
               fontSize: 13,
               cursor: "pointer",

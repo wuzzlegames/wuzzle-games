@@ -15,8 +15,8 @@ export default function GameStatusBar({
       style={{
         padding: "10px 12px",
         borderRadius: 8,
-        border: "1px solid #3a3a3c",
-        background: "#372F41",
+        border: "1px solid var(--c-border)",
+        background: "var(--c-panel)",
         display: "flex",
         flexWrap: "wrap",
         alignItems: "center",
@@ -28,7 +28,7 @@ export default function GameStatusBar({
       <div
         style={{
           fontSize: 12,
-          color: "#d7dadc",
+          color: "var(--c-text)",
           textTransform: "uppercase",
           letterSpacing: 0.5,
         }}
@@ -45,7 +45,7 @@ export default function GameStatusBar({
               fontSize: 22,
               fontWeight: "bold",
               letterSpacing: 1,
-              color: "#ffffff",
+              color: "var(--c-text-strong)",
             }}
           >
             {isMarathonSpeedrun ? (
@@ -57,7 +57,7 @@ export default function GameStatusBar({
                     marginTop: 2,
                     fontSize: 11,
                     fontWeight: "normal",
-                    color: "#a1a1aa",
+                    color: "var(--c-text)",
                   }}
                 >
                   Total {formatElapsed(displayTotalMs || 0)}
@@ -72,7 +72,7 @@ export default function GameStatusBar({
             style={{
               fontSize: 18,
               fontWeight: "bold",
-              color: "#ffffff",
+              color: "var(--c-text-strong)",
             }}
           >
             Guesses: {turnsUsed}/{maxTurns}
@@ -84,7 +84,7 @@ export default function GameStatusBar({
       <div
         style={{
           fontSize: 12,
-          color: "#d7dadc",
+          color: "var(--c-text)",
           textTransform: "uppercase",
           letterSpacing: 0.5,
           textAlign: "right",

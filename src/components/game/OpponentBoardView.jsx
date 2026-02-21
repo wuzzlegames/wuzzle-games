@@ -20,9 +20,9 @@ export default function OpponentBoardView({ opponentColors, maxTurns, opponentGu
     <div
       style={{
         borderRadius: 8,
-        border: isActive ? "2px solid #50a339" : "1px solid #3A3A3C",
+        border: isActive ? "2px solid var(--c-correct)" : "1px solid var(--c-border)",
         padding: 8,
-        background: "#372F41",
+        background: "var(--c-panel)",
         display: "flex",
         flexDirection: "column",
         minWidth: 0,
@@ -37,7 +37,7 @@ export default function OpponentBoardView({ opponentColors, maxTurns, opponentGu
           alignItems: "center",
           marginBottom: 6,
           fontSize: 12,
-          color: "#d7dadc"
+          color: "var(--c-text)"
         }}
       >
         <span>{`Board ${boardNumber}`}</span>
@@ -74,8 +74,8 @@ export default function OpponentBoardView({ opponentColors, maxTurns, opponentGu
             {Array.from({ length: 5 }).map((_, colIdx) => {
               const color = Array.isArray(colors) ? (colors[colIdx] || 0) : 0;
               // 0 = gray (not in word), 1 = yellow (wrong position), 2 = green (correct)
-              const bgColor = color === 2 ? "#50a339" : color === 1 ? "#B1A04C" : "#3A3A3C";
-              const borderColor = color === 0 ? "#3A3A3C" : color === 2 ? "#50a339" : "#B1A04C";
+              const bgColor = color === 2 ? "var(--c-correct)" : color === 1 ? "var(--c-present)" : "var(--c-border)";
+              const borderColor = color === 0 ? "var(--c-border)" : color === 2 ? "var(--c-correct)" : "var(--c-present)";
               const letter = showLetters && opponentGuesses && opponentGuesses[rowIdx] 
                 ? opponentGuesses[rowIdx][colIdx]?.toUpperCase() || "" 
                 : "";
@@ -95,7 +95,7 @@ export default function OpponentBoardView({ opponentColors, maxTurns, opponentGu
                     justifyContent: "center",
                     fontSize: 18,
                     fontWeight: "bold",
-                    color: "#ffffff",
+                    color: "var(--c-text-strong)",
                     flexShrink: 0,
                     boxSizing: "border-box"
                   }}

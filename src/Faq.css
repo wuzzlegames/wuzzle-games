@@ -1,7 +1,7 @@
 .faqRoot {
   min-height: 100vh;
-  background-color: #212121;
-  color: #ffffff;
+  background-color: var(--c-bg);
+  color: var(--c-text-strong);
   padding: 20px;
   max-width: 100vw;
   overflow-x: hidden;
@@ -28,7 +28,7 @@
 
 .faqIntro {
   font-size: 14px;
-  color: #d7dadc;
+  color: var(--c-text);
   line-height: 1.6;
 }
 
@@ -44,7 +44,7 @@
 
 .faqParagraph {
   font-size: 14px;
-  color: #d7dadc;
+  color: var(--c-text);
   line-height: 1.6;
   margin: 4px 0;
 }

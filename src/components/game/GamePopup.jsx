@@ -88,7 +88,7 @@ export default function GamePopup({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.82)",
+        backgroundColor: "var(--c-bg)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -97,7 +97,7 @@ export default function GamePopup({
       >
       <div
         style={{
-          backgroundColor: "#372F41",
+          backgroundColor: "var(--c-panel)",
           borderRadius: 16,
           padding: 24,
           maxWidth: 560,
@@ -105,7 +105,7 @@ export default function GamePopup({
           maxHeight: "80vh",
           overflowY: "auto",
           textAlign: "center",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.8)"
+          boxShadow: "0 20px 60px var(--c-bg)"
         }}
       >
         {isMultiplayer ? (() => {
@@ -208,7 +208,7 @@ export default function GamePopup({
           };
 
           let headingText = "Game finished";
-          let titleColor = "#B1A04C";
+          let titleColor = "var(--c-text-strong)";
 
           if (rankedPlayers.length) {
             const findMe = () => {
@@ -228,7 +228,7 @@ export default function GamePopup({
               } else {
                 headingText = `You finished ${ordinal}`;
               }
-              titleColor = me.rank === 1 ? "#50a339" : "#B1A04C";
+              titleColor = "var(--c-text-strong)";
             }
           }
 
@@ -247,13 +247,13 @@ export default function GamePopup({
               {headingText}
             </h2>
 
-            <div style={{ marginBottom: 20, fontSize: 18, color: "#d7dadc" }}>
+            <div style={{ marginBottom: 20, fontSize: 18, color: "var(--c-text)" }}>
               {/* Rematch status text for multiplayer */}
               {isMultiplayer && multiplayerGameState?.status === 'finished' && (
                 <div style={{
                   marginBottom: 12,
                   fontSize: 14,
-                  color: "#B1A04C",
+                  color: "var(--c-text)",
                 }}>
                   {(() => {
                     const players = multiplayerGameState?.players;
@@ -278,14 +278,14 @@ export default function GamePopup({
               )}
 
               <div style={{ marginBottom: 12 }}>
-                <div style={{ fontSize: 16, color: "#818384", marginBottom: 4 }}>
+                <div style={{ fontSize: 16, color: "var(--c-text)", marginBottom: 4 }}>
                   {isSpeedrun
                     ? "Your Time"
                     : hasExplicitScores
                     ? "Your Score"
                     : "Your Guesses"}
                 </div>
-                <div style={{ fontSize: 24, color: "#ffffff", fontWeight: "bold" }}>
+                <div style={{ fontSize: 24, color: "var(--c-text-strong)", fontWeight: "bold" }}>
                   {(() => {
                     if (isSpeedrun) {
                       if (!multiplayerGameState) return "N/A";
@@ -314,15 +314,15 @@ export default function GamePopup({
                   })()}
                 </div>
               </div>
-              <div style={{ borderTop: "1px solid #3A3A3C", paddingTop: 12 }}>
-                <div style={{ fontSize: 16, color: "#818384", marginBottom: 4 }}>
+              <div style={{ borderTop: "1px solid var(--c-border)", paddingTop: 12 }}>
+                <div style={{ fontSize: 16, color: "var(--c-text)", marginBottom: 4 }}>
                   {isSpeedrun
                     ? "Opponent's Time"
                     : hasExplicitScores
                     ? "Opponent's Score"
                     : "Opponent's Guesses"}
                 </div>
-                <div style={{ fontSize: 24, color: "#ffffff", fontWeight: "bold" }}>
+                <div style={{ fontSize: 24, color: "var(--c-text-strong)", fontWeight: "bold" }}>
                   {(() => {
                     if (isSpeedrun) {
                       if (!multiplayerGameState) return "N/A";
@@ -367,7 +367,7 @@ export default function GamePopup({
                   style={{
                     marginTop: 20,
                     paddingTop: 12,
-                    borderTop: "1px solid #3A3A3C",
+                    borderTop: "1px solid var(--c-border)",
                     textAlign: "left",
                   }}
                 >
@@ -375,7 +375,7 @@ export default function GamePopup({
                     style={{
                       fontSize: 14,
                       fontWeight: "bold",
-                      color: "#d7dadc",
+                      color: "var(--c-text)",
                       marginBottom: 8,
                     }}
                   >
@@ -413,7 +413,7 @@ export default function GamePopup({
                             alignItems: "center",
                             padding: "4px 6px",
                             borderRadius: 4,
-                            backgroundColor: isMe ? "#6d597a" : "transparent",
+                            backgroundColor: isMe ? "var(--c-accent-2)" : "transparent",
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -421,7 +421,7 @@ export default function GamePopup({
                               style={{
                                 minWidth: 36,
                                 fontWeight: "bold",
-                                color: "#d7dadc",
+                                color: "var(--c-text)",
                               }}
                             >
                               {toOrdinal(p.rank)}
@@ -434,10 +434,10 @@ export default function GamePopup({
                             />
                           </div>
                           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            <div style={{ textAlign: "right", color: "#d7dadc" }}>
+                            <div style={{ textAlign: "right", color: "var(--c-text)" }}>
                               <div>{primaryStat}</div>
                               {secondary && (
-                                <div style={{ fontSize: 11, color: "#9ca3af" }}>{secondary}</div>
+                                <div style={{ fontSize: 11, color: "var(--c-text)" }}>{secondary}</div>
                               )}
                             </div>
                             {!isMe && onAddFriend && !friendIds?.includes(p.id) && (() => {
@@ -451,8 +451,8 @@ export default function GamePopup({
                                   fontSize: 12,
                                   borderRadius: 4,
                                   border: "none",
-                                  backgroundColor: sent ? "#3A3A3C" : "#e56b6f",
-                                  color: "#ffffff",
+                                  backgroundColor: sent ? "var(--c-border)" : "var(--c-accent-1)",
+                                  color: "var(--c-text-strong)",
                                   cursor: sent ? "default" : "pointer",
                                   fontWeight: "bold",
                                   whiteSpace: "nowrap",
@@ -481,14 +481,14 @@ export default function GamePopup({
                 fontSize: 22,
                 fontWeight: "bold",
                 letterSpacing: 1,
-                color: allSolved ? "#50a339" : "#d7dadc"
+                color: allSolved ? "var(--c-correct)" : "var(--c-text)"
               }}
             >
               {allSolved ? "Congratulations!" : "Stage ended"}
             </h2>
 
             {speedrunEnabled && (
-              <div style={{ marginBottom: 12, color: "#d7dadc", fontSize: 15 }}>
+              <div style={{ marginBottom: 12, color: "var(--c-text)", fontSize: 15 }}>
                 <div>Total time: {formatElapsed(popupTotalMs)}</div>
                 {mode === "marathon" && (
                   <div>Stage time: {formatElapsed(stageElapsedMs)}</div>
@@ -496,7 +496,7 @@ export default function GamePopup({
               </div>
             )}
 
-            <div style={{ marginBottom: 8, fontSize: 16, color: "#d7dadc" }}>
+            <div style={{ marginBottom: 8, fontSize: 16, color: "var(--c-text)" }}>
               {allSolved
                 ? boards.length === 1
                   ? "You solved the word."
@@ -504,7 +504,7 @@ export default function GamePopup({
                 : `You solved ${solvedCount} of ${boards.length} word${boards.length > 1 ? "s" : ""}.`}
             </div>
 
-            <div style={{ marginBottom: 14, fontSize: 18, color: "#ffffff", fontWeight: "bold" }}>
+            <div style={{ marginBottom: 14, fontSize: 18, color: "var(--c-text-strong)", fontWeight: "bold" }}>
               {speedrunEnabled
                 ? `Guesses used: ${turnsUsed}`
                 : `Guesses used: ${turnsUsed}/${maxTurns}`}
@@ -515,7 +515,7 @@ export default function GamePopup({
                 style={{
                   marginBottom: 10,
                   fontSize: 14,
-                  color: "#d7dadc",
+                  color: "var(--c-text)",
                 }}
               >
                 {streakLabel}
@@ -526,7 +526,7 @@ export default function GamePopup({
 
         {!isMultiplayer && (
           <>
-            <div style={{ marginBottom: 10, color: "#ffffff", fontWeight: "bold" }}>Solutions</div>
+            <div style={{ marginBottom: 10, color: "var(--c-text-strong)", fontWeight: "bold" }}>Solutions</div>
 
             <div
               style={{
@@ -541,8 +541,8 @@ export default function GamePopup({
                 <div
                   key={b?.solution ?? `board-${i}`}
                   style={{
-                    backgroundColor: b && b.isSolved ? "#50a339" : "#3A3A3C",
-                    color: "#ffffff",
+                    backgroundColor: b && b.isSolved ? "var(--c-correct)" : "var(--c-border)",
+                    color: "var(--c-text-strong)",
                     padding: "8px 10px",
                     borderRadius: 8,
                     fontSize: 13
@@ -557,7 +557,7 @@ export default function GamePopup({
 
         {isMultiplayer && (multiplayerGameState?.solution || multiplayerGameState?.solutions) && (
           <div style={{ marginBottom: 16 }}>
-            <div style={{ marginBottom: 8, color: "#ffffff", fontWeight: "bold", fontSize: 16 }}>
+            <div style={{ marginBottom: 8, color: "var(--c-text-strong)", fontWeight: "bold", fontSize: 16 }}>
               {Array.isArray(multiplayerGameState?.solutions) && multiplayerGameState.solutions.length > 1
                 ? "Solutions"
                 : "Solution"}
@@ -579,8 +579,8 @@ export default function GamePopup({
                     <div
                       key={typeof word === "string" ? word : `sol-${idx}`}
                       style={{
-                        backgroundColor: "#50a339",
-                        color: "#ffffff",
+                        backgroundColor: "var(--c-correct)",
+                        color: "var(--c-text-strong)",
                         padding: "8px 12px",
                         borderRadius: 8,
                         fontSize: 16,
@@ -608,8 +608,8 @@ export default function GamePopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#e56b6f",
-                color: "#ffffff",
+                background: "var(--c-accent-1)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",
@@ -630,8 +630,8 @@ export default function GamePopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#e56b6f",
-                color: "#ffffff",
+                background: "var(--c-accent-1)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",
@@ -651,9 +651,9 @@ export default function GamePopup({
                 minWidth: 160,
                 padding: "12px 0",
                 borderRadius: 10,
-                border: "1px solid #3A3A3C",
-                background: "#355070",
-                color: "#ffffff",
+                border: "1px solid var(--c-border)",
+                background: "var(--c-panel)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",
@@ -673,9 +673,9 @@ export default function GamePopup({
                 minWidth: 160,
                 padding: "12px 0",
                 borderRadius: 10,
-                border: "1px solid #3A3A3C",
-                background: "#355070",
-                color: "#ffffff",
+                border: "1px solid var(--c-border)",
+                background: "var(--c-panel)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",
@@ -694,9 +694,9 @@ export default function GamePopup({
               minWidth: 160,
               padding: "12px 0",
               borderRadius: 10,
-              border: "1px solid #3A3A3C",
-              background: "#355070",
-              color: "#ffffff",
+              border: "1px solid var(--c-border)",
+              background: "var(--c-panel)",
+              color: "var(--c-text-strong)",
               fontSize: 14,
               fontWeight: "bold",
               cursor: "pointer",
@@ -716,8 +716,8 @@ export default function GamePopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#e56b6f",
-                color: "#ffffff",
+                background: "var(--c-accent-1)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",
@@ -738,8 +738,8 @@ export default function GamePopup({
                 padding: "12px 0",
                 borderRadius: 10,
                 border: "none",
-                background: "#B1A04C",
-                color: "#212121",
+                background: "var(--c-present)",
+                color: "var(--c-text)",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",

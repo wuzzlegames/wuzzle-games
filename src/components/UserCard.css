@@ -5,15 +5,15 @@
   gap: 6px;
   padding: 5px 12px;
   border-radius: 9999px;
-  background: linear-gradient(145deg, #372F41 0%, #372F41 100%);
-  color: #e4e4e7;
+  background: linear-gradient(145deg, var(--c-panel) 0%, var(--c-panel) 100%);
+  color: var(--c-text);
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
   max-width: 100%;
   box-sizing: border-box;
-  border: 1px solid #3A3A3C;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--c-border);
+  box-shadow: 0 1px 2px var(--c-bg);
   position: relative;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .userCard-main.userCard--clickable:hover {
-  color: #fff;
+  color: var(--c-text-strong);
 }
 
 .userCard-main.userCard--clickable:focus {
@@ -58,9 +58,9 @@
 /* Highlight whole pill when hovering/focusing main button */
 .userCard:has(.userCard-main.userCard--clickable:hover),
 .userCard:has(.userCard-main.userCard--clickable:focus-visible) {
-  background: linear-gradient(145deg, #6d597a 0%, #6d597a 100%);
-  border-color: #6d597a;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(145deg, var(--c-accent-2) 0%, var(--c-accent-2) 100%);
+  border-color: var(--c-accent-2);
+  box-shadow: 0 2px 6px var(--c-bg);
 }
 
 .userCard--sm .userCard-main {
@@ -85,9 +85,9 @@
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  background: rgba(80, 163, 57, 0.2);
-  color: #50a339;
-  border: 1px solid rgba(80, 163, 57, 0.3);
+  background: var(--c-bg);
+  color: var(--c-text);
+  border: 1px solid var(--c-correct);
 }
 
 .userCard--sm .userCard-badge {
@@ -134,19 +134,20 @@
   background: none;
   border: none;
   border-radius: 6px;
-  color: #B1A04C;
+  color: var(--c-text);
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .userCard-earnedIcon:hover {
-  background: rgba(177, 160, 76, 0.2);
-  color: #B1A04C;
+  background: var(--c-bg);
+  color: var(--c-text);
+  box-shadow: 0 0 0 1px var(--c-present) inset;
 }
 
 .userCard-earnedIcon:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(177, 160, 76, 0.4);
+  box-shadow: 0 0 0 2px var(--c-present);
 }
 
 /* Badges modal panel: hide scrollbar, keep scroll via mouse/touch */
@@ -154,7 +155,7 @@
   text-align: left;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  background: #212121;
+  background: var(--c-bg);
 }
 .userCard-badgesModalPanel::-webkit-scrollbar {
   display: none;
@@ -170,7 +171,7 @@
   margin: 0 0 12px;
   font-size: 18px;
   font-weight: 600;
-  color: #e4e4e7;
+  color: var(--c-text);
 }
 
 /* "+ Add Friend" button inside the badges modal */
@@ -181,8 +182,8 @@
   margin-bottom: 16px;
   border: none;
   border-radius: 8px;
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -190,7 +191,7 @@
 }
 
 .userCard-addFriendButton:hover:not(:disabled) {
-  background: #d45a5e;
+  background: var(--c-accent-1);
 }
 
 .userCard-addFriendButton:disabled {
@@ -203,8 +204,9 @@
   margin-bottom: 16px;
   padding: 8px 12px;
   border-radius: 8px;
-  background: rgba(80, 163, 57, 0.15);
-  color: #50a339;
+  background: var(--c-bg);
+  border: 1px solid var(--c-correct);
+  color: var(--c-text);
   font-size: 13px;
   font-weight: 600;
   text-align: center;
@@ -223,13 +225,13 @@
   align-items: stretch;
   padding: 0;
   border-radius: 8px;
-  border: 1px solid #3A3A3C;
-  background: #372F41;
+  border: 1px solid var(--c-border);
+  background: var(--c-panel);
   overflow: hidden;
 }
 
 .userCard-badgesModalItem .badgeIcon {
-  color: #B1A04C;
+  color: var(--c-text);
   flex-shrink: 0;
 }
 
@@ -247,7 +249,7 @@
 .userCard-badgesModalItemName {
   font-size: 14px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--c-text-strong);
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -257,7 +259,7 @@
 
 .userCard-badgesModalItemDesc {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--c-text);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;

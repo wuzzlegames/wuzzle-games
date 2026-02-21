@@ -75,10 +75,10 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
     return (
       <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
         <div style={{ padding: '24px' }}>
-          <h2 style={{ margin: 0, marginBottom: '16px', fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>
+          <h2 style={{ margin: 0, marginBottom: '16px', fontSize: 20, fontWeight: 'bold', color: 'var(--c-text-strong)' }}>
             Verify your email
           </h2>
-          <p style={{ marginBottom: '20px', color: '#d7dadc', fontSize: 14 }}>
+          <p style={{ marginBottom: '20px', color: 'var(--c-text)', fontSize: 14 }}>
             You must verify your email address or sign in with Google to play Multiplayer Mode.
           </p>
           <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
@@ -109,7 +109,7 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
     <>
       <Modal isOpen={isOpen && !showConfig} onRequestClose={onRequestClose} disableAutoFocus>
       <div style={{ padding: '24px' }}>
-        <h2 style={{ margin: 0, marginBottom: '24px', fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>
+        <h2 style={{ margin: 0, marginBottom: '24px', fontSize: 20, fontWeight: 'bold', color: 'var(--c-text-strong)' }}>
           Multiplayer Mode
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -121,7 +121,7 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
             >
               Host
             </button>
-            <p style={{ fontSize: 12, color: '#818384', marginTop: '8px', textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--c-text)', marginTop: '8px', textAlign: 'center' }}>
               Create a new room and share the code with friends.
             </p>
             <button
@@ -134,8 +134,8 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
             </button>
           </div>
 
-          <div style={{ borderTop: '1px solid #3a3a3c', paddingTop: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', color: '#d7dadc', fontSize: 14 }}>
+          <div style={{ borderTop: '1px solid var(--c-border)', paddingTop: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', color: 'var(--c-text)', fontSize: 14 }}>
               Enter Game Code:
             </label>
             <input
@@ -152,9 +152,9 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                 width: '100%',
                 padding: '12px',
                 borderRadius: 6,
-                border: `1px solid ${codeError ? '#ED2939' : '#3A3A3C'}`,
-                background: '#372F41',
-                color: '#ffffff',
+                border: `1px solid ${codeError ? 'var(--c-error)' : 'var(--c-border)'}`,
+                background: 'var(--c-panel)',
+                color: 'var(--c-text-strong)',
                 fontSize: 18,
                 textAlign: 'center',
                 letterSpacing: '4px',
@@ -163,7 +163,7 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
               }}
             />
             {codeError && (
-              <div style={{ color: '#f06272', fontSize: 12, marginBottom: '12px', textAlign: 'center' }}>
+              <div style={{ color: 'var(--c-text)', fontSize: 12, marginBottom: '12px', textAlign: 'center', border: '1px solid var(--c-error)', borderRadius: 8, padding: '8px 10px', background: 'var(--c-bg)' }}>
                 {codeError}
               </div>
             )}
@@ -213,7 +213,7 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
               marginBottom: '24px',
               fontSize: 20,
               fontWeight: 'bold',
-              color: '#ffffff',
+              color: 'var(--c-text-strong)',
             }}
           >
             Multiplayer Game Configuration
@@ -225,7 +225,7 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                 style={{
                   display: 'block',
                   marginBottom: '8px',
-                  color: '#d7dadc',
+                  color: 'var(--c-text)',
                   fontSize: 14,
                 }}
               >
@@ -239,9 +239,9 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                   width: '100%',
                   padding: '10px',
                   borderRadius: 6,
-                  border: '1px solid #3A3A3C',
-                  background: '#372F41',
-                  color: '#ffffff',
+                  border: '1px solid var(--c-border)',
+                  background: 'var(--c-panel)',
+                  color: 'var(--c-text-strong)',
                   fontSize: 14,
                   cursor: 'pointer',
                 }}
@@ -260,7 +260,7 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                   style={{
                     display: 'block',
                     marginBottom: '8px',
-                    color: '#d7dadc',
+                    color: 'var(--c-text)',
                     fontSize: 14,
                   }}
                 >
@@ -274,9 +274,9 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                     width: '100%',
                     padding: '10px',
                     borderRadius: 6,
-                    border: '1px solid #3A3A3C',
-                    background: '#372F41',
-                    color: '#ffffff',
+                    border: '1px solid var(--c-border)',
+                    background: 'var(--c-panel)',
+                    color: 'var(--c-text-strong)',
                     fontSize: 14,
                     cursor: 'pointer',
                   }}
@@ -296,7 +296,7 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                   display: 'block',
                   marginTop: '12px',
                   marginBottom: '8px',
-                  color: '#d7dadc',
+                  color: 'var(--c-text)',
                   fontSize: 14,
                 }}
               >
@@ -309,9 +309,9 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                   width: '100%',
                   padding: '10px',
                   borderRadius: 6,
-                  border: '1px solid #3A3A3C',
-                  background: '#372F41',
-                  color: '#ffffff',
+                  border: '1px solid var(--c-border)',
+                  background: 'var(--c-panel)',
+                  color: 'var(--c-text-strong)',
                   fontSize: 14,
                   cursor: 'pointer',
                 }}
@@ -329,14 +329,14 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                 style={{
                   display: 'block',
                   marginBottom: '6px',
-                  color: '#d7dadc',
+                  color: 'var(--c-text)',
                   fontSize: 14,
                 }}
               >
                 Room visibility
               </div>
               <div style={{ display: 'flex', gap: '12px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#d7dadc' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: 'var(--c-text)' }}>
                   <input
                     type="radio"
                     name="multiplayer-visibility"
@@ -346,7 +346,7 @@ export default function MultiplayerModal({ isOpen, onRequestClose, showConfigFir
                   />
                   Public (show in Open Rooms)
                 </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#d7dadc' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: 'var(--c-text)' }}>
                   <input
                     type="radio"
                     name="multiplayer-visibility"

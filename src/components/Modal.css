@@ -1,7 +1,6 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.82);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,8 +8,18 @@
   box-sizing: border-box;
 }
 
+.modalOverlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--c-bg);
+  opacity: 0.82;
+}
+
 .modalPanel {
-  background: #372F41;
+  position: relative;
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
   border-radius: 16px;
   padding: 24px;
   width: 100%;
@@ -18,7 +27,7 @@
   max-height: 80vh;
   overflow: auto;
   text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 20px 60px var(--c-bg);
   outline: none;
 }
 

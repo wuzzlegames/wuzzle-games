@@ -34,13 +34,13 @@ export default function SignInRequiredModal({
               marginBottom: '16px',
               fontSize: 20,
               fontWeight: 'bold',
-              color: '#ffffff',
+              color: 'var(--c-text-strong)',
             }}
           >
             {title}
           </h2>
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <p style={{ marginBottom: '20px', color: '#d7dadc' }}>{message}</p>
+            <p style={{ marginBottom: '20px', color: 'var(--c-text)' }}>{message}</p>
             <button
               onClick={handleSignInClick}
               className="homeBtn homeBtnGreen homeBtnLg"

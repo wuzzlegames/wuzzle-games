@@ -3,8 +3,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #212121;
-  color: #ffffff;
+  background-color: var(--c-bg);
+  color: var(--c-text-strong);
   padding: 20px;
 }
 
@@ -16,19 +16,19 @@
 .error-boundary-content h2 {
   font-size: 24px;
   margin-bottom: 16px;
-  color: #ffffff;
+  color: var(--c-text-strong);
 }
 
 .error-boundary-content p {
   font-size: 16px;
   margin-bottom: 24px;
-  color: #d7dadc;
+  color: var(--c-text);
 }
 
 .error-boundary-details {
   margin: 24px 0;
   text-align: left;
-  background-color: #372F41;
+  background-color: var(--c-panel);
   padding: 16px;
   border-radius: 8px;
 }
@@ -36,7 +36,7 @@
 .error-boundary-details summary {
   cursor: pointer;
   margin-bottom: 12px;
-  color: #d7dadc;
+  color: var(--c-text);
   font-weight: 500;
 }
 
@@ -44,7 +44,7 @@
   white-space: pre-wrap;
   word-wrap: break-word;
   font-size: 12px;
-  color: #ED2939;
+  color: var(--c-text);
   margin: 8px 0;
 }
 
@@ -61,20 +61,20 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  background-color: #e56b6f;
-  color: #ffffff;
+  background-color: var(--c-accent-1);
+  color: var(--c-text-strong);
   font-weight: 500;
-  transition: background-color 0.2s;
+  transition: opacity 0.2s;
 }
 
 .error-boundary-button:hover {
-  background-color: #eaac8b;
+  opacity: 0.9;
 }
 
 .error-boundary-button-secondary {
-  background-color: #355070;
+  background-color: var(--c-panel);
 }
 
 .error-boundary-button-secondary:hover {
-  background-color: #6d597a;
+  background-color: var(--c-accent-2);
 }

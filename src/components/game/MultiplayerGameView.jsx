@@ -71,8 +71,8 @@ export default function MultiplayerGameView({
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#212121",
-          color: "#ffffff",
+          backgroundColor: "var(--c-bg)",
+          color: "var(--c-text-strong)",
         }}
       >
         <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
@@ -100,8 +100,8 @@ export default function MultiplayerGameView({
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "#212121",
-            color: "#ffffff",
+            backgroundColor: "var(--c-bg)",
+            color: "var(--c-text-strong)",
           }}
         >
           <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
@@ -129,7 +129,7 @@ export default function MultiplayerGameView({
               style={{
                 maxWidth: 480,
                 fontSize: 14,
-                color: "#d7dadc",
+                color: "var(--c-text)",
                 marginBottom: 24,
                 lineHeight: 1.6,
               }}
@@ -176,7 +176,7 @@ export default function MultiplayerGameView({
   if (gameState && gameState.status === "cancelled") {
     const declinedBy = gameState.cancelledByName || "Your friend";
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "#212121", color: "#ffffff" }}>
+      <div style={{ minHeight: "100vh", backgroundColor: "var(--c-bg)", color: "var(--c-text-strong)" }}>
         <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
         <div
           style={{
@@ -190,7 +190,7 @@ export default function MultiplayerGameView({
           }}
         >
           <h2 style={{ fontSize: 22, fontWeight: "bold", marginBottom: 16 }}>Multiplayer Challenge</h2>
-          <p style={{ fontSize: 16, color: "#d7dadc", marginBottom: 16 }}>
+          <p style={{ fontSize: 16, color: "var(--c-text)", marginBottom: 16 }}>
             {declinedBy} has declined the challenge.
           </p>
           <button
@@ -199,8 +199,8 @@ export default function MultiplayerGameView({
               padding: "10px 18px",
               borderRadius: 8,
               border: "none",
-              background: "#e56b6f",
-              color: "#ffffff",
+              background: "var(--c-accent-1)",
+              color: "var(--c-text-strong)",
               fontSize: 14,
               fontWeight: "bold",
               cursor: "pointer",
@@ -232,7 +232,7 @@ export default function MultiplayerGameView({
     const roomName = gameState.roomName || null;
 
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "#212121", color: "#ffffff" }}>
+      <div style={{ minHeight: "100vh", backgroundColor: "var(--c-bg)", color: "var(--c-text-strong)" }}>
         <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
         <GameHeader
           mode={mode}
@@ -284,8 +284,8 @@ export default function MultiplayerGameView({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#212121",
-          color: "#ffffff",
+          backgroundColor: "var(--c-bg)",
+          color: "var(--c-text-strong)",
           flexDirection: "column",
           gap: "16px",
           padding: "20px",
@@ -294,7 +294,7 @@ export default function MultiplayerGameView({
         <div style={{ textAlign: "center", fontSize: 18 }}>
           The host has left the room
         </div>
-        <div style={{ color: "#9ca3af", textAlign: "center", fontSize: 14 }}>
+        <div style={{ color: "var(--c-text)", textAlign: "center", fontSize: 14 }}>
           {ROOM_CLOSED_MESSAGE}
         </div>
         <button
@@ -303,8 +303,8 @@ export default function MultiplayerGameView({
             padding: "12px 24px",
             borderRadius: 8,
             border: "none",
-            background: "#e56b6f",
-            color: "#ffffff",
+            background: "var(--c-accent-1)",
+            color: "var(--c-text-strong)",
             fontSize: 16,
             fontWeight: "bold",
             cursor: "pointer",
@@ -325,14 +325,14 @@ export default function MultiplayerGameView({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#212121",
-          color: "#ffffff",
+          backgroundColor: "var(--c-bg)",
+          color: "var(--c-text-strong)",
           flexDirection: "column",
           gap: "16px",
           padding: "20px",
         }}
       >
-        <div style={{ color: "#f06272", textAlign: "center" }}>
+        <div style={{ color: "var(--c-text)", textAlign: "center", border: "1px solid var(--c-error)", borderRadius: 12, padding: "12px 14px", background: "var(--c-panel)" }}>
           Error: {multiplayerGame.error}
         </div>
         <button
@@ -341,8 +341,8 @@ export default function MultiplayerGameView({
             padding: "12px 24px",
             borderRadius: 8,
             border: "none",
-            background: "#e56b6f",
-            color: "#ffffff",
+            background: "var(--c-accent-1)",
+            color: "var(--c-text-strong)",
             fontSize: 16,
             fontWeight: "bold",
             cursor: "pointer",
@@ -369,8 +369,8 @@ export default function MultiplayerGameView({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#212121",
-          color: "#ffffff",
+          backgroundColor: "var(--c-bg)",
+          color: "var(--c-text-strong)",
           flexDirection: "column",
           gap: "16px",
         }}
@@ -387,8 +387,8 @@ export default function MultiplayerGameView({
                 padding: "10px 18px",
                 borderRadius: 8,
                 border: "none",
-                background: "#e56b6f",
-                color: "#ffffff",
+                background: "var(--c-accent-1)",
+                color: "var(--c-text-strong)",
                 fontSize: 14,
                 fontWeight: "bold",
                 cursor: "pointer",
@@ -419,8 +419,8 @@ export default function MultiplayerGameView({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#212121",
-            color: "#ffffff",
+            backgroundColor: "var(--c-bg)",
+            color: "var(--c-text-strong)",
             flexDirection: "column",
             gap: "16px",
             textAlign: "center",
@@ -434,8 +434,8 @@ export default function MultiplayerGameView({
               padding: "10px 18px",
               borderRadius: 8,
               border: "none",
-              background: "#e56b6f",
-              color: "#ffffff",
+              background: "var(--c-accent-1)",
+              color: "var(--c-text-strong)",
               fontSize: 14,
               fontWeight: "bold",
               cursor: "pointer",
@@ -594,8 +594,8 @@ export default function MultiplayerGameView({
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#212121",
-          color: "#ffffff",
+          backgroundColor: "var(--c-bg)",
+          color: "var(--c-text-strong)",
         }}
       >
         <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
@@ -611,7 +611,7 @@ export default function MultiplayerGameView({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "rgba(18, 18, 19, 0.95)",
+                backgroundColor: "var(--c-bg)",
                 zIndex: 9999,
               }}
               aria-live="polite"
@@ -622,7 +622,7 @@ export default function MultiplayerGameView({
                   fontSize: 48,
                   fontWeight: "bold",
                   letterSpacing: 4,
-                  color: "#ffffff",
+                  color: "var(--c-text-strong)",
                   textAlign: "center",
                 }}
               >
@@ -654,7 +654,7 @@ export default function MultiplayerGameView({
               style={{
                 padding: "0 16px 8px",
                 fontSize: 12,
-                color: "#d7dadc",
+                color: "var(--c-text)",
                 textTransform: "uppercase",
                 fontWeight: "normal",
                 whiteSpace: "nowrap",
@@ -681,7 +681,7 @@ export default function MultiplayerGameView({
               <div
                 style={{
                   fontSize: 11,
-                  color: "#9ca3af",
+                  color: "var(--c-text)",
                   textAlign: "center",
                   marginBottom: 4,
                 }}
@@ -695,8 +695,8 @@ export default function MultiplayerGameView({
                 marginBottom: 4,
                 padding: "10px 12px",
                 borderRadius: 8,
-                border: "1px solid #3A3A3C",
-                background: "#372F41",
+                border: "1px solid var(--c-border)",
+                background: "var(--c-panel)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
@@ -707,7 +707,7 @@ export default function MultiplayerGameView({
               <div
                 style={{
                   fontSize: 12,
-                  color: "#d7dadc",
+                  color: "var(--c-text)",
                   textTransform: "uppercase",
                   letterSpacing: 0.5,
                 }}
@@ -724,7 +724,7 @@ export default function MultiplayerGameView({
                       fontSize: 22,
                       fontWeight: "bold",
                       letterSpacing: 1,
-                      color: "#ffffff",
+                      color: "var(--c-text-strong)",
                     }}
                   >
                     {(() => {
@@ -759,7 +759,7 @@ export default function MultiplayerGameView({
                     style={{
                       fontSize: 18,
                       fontWeight: "bold",
-                      color: "#ffffff",
+                      color: "var(--c-text-strong)",
                     }}
                   >
                     Your guesses: {myGuesses.length}/{maxTurns}
@@ -771,7 +771,7 @@ export default function MultiplayerGameView({
               <div
                 style={{
                   fontSize: 12,
-                  color: "#d7dadc",
+                  color: "var(--c-text)",
                   textTransform: "uppercase",
                   letterSpacing: 0.5,
                   textAlign: "right",
@@ -789,7 +789,7 @@ export default function MultiplayerGameView({
               style={{
                 textAlign: "center",
                 fontSize: 14,
-                color: "#d7dadc",
+                color: "var(--c-text)",
                 marginBottom: "8px",
               }}
             >
@@ -803,14 +803,14 @@ export default function MultiplayerGameView({
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: 12, color: "#818384" }}>
+                    <div style={{ fontSize: 12, color: "var(--c-text)" }}>
                       Your Guesses
                     </div>
                     <div
                       style={{
                         fontSize: 18,
                         fontWeight: "bold",
-                        color: "#ffffff",
+                        color: "var(--c-text-strong)",
                       }}
                     >
                       {myGuessCount}
@@ -821,7 +821,7 @@ export default function MultiplayerGameView({
                 <div
                   style={{
                     fontSize: 12,
-                    color: "#818384",
+                    color: "var(--c-text)",
                     textAlign: "center",
                   }}
                 >
@@ -847,8 +847,8 @@ export default function MultiplayerGameView({
                     fontWeight: 600,
                     border: "none",
                     borderRadius: 8,
-                    background: "#50a339",
-                    color: "#ffffff",
+                    background: "var(--c-correct)",
+                    color: "var(--c-text-strong)",
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
@@ -876,7 +876,7 @@ export default function MultiplayerGameView({
                   <div
                     style={{
                       fontSize: 14,
-                      color: "#818384",
+                      color: "var(--c-text)",
                       marginBottom: "8px",
                       textAlign: "center",
                     }}
@@ -914,14 +914,14 @@ export default function MultiplayerGameView({
                   marginTop: 16,
                   padding: "12px 12px 10px",
                   borderRadius: 8,
-                  border: "1px solid #3A3A3C",
-                  background: "#372F41",
+                  border: "1px solid var(--c-border)",
+                  background: "var(--c-panel)",
                 }}
               >
                 <div
                   style={{
                     fontSize: 13,
-                    color: "#d7dadc",
+                    color: "var(--c-text)",
                     marginBottom: 8,
                     textAlign: "left",
                     fontWeight: "bold",
@@ -949,7 +949,7 @@ export default function MultiplayerGameView({
                         style={{
                           padding: "8px 8px 6px",
                           borderRadius: 6,
-                          background: "#372F41",
+                          background: "var(--c-panel)",
                           display: "flex",
                           flexDirection: "column",
                           gap: 4,
@@ -972,7 +972,7 @@ export default function MultiplayerGameView({
                             <div
                               style={{
                                 fontSize: 11,
-                                color: isSelf ? "#50a339" : "#B1A04C", // Highlight current player's time
+                                color: isSelf ? "var(--c-correct)" : "var(--c-present)", // Highlight current player's time
                               }}
                             >
                               {renderSpeedrunTimeForPlayer(p.id)}
@@ -981,7 +981,7 @@ export default function MultiplayerGameView({
                             <div
                               style={{
                                 fontSize: 11,
-                                color: "#9ca3af",
+                                color: "var(--c-text)",
                               }}
                             >
                               Total guesses: {guesses.length}
@@ -994,7 +994,7 @@ export default function MultiplayerGameView({
                             flexDirection: "column",
                             gap: 4,
                             fontSize: 11,
-                            color: "#d7dadc",
+                            color: "var(--c-text)",
                           }}
                         >
                           {perBoard.map((b) => {
@@ -1018,7 +1018,7 @@ export default function MultiplayerGameView({
                                 style={{
                                   padding: "4px 6px",
                                   borderRadius: 4,
-                                  background: "#372F41",
+                                  background: "var(--c-panel)",
                                 }}
                               >
                                 {summaryText}
@@ -1063,14 +1063,14 @@ export default function MultiplayerGameView({
                     padding: "12px 24px",
                     borderRadius: 10,
                     border: "none",
-                    background: "#e56b6f",
-                    color: "#ffffff",
+                    background: "var(--c-accent-1)",
+                    color: "var(--c-text-strong)",
                     fontSize: 14,
                     fontWeight: "bold",
                     cursor: "pointer",
                     letterSpacing: 1,
                     textTransform: "uppercase",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                    boxShadow: "0 4px 12px var(--c-bg)",
                   }}
                 >
                   Rematch
@@ -1083,15 +1083,15 @@ export default function MultiplayerGameView({
                   style={{
                     padding: "12px 18px",
                     borderRadius: 10,
-                    border: "1px solid #3A3A3C",
-                    background: isPlayerHost ? "#372F41" : "#355070",
-                    color: "#ffffff",
+                    border: "1px solid var(--c-border)",
+                    background: isPlayerHost ? "var(--c-panel)" : "var(--c-panel)",
+                    color: "var(--c-text-strong)",
                     fontSize: 14,
                     fontWeight: "bold",
                     cursor: "pointer",
                     letterSpacing: 1,
                     textTransform: "uppercase",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                    boxShadow: "0 4px 12px var(--c-bg)",
                   }}
                 >
                   {isPlayerHost ? "Change mode" : "View config"}

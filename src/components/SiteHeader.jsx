@@ -141,8 +141,8 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
       <header
         style={{
           padding: "10px 16px 8px",
-          borderBottom: "1px solid #3A3A3C",
-          backgroundColor: "#212121",
+          borderBottom: "1px solid var(--c-border)",
+          backgroundColor: "var(--c-bg)",
           marginBottom: "12px",
         }}
       >
@@ -167,7 +167,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
               alignItems: "center",
               justifyContent: "center",
               borderRadius: 4,
-              border: "1px solid #3A3A3C",
+              border: "1px solid var(--c-border)",
               background: "transparent",
               cursor: "pointer",
               padding: 0,
@@ -182,7 +182,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
             >
               <path
                 d="M4 10.5L12 3L20 10.5V20H14V14H10V20H4V10.5Z"
-                stroke="#ffffff"
+                stroke="var(--c-text-strong)"
                 strokeWidth="1.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -220,7 +220,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
                   alignItems: "center",
                   justifyContent: "center",
                   borderRadius: 4,
-                  border: "1px solid #3A3A3C",
+                  border: "1px solid var(--c-border)",
                   background: "transparent",
                   cursor: "pointer",
                   padding: 0,
@@ -236,7 +236,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
                 >
                   <path
                     d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
-                    fill="#ffffff"
+                    fill="var(--c-text-strong)"
                   />
                 </svg>
                 {unseenCount > 0 && (
@@ -248,8 +248,8 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
                       minWidth: 18,
                       height: 18,
                       borderRadius: 9,
-                      background: "#ED2939",
-                      color: "#ffffff",
+                      background: "var(--c-error)",
+                      color: "var(--c-text-strong)",
                       fontSize: 11,
                       fontWeight: "bold",
                       display: "flex",
@@ -284,7 +284,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
           <div
             style={{
               fontSize: 12,
-              color: "#d7dadc",
+              color: "var(--c-text)",
               whiteSpace: "nowrap",
             }}
           >
@@ -356,7 +356,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
               flexWrap: "wrap",
             }}
           >
-            <span style={{ fontSize: 12, color: "#d7dadc" }}>Signed in as</span>
+            <span style={{ fontSize: 12, color: "var(--c-text)" }}>Signed in as</span>
             <UserCard
               username={user.displayName || user.email || "Unknown user"}
               onClick={() => navigate("/profile")}
@@ -374,8 +374,8 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
                   fontSize: 12,
                   textTransform: "uppercase",
                   letterSpacing: 0.5,
-                  background: "#e56b6f",
-                  color: "#ffffff",
+                  background: "var(--c-accent-1)",
+                  color: "var(--c-text-strong)",
                   border: "none",
                   borderRadius: 4,
                   cursor: "pointer",

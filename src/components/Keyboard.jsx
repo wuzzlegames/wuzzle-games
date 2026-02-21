@@ -25,12 +25,12 @@ export default function Keyboard({
 
             const isMultiNoFocus = numBoards > 1 && selectedBoardIndex == null;
 
-            let baseBg = "#3A3A3C";
+            let baseBg = "var(--c-panel)";
 
             if (!isMultiNoFocus && isLetter) {
               const map = selectedBoardIndex == null ? perBoardLetterMaps[0] : focusedLetterMap;
               const status = map && map[key] ? map[key] : "none";
-              baseBg = status === "none" ? "#3A3A3C" : colorForStatus(status);
+              baseBg = status === "none" ? "var(--c-panel)" : colorForStatus(status);
             }
 
             const display =

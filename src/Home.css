@@ -1,7 +1,7 @@
 .homeRoot {
   min-height: 100vh;
-  background: #212121;
-  color: #ffffff;
+  background: var(--c-bg);
+  color: var(--c-text-strong);
   padding: 20px;
   max-width: 100vw;
   overflow-x: hidden;
@@ -19,7 +19,7 @@
   gap: 20px;
   margin-bottom: 24px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #3A3A3C;
+  border-bottom: 1px solid var(--c-border);
 }
 
 .homeTitle {
@@ -46,14 +46,14 @@
 
 .resetTimer {
   font-size: 11px;
-  color: #818384;
+  color: var(--c-text);
   white-space: nowrap;
   letter-spacing: 0.3px;
 }
 
 .userInfo {
   font-size: 12px;
-  color: #d7dadc;
+  color: var(--c-text);
   white-space: nowrap;
   font-weight: 500;
 }
@@ -65,10 +65,10 @@
 }
 
 .panel {
-  border: 1px solid #3A3A3C;
+  border: 1px solid var(--c-border);
   border-radius: 14px;
-  background: #372F41;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  background: var(--c-panel);
+  box-shadow: 0 8px 20px var(--c-bg);
   padding: 20px;
   margin-bottom: 18px;
 }
@@ -87,11 +87,11 @@
   font-size: 19px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #e5e7eb;
+  color: var(--c-text);
 }
 
 .panelDesc {
-  color: #9ca3af;
+  color: var(--c-text);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -111,22 +111,22 @@
 }
 
 .label {
-  color: #d7dadc;
+  color: var(--c-text);
   font-size: 12px;
   letter-spacing: 0.2px;
 }
 
 .select {
-  background: #212121;
-  color: #ffffff;
-  border: 1px solid #3A3A3C;
+  background: var(--c-bg);
+  color: var(--c-text-strong);
+  border: 1px solid var(--c-border);
   border-radius: 10px;
   padding: 10px 12px;
   outline: none;
 }
 
 .select:focus {
-  border-color: #6d597a;
+  border-color: var(--c-accent-2);
 }
 
 /* Mode rows */
@@ -137,54 +137,54 @@
   justify-content: center;
   gap: 8px;
 
-  border: 1px solid #3A3A3C;
+  border: 1px solid var(--c-border);
   border-radius: 12px;
   padding: 16px 14px;
-  background: #372F41;
+  background: var(--c-panel);
 
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
 }
 
 .modeRow--daily {
-  /* Daily modes: soft green accent + subtle glow */
-  border-color: #50a339;
-  box-shadow: 0 0 0 1px rgba(80, 163, 57, 0.3);
-  background: linear-gradient(0deg, rgba(80, 163, 57, 0.06), #372F41);
+  /* Daily modes: green accent */
+  border-color: var(--c-correct);
+  box-shadow: 0 0 0 1px var(--c-correct);
+  background: var(--c-panel);
 }
 
 .modeRow--speedrun {
-  /* Speedrun modes: red accent + subtle glow */
-  border-color: #ED2939;
-  box-shadow: 0 0 0 1px rgba(237, 41, 57, 0.32);
-  background: linear-gradient(0deg, rgba(237, 41, 57, 0.06), #372F41);
+  /* Speedrun modes: red accent */
+  border-color: var(--c-error);
+  box-shadow: 0 0 0 1px var(--c-error);
+  background: var(--c-panel);
 }
 
 .modeRow--marathon {
-  /* Marathon modes: amber/yellow accent + subtle glow */
-  border-color: #B1A04C;
-  box-shadow: 0 0 0 1px rgba(177, 160, 76, 0.32);
-  background: linear-gradient(0deg, rgba(177, 160, 76, 0.06), #372F41);
+  /* Marathon modes: amber accent */
+  border-color: var(--c-present);
+  box-shadow: 0 0 0 1px var(--c-present);
+  background: var(--c-panel);
 }
 
 .modeRow--pvp {
-  /* Multiplayer: warm red accent + subtle glow */
-  border-color: #ED2939;
-  box-shadow: 0 0 0 1px rgba(237, 41, 57, 0.32);
-  background: linear-gradient(0deg, rgba(237, 41, 57, 0.06), #372F41);
+  /* Multiplayer: warm red accent */
+  border-color: var(--c-error);
+  box-shadow: 0 0 0 1px var(--c-error);
+  background: var(--c-panel);
 }
 
 .modeRow:hover {
-  background: #6d597a;
+  background: var(--c-accent-2);
 }
 
 .modeRow:active {
-  background: #372F41;
+  background: var(--c-panel);
 }
 
 .modeRow:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(177, 160, 76, 0.4);
+  box-shadow: 0 0 0 2px var(--c-present);
 }
 
 .modeRowText {
@@ -211,28 +211,28 @@
 }
 
 .modeRow--green .modeRowCtaLabel {
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
 }
 
 .modeRow--green:hover .modeRowCtaLabel {
-  background: #eaac8b;
+  filter: brightness(1.05);
 }
 
 .modeRow--gold .modeRowCtaLabel {
-  background: #B1A04C;
-  color: #212121;
+  background: var(--c-present);
+  color: var(--c-text);
 }
 
 .modeRow--gold:hover .modeRowCtaLabel {
-  background: #eaac8b;
+  filter: brightness(1.05);
 }
 
 .modeRowTitle {
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.3px;
-  color: #ffffff;
+  color: var(--c-text-strong);
   display: flex;
   align-items: baseline;
   justify-content: center;
@@ -243,18 +243,18 @@
 .modeRowTitleRight {
   font-size: 12px;
   font-weight: 600;
-  color: #e5e7eb;
-  border: 1px solid #3A3A3C;
-  background: rgba(53, 80, 112, 0.9);
+  color: var(--c-text);
+  border: 1px solid var(--c-border);
+  background: var(--c-bg);
   padding: 2px 10px;
   border-radius: 999px;
 }
 
 .modeRowTitleSelect {
   /* Explicit dark styling for native <select> (prevents white-on-white rendering) */
-  background: #212121;
-  color: #ffffff;
-  border: 1px solid #3A3A3C;
+  background: var(--c-bg);
+  color: var(--c-text-strong);
+  border: 1px solid var(--c-border);
   border-radius: 8px;
   font-size: 12px;
   font-weight: 600;
@@ -266,18 +266,18 @@
 }
 
 .modeRowTitleSelect:focus-visible {
-  border-color: #6d597a;
-  box-shadow: 0 0 0 2px rgba(109, 89, 122, 0.35);
+  border-color: var(--c-accent-2);
+  box-shadow: 0 0 0 2px var(--c-accent-2);
 }
 
 .modeRowTitleSelect option {
-  background: #212121;
-  color: #ffffff;
+  background: var(--c-bg);
+  color: var(--c-text-strong);
 }
 
 .modeRowDesc {
   margin-top: 4px;
-  color: #9ca3af;
+  color: var(--c-text);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -291,17 +291,17 @@
 }
 
 .metaLine {
-  color: #d7dadc;
+  color: var(--c-text);
   font-size: 13px;
 }
 
 .metaStrong {
-  color: #ffffff;
+  color: var(--c-text-strong);
   font-weight: 700;
 }
 
 .metaHint {
-  color: #9aa0a6;
+  color: var(--c-text);
   font-size: 12px;
   line-height: 1.35;
 }
@@ -314,12 +314,12 @@
   justify-content: space-between;
   gap: 10px;
 
-  border-top: 1px solid #3A3A3C;
+  border-top: 1px solid var(--c-border);
   padding-top: 12px;
 }
 
 .resetText {
-  color: #9ca3af;
+  color: var(--c-text);
   font-size: 12px;
 }
 
@@ -330,20 +330,18 @@
 
 .homeIntroDetails {
   border-radius: 16px;
-  border: 1px solid #3A3A3C;
+  border: 1px solid var(--c-border);
   padding: 14px 16px 16px;
-  background:
-    linear-gradient(0deg, rgba(80, 163, 57, 0.04), rgba(177, 160, 76, 0.03)),
-    #372F41;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
-  color: #e5e7eb;
+  background: var(--c-panel);
+  box-shadow: 0 8px 20px var(--c-bg);
+  color: var(--c-text);
 }
 
 .homeIntroSummary {
   cursor: pointer;
   font-size: 13px;
   letter-spacing: 0.06em;
-  color: #9ca3af;
+  color: var(--c-text);
 }
 
 .homeIntroSummary::-webkit-details-marker {
@@ -352,15 +350,15 @@
 
 .homeIntroParagraph {
   margin-top: 10px;
-  color: #9ca3af;
+  color: var(--c-text);
   font-size: 13px;
   line-height: 1.6;
 }
 
 .homeLink {
-  color: #50a339;
+  color: var(--c-text);
   font-weight: 500;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .homeLink:hover {
@@ -390,35 +388,35 @@
 }
 
 .homeBtnGreen {
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
   transition: all 0.2s ease;
 }
 
 .homeBtnGreen:hover {
-  background: #eaac8b;
+  filter: brightness(1.05);
 }
 
 .homeBtnGold {
-  background: #B1A04C;
-  color: #212121;
+  background: var(--c-present);
+  color: var(--c-text);
   transition: all 0.2s ease;
 }
 
 .homeBtnGold:hover {
-  background: #eaac8b;
+  filter: brightness(1.05);
 }
 
 .homeBtnOutline {
-  border: 1px solid #3A3A3C;
-  background: #e56b6f;
-  color: #ffffff;
+  border: 1px solid var(--c-border);
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
   transition: all 0.2s ease;
 }
 
 .homeBtnOutline:hover {
-  background: #eaac8b;
-  border-color: #eaac8b;
+  filter: brightness(1.05);
+  border-color: var(--c-border-strong);
 }
 
 .homeBtn:active {
@@ -427,7 +425,7 @@
 
 .homeBtn:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(177, 160, 76, 0.25);
+  box-shadow: 0 0 0 3px var(--c-present);
 }
 
 /* Larger buttons for modals and primary actions */
@@ -439,20 +437,20 @@
 
 /* Neutral gray button using the same typography */
 .homeBtnNeutral {
-  background: #355070;
-  color: #ffffff;
+  background: var(--c-panel);
+  color: var(--c-text-strong);
   transition: all 0.2s ease;
 }
 
 .homeBtnNeutral:hover {
-  background: #6d597a;
+  background: var(--c-accent-2);
 }
 
 /* Tab bar */
 .homeTabBar {
   display: flex;
   gap: 4px;
-  background: #2a2a2e;
+  background: var(--c-panel);
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 18px;
@@ -464,7 +462,7 @@
   border: none;
   border-radius: 10px;
   background: transparent;
-  color: #9ca3af;
+  color: var(--c-text);
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -474,18 +472,18 @@
 }
 
 .homeTab:hover {
-  background: rgba(109, 89, 122, 0.3);
-  color: #e5e7eb;
+  background: var(--c-bg);
+  color: var(--c-text);
 }
 
 .homeTab--active {
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
 }
 
 .homeTab--active:hover {
-  background: #e56b6f;
-  color: #ffffff;
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
 }
 
 /* Single Player grid */
@@ -509,7 +507,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #9ca3af;
+  color: var(--c-text);
 }
 
 .spGridRowGroup {
@@ -531,7 +529,7 @@
 .spGridRowLabel {
   font-size: 14px;
   font-weight: 700;
-  color: #e5e7eb;
+  color: var(--c-text);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -548,9 +546,9 @@
 }
 
 .spGridSelect {
-  background: #212121;
-  color: #ffffff;
-  border: 1px solid #3A3A3C;
+  background: var(--c-bg);
+  color: var(--c-text-strong);
+  border: 1px solid var(--c-border);
   border-radius: 8px;
   padding: 5px 8px;
   font-size: 12px;
@@ -559,7 +557,7 @@
 }
 
 .spGridSelect:focus {
-  border-color: #6d597a;
+  border-color: var(--c-accent-2);
 }
 
 .spGridRow {
@@ -582,16 +580,16 @@
   justify-content: center;
   gap: 6px;
   padding: 20px 14px;
-  border: 1px solid #B1A04C;
+  border: 1px solid var(--c-present);
   border-radius: 12px;
-  background: linear-gradient(0deg, rgba(177, 160, 76, 0.06), #372F41);
-  box-shadow: 0 0 0 1px rgba(177, 160, 76, 0.32);
+  background: var(--c-panel);
+  box-shadow: 0 0 0 1px var(--c-present);
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
 }
 
 .mpGridBtn:hover {
-  background: #6d597a;
+  background: var(--c-accent-2);
 }
 
 .mpGridBtn:active {
@@ -600,7 +598,7 @@
 
 .mpGridBtn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(177, 160, 76, 0.4);
+  box-shadow: 0 0 0 2px var(--c-present);
 }
 
 .mpGridBtn--disabled {
@@ -609,7 +607,7 @@
 }
 
 .mpGridBtn--disabled:hover {
-  background: linear-gradient(0deg, rgba(177, 160, 76, 0.06), #372F41);
+  background: var(--c-panel);
 }
 
 .mpGridBtn--disabled:active {
@@ -619,13 +617,13 @@
 .mpGridBtnTitle {
   font-size: 14px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--c-text-strong);
   text-align: center;
 }
 
 .mpGridBtnDesc {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--c-text);
   text-align: center;
   line-height: 1.4;
 }
@@ -634,15 +632,15 @@
 .mpJoinInline {
   margin-top: 12px;
   padding: 16px;
-  border: 1px solid #3A3A3C;
+  border: 1px solid var(--c-border);
   border-radius: 12px;
-  background: #2a2a2e;
+  background: var(--c-panel);
 }
 
 .mpJoinLabel {
   display: block;
   margin-bottom: 8px;
-  color: #d7dadc;
+  color: var(--c-text);
   font-size: 14px;
 }
 
@@ -650,9 +648,9 @@
   width: 100%;
   padding: 12px;
   border-radius: 6px;
-  border: 1px solid #3A3A3C;
-  background: #372F41;
-  color: #ffffff;
+  border: 1px solid var(--c-border);
+  background: var(--c-panel);
+  color: var(--c-text-strong);
   font-size: 18px;
   text-align: center;
   letter-spacing: 4px;
@@ -663,18 +661,22 @@
 }
 
 .mpJoinInput:focus {
-  border-color: #6d597a;
+  border-color: var(--c-accent-2);
 }
 
 .mpJoinInput--error {
-  border-color: #ED2939;
+  border-color: var(--c-error);
 }
 
 .mpJoinError {
-  color: #f06272;
+  color: var(--c-text);
   font-size: 12px;
   margin-bottom: 12px;
   text-align: center;
+  border: 1px solid var(--c-error);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: var(--c-bg);
 }
 
 @media (max-width: 768px) {

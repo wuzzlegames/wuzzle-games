@@ -39,6 +39,53 @@
   gap: 16px;
   margin-bottom: 24px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Tab bar (mirrors Home page tabs) */
+.leaderboardTabBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: var(--c-panel);
+  border-radius: 12px;
+  padding: 4px;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.leaderboardTab {
+  flex: 1 1 140px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--c-text);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  text-transform: uppercase;
+  white-space: normal;
+  line-height: 1.1;
+}
+
+.leaderboardTab:hover {
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+
+.leaderboardTab--active {
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
+}
+
+.leaderboardTab--active:hover {
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
 }
 
 .filterGroup {

@@ -52,26 +52,18 @@ describe('Leaderboard component', () => {
   });
 
   it('toggles mode between daily and marathon and passes args to useLeaderboard', async () => {
-    const { rerender } = render(<Leaderboard />);
+    render(<Leaderboard />);
 
     await screen.findByRole('heading', { name: /speedrun leaderboard/i });
-
-    const modeSelect = screen.getAllByRole('combobox')[0];
-    expect(modeSelect).toHaveValue('daily');
 
     // Initial call should be for daily mode, default boards=1, limit 100
     expect(useLeaderboard).toHaveBeenCalledWith('daily', 1, 100);
 
-    fireEvent.change(modeSelect, { target: { value: 'marathon' } });
+    // Switch to marathon via tab
+    fireEvent.click(screen.getByRole('tab', { name: /marathon/i }));
 
-    // Re-render to reflect updated hook calls
-    rerender(<Leaderboard />);
-
-    expect(modeSelect).toHaveValue('marathon');
-    const calls = useLeaderboard.mock.calls;
-    expect(
-      calls.some(([mode, boards, limit]) => mode === 'marathon' && boards === null && limit === 100)
-    ).toBe(true);
+    expect(useLeaderboard).toHaveBeenCalledWith('marathon', null, 100);
+    expect(screen.getByRole('tab', { name: /marathon/i }).className).toContain('leaderboardTab--active');
   });
 
   it('shows boards filter only for daily mode and supports selecting board counts', async () => {
@@ -80,8 +72,7 @@ describe('Leaderboard component', () => {
     await screen.findByRole('heading', { name: /speedrun leaderboard/i });
 
     // Daily mode by default: boards filter visible
-    const selects = screen.getAllByRole('combobox');
-    const boardsSelect = selects[1];
+    const boardsSelect = screen.getByRole('combobox');
     expect(boardsSelect).toBeInTheDocument();
     expect(boardsSelect).toHaveValue('1');
     expect(screen.getByRole('option', { name: '1' })).toBeInTheDocument();
@@ -94,11 +85,9 @@ describe('Leaderboard component', () => {
     expect(calls.some(([mode, boards]) => mode === 'daily' && boards === 4)).toBe(true);
 
     // Switch to solution hunt mode: boards filter should disappear
-    const modeSelect = screen.getAllByRole('combobox')[0];
-    fireEvent.change(modeSelect, { target: { value: 'solutionhunt' } });
+    fireEvent.click(screen.getByRole('tab', { name: /solution hunt/i }));
 
-    // After switching away from daily, only one combobox (mode) should remain
-    expect(screen.getAllByRole('combobox').length).toBe(1);
+    expect(screen.queryByRole('combobox')).toBeNull();
   });
 
   it('renders rows with correct rank, fields, and highlights current user', async () => {

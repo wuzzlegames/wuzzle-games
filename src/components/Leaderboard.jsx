@@ -42,21 +42,34 @@ export default function Leaderboard() {
         <h1 className="leaderboardTitle">Speedrun Leaderboard</h1>
 
         <div className="leaderboardFilters">
-          <div className="filterGroup">
-            <label className="filterLabel">Mode:</label>
-            <select
-              className="filterSelect"
-              value={mode}
-              onChange={(e) => {
-                const nextMode = e.target.value;
-                setMode(nextMode);
-                setNumBoards(nextMode === 'daily' ? 1 : null);
-              }}
+          <div className="leaderboardTabBar" role="tablist" aria-label="Leaderboard mode">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'daily'}
+              className={`leaderboardTab${mode === 'daily' ? ' leaderboardTab--active' : ''}`}
+              onClick={() => setMode('daily')}
             >
-              <option value="daily">Daily</option>
-              <option value="solutionhunt">Solution Hunt</option>
-              <option value="marathon">Marathon</option>
-            </select>
+              Daily
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'solutionhunt'}
+              className={`leaderboardTab${mode === 'solutionhunt' ? ' leaderboardTab--active' : ''}`}
+              onClick={() => setMode('solutionhunt')}
+            >
+              Solution Hunt
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'marathon'}
+              className={`leaderboardTab${mode === 'marathon' ? ' leaderboardTab--active' : ''}`}
+              onClick={() => setMode('marathon')}
+            >
+              Marathon
+            </button>
           </div>
 
           {mode === 'daily' && (

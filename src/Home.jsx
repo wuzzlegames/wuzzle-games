@@ -568,7 +568,7 @@ export default function Home({
                   tabIndex={-1}
                   aria-disabled="true"
                 >
-                  <div className="mpGridBtnTitle">Ranked Mode</div>
+                  <div className="mpGridBtnTitle">Ranked</div>
                   <div className="mpGridBtnDesc">(Coming Soon)</div>
                 </div>
               </div>

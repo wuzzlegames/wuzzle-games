@@ -5,6 +5,7 @@ import { getAllGameModes } from "./lib/gameModes";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { useConnectionStatus } from "./hooks/useConnectionStatus";
 import { useAuth } from "./hooks/useAuth";
+import { trackPageView } from "./lib/gtm";
 import "./Game.css"; // For utility classes like loadingContainer
 const Game = lazy(() => import("./Game"));
 const Profile = lazy(() => import("./Profile"));
@@ -81,6 +82,13 @@ function App() {
         window.scrollTo({ top: 0, left: 0, behavior: "auto" });
       }
     }
+  }, [location.pathname]);
+
+  // Track page views for analytics
+  useEffect(() => {
+    // Get page title from document or use pathname
+    const pageTitle = document.title || location.pathname;
+    trackPageView(location.pathname, pageTitle);
   }, [location.pathname]);
 
   const marathonLevelsMemo = useMemo(() => MARATHON_LEVELS, []);

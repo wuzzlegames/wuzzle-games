@@ -1,65 +1,55 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { vitePrerenderPlugin } from 'vite-prerender-plugin'
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
+import { vitePrerenderPlugin } from 'vite-prerender-plugin';
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    // Pre-render key routes into real HTML files so Google sees 200 + content.
-    // This does NOT change runtime routing for users.
-    vitePrerenderPlugin({
-      renderTarget: '#root',
-      additionalPrerenderRoutes: [
-        '/',
-        '/game',
-        '/leaderboard',
-        '/faq',
-        '/profile',
-        '/how-to-play',
-        '/notifications',
-        '/stats',
-        // Long-tail SEO landing pages (match current features; multiplayer landing)
-        '/multiplayer-wuzzle',
-        '/multi-board-wuzzle',
-        '/wuzzle-speedrun',
-        '/wuzzle-marathon'
-      ],
-    }),
-  ],
-  base: '/',
-  build: {
-    emptyOutDir: true,
-    outDir: 'dist',
-    // Increase the limit at which Vite shows "chunk too large" warnings (in kB).
-    // This only affects warnings, not the actual bundle or runtime behavior.
-    chunkSizeWarningLimit: 1000,
-    rollupOptions: {
-      onwarn(warning, warn) {
-        // Suppress warning about Firebase database being both dynamically and statically imported.
-        // This is intentional: dynamic imports in singlePlayerStore.js enable code splitting
-        // (only load Firebase for signed-in users), while static imports elsewhere are needed
-        // for components that always require Firebase.
-        if (
-          warning.message && 
-          warning.message.includes('dynamically imported') && 
-          warning.message.includes('firebase/database')
-        ) {
-          return;
-        }
-        warn(warning);
-      },
-      output: {
-        // Put large libraries into a separate "vendor" chunk so that your app code
-        // and third‑party code are split. This does not change your React code;
-        // it only affects how the final JS files are grouped.
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom']
+export default defineConfig(({ mode }) => {
+  // Load env file based on `mode` in the current working directory.
+  const env = loadEnv(mode, process.cwd(), '');
+  
+  return {
+    plugins: [
+      react(),
+      vitePrerenderPlugin({
+        routes: [
+          '/',
+          '/game',
+          '/leaderboard',
+          '/profile',
+          '/faq',
+          '/how-to-play',
+          '/stats',
+          '/multiplayer-wuzzle',
+          '/multi-board-wuzzle',
+          '/wuzzle-speedrun',
+          '/wuzzle-marathon',
+        ],
+        postProcess(renderedRoute) {
+          // Replace environment variable placeholders in HTML
+          // This ensures GTM ID is properly injected during build
+          renderedRoute.html = renderedRoute.html
+            .replace(/%VITE_GTM_ID%/g, env.VITE_GTM_ID || 'GTM-XXXXXXX')
+            .replace(/%VITE_APP_ENV%/g, env.VITE_APP_ENV || 'development');
+          return renderedRoute;
         },
-        assetFileNames: (assetInfo) => {
-          return assetInfo.name || 'assets/[name]-[hash][extname]';
-        }
-      }
-    }
-  }
-})
+      }),
+    ],
+    base: '/',
+    build: {
+      outDir: 'dist',
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+            'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/database'],
+          },
+        },
+      },
+    },
+    server: {
+      port: 3000,
+      open: true,
+    },
+  };
+});

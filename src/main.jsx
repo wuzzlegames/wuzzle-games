@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import App from './App.jsx'
 import './index.css'
+import { initGTM } from './lib/gtm.js'
 
 // Get base URL from Vite.
 // React Router basename should not have trailing slash.
@@ -39,6 +40,9 @@ if (typeof window !== 'undefined') {
     const bg = getComputedStyle(document.documentElement).getPropertyValue('--c-bg').trim();
     if (bg) metaThemeColor.setAttribute('content', bg);
   }
+
+  // Initialize Google Tag Manager
+  initGTM();
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

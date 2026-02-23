@@ -258,10 +258,10 @@ export default function Home({
   return (
     <>
       <Helmet>
-        <title>Wuzzle Games</title>
+        <title>Wuzzle Games – Free Wordle Alternative | Multiplayer Word Puzzle</title>
         <meta
           name="description"
-          content="Wuzzle Games is a Wordle alternative with multi-board daily puzzles, marathon and speedrun modes, and Multiplayer Mode battles with friends."
+          content="Play Wuzzle Games, a free Wordle-style word puzzle with multiplayer battles, speedrun mode, and daily challenges. No signup required."
         />
       </Helmet>
       <div className="homeRoot">

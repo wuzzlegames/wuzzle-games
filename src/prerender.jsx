@@ -67,14 +67,24 @@ export async function prerender(data) {
 
   const helmet = helmetContext.helmet;
 
+  // Extract title text content from helmet
+  // helmet.title.toComponent() returns a React element, we need just the text
+  let titleText = "Wuzzle Games";
+  if (helmet?.title) {
+    const titleString = helmet.title.toString();
+    // Extract text between <title> tags, removing any attributes
+    const match = titleString.match(/<title[^>]*>(.*?)<\/title>/);
+    if (match && match[1]) {
+      titleText = match[1];
+    }
+  }
+
   return {
     html,
     links: new Set(PRERENDER_ROUTES),
     head: {
       lang: "en",
-      title:
-        helmet?.title?.toString?.().replace(/<\/?title>/g, "") ||
-        "Wuzzle Games",
+      title: titleText,
       elements: toHeadElements(helmet),
     },
   };

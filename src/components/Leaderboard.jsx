@@ -122,7 +122,7 @@ export default function Leaderboard() {
                   <div className="leaderboardName">
                     <UserCardWithBadges
                       userId={entry.userId}
-                      username={entry.userName}
+                      username={entry.userName ?? 'Anonymous'}
                       isYou={isCurrentUser}
                       size="sm"
                     />

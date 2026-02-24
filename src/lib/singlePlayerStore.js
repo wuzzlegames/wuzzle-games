@@ -229,7 +229,7 @@ export async function saveGameState({ authUser, database, gameStateKey, value })
  * Load a streak with server-first semantics and mirror into local storage.
  */
 export async function loadStreakRemoteAware({ authUser, database, mode, speedrunEnabled }) {
-  const modeKey = mode === "daily" ? "daily" : "marathon";
+  const modeKey = mode === "daily" ? "daily" : mode === "solutionhunt" ? "solutionhunt" : "marathon";
   const variantKey = speedrunEnabled ? "speedrun" : "standard";
   const remoteKey = `${modeKey}_${variantKey}`;
   const localKey = makeStreakKey(mode, speedrunEnabled);
@@ -289,7 +289,7 @@ export async function saveStreakRemoteAware({
 
   if (!authUser || !database) return;
 
-  const modeKey = mode === "daily" ? "daily" : "marathon";
+  const modeKey = mode === "daily" ? "daily" : mode === "solutionhunt" ? "solutionhunt" : "marathon";
   const variantKey = speedrunEnabled ? "speedrun" : "standard";
   const remoteKey = `${modeKey}_${variantKey}`;
 
@@ -318,6 +318,8 @@ export async function syncLocalStreaksToRemoteOnLogin(authUser, database) {
     { mode: "daily", speedrunEnabled: true },
     { mode: "marathon", speedrunEnabled: false },
     { mode: "marathon", speedrunEnabled: true },
+    { mode: "solutionhunt", speedrunEnabled: false },
+    { mode: "solutionhunt", speedrunEnabled: true },
   ];
 
   try {
@@ -326,7 +328,7 @@ export async function syncLocalStreaksToRemoteOnLogin(authUser, database) {
     const snap = await get(streaksRef);
     const remote = snap.exists() ? snap.val() || {} : {};
 
-    const modeKey = (m) => (m === "daily" ? "daily" : "marathon");
+    const modeKey = (m) => (m === "daily" ? "daily" : m === "solutionhunt" ? "solutionhunt" : "marathon");
     const variantKey = (v) => (v ? "speedrun" : "standard");
     const remoteKey = (m, v) => `${modeKey(m)}_${variantKey(v)}`;
 

@@ -14,7 +14,7 @@ import UserCardWithBadges from "../UserCardWithBadges";
  *   comments/<threadId>/<autoId>
  * Limits display to last 300 comments to prevent unbounded growth.
  */
-export default function CommentsSection({ threadId }) {
+export default function CommentsSection({ threadId, setTimedMessage }) {
   const { user } = useAuth();
 
   const [username, setUsername] = useState("");
@@ -150,6 +150,9 @@ export default function CommentsSection({ threadId }) {
       await update(commentRef, updates);
     } catch (err) {
       logError(err, 'CommentsSection.handleReaction');
+      if (typeof setTimedMessage === 'function') {
+        setTimedMessage("Couldn't update reaction.", 4000);
+      }
     }
   };
 

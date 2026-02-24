@@ -680,11 +680,13 @@ export default function GameSinglePlayer({
       // Update streaks for supported configurations:
       // - Daily: 1-board standard or speedrun
       // - Marathon: standard or speedrun, but only once the full run is complete.
+      // - Solution Hunt: 1-board, completion is well-defined.
       // NOTE: Archive games do NOT update streaks
       const shouldUpdateStreak =
         !archiveDate && // Don't update streaks for archive games
         ((mode === "daily" && numBoards === 1) ||
-        (mode === "marathon" && isMarathonComplete));
+        (mode === "marathon" && isMarathonComplete) ||
+        mode === "solutionhunt");
 
       if (shouldUpdateStreak) {
         (async () => {
@@ -1286,6 +1288,7 @@ export default function GameSinglePlayer({
         filteredSolutionWords={filteredSolutionWords}
         totalSolutionWords={answerWords.length}
         onSelectSolutionWord={handleSelectSolutionWord}
+        setTimedMessage={setTimedMessage}
       />
 
         <SubscribeModal

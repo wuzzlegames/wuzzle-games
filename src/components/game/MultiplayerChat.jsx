@@ -15,7 +15,7 @@ const HIDE_EMOJIS_KEY_PREFIX = "mw:multiplayerHideEmojis:";
  * Messages live under: multiplayer/<gameCode>/chat/<autoId>
  * Limits display to last 100 messages to prevent unbounded growth.
  */
-export default function MultiplayerChat({ gameCode, authUser }) {
+export default function MultiplayerChat({ gameCode, authUser, setTimedMessage }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -328,6 +328,9 @@ export default function MultiplayerChat({ gameCode, authUser }) {
       // Best-effort only; surface error via logging for debugging.
       // Multiplayer gameplay should not break if chat fails.
       logError(err, 'MultiplayerChat.handleSend');
+      if (typeof setTimedMessage === 'function') {
+        setTimedMessage("Couldn't send message.", 4000);
+      }
     } finally {
       setIsSending(false);
     }

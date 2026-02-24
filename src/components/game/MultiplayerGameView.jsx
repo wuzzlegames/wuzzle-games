@@ -265,7 +265,7 @@ export default function MultiplayerGameView({
           onInviteFriend={onInviteFriend}
         />
 
-        <MultiplayerChat gameCode={gameCode || ""} authUser={authUser} />
+        <MultiplayerChat gameCode={gameCode || ""} authUser={authUser} setTimedMessage={setTimedMessage} />
       </div>
     );
   }
@@ -1097,7 +1097,7 @@ export default function MultiplayerGameView({
           </div>
         )}
 
-        <MultiplayerChat gameCode={gameCode || ""} authUser={authUser} />
+        <MultiplayerChat gameCode={gameCode || ""} authUser={authUser} setTimedMessage={setTimedMessage} />
       </div>
     </>
   );

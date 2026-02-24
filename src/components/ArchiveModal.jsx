@@ -32,9 +32,9 @@ export default function ArchiveModal({
   }, [isOpen, mode, speedrunEnabled]);
 
   const getModeDisplayName = () => {
-    const modeName = mode === 'daily' ? 'Daily' : 'Marathon';
+    const modeName = mode === 'daily' ? 'Daily' : mode === 'solutionhunt' ? 'Solution Hunt' : 'Marathon';
     const variantName = speedrunEnabled ? 'Speedrun' : 'Standard';
-    const boardText = mode === 'daily' ? '1 board' : '';
+    const boardText = mode === 'daily' || mode === 'solutionhunt' ? '1 board' : '';
     return `${modeName} ${variantName}${boardText ? ' ' + boardText : ''}`;
   };
 
@@ -47,7 +47,7 @@ export default function ArchiveModal({
     // Navigate to game with archive date (solutions are seeded on demand if missing)
     // Format: /game?mode=daily&boards=1&archiveDate=2026-01-24
     const modeParam = mode;
-    const boardsParam = mode === 'daily' ? 1 : null; // Marathon will use default
+    const boardsParam = (mode === 'daily' || mode === 'solutionhunt') ? 1 : null; // Marathon will use default
     const speedrunParam = speedrunEnabled ? 'true' : undefined;
     
     let gameUrl = `/game?mode=${modeParam}`;

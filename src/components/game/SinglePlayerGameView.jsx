@@ -78,6 +78,7 @@ export default function SinglePlayerGameView({
   filteredSolutionWords = [],
   totalSolutionWords = 0,
   onSelectSolutionWord,
+  setTimedMessage,
 }) {
   const inRouter = useInRouterContext();
 
@@ -274,7 +275,7 @@ export default function SinglePlayerGameView({
 
           {showComments && commentThreadId && (
             <div style={{ width: "100%", maxWidth: 600 }}>
-              <CommentsSection threadId={commentThreadId} />
+              <CommentsSection threadId={commentThreadId} setTimedMessage={setTimedMessage} />
             </div>
           )}
         </div>

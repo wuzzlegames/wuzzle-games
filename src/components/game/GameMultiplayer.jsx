@@ -549,10 +549,15 @@ export default function GameMultiplayer() {
   // Only run leaveGame for non-hosts: when the host unmounts (e.g. React Strict
   // Mode remount after navigating from Friends modal challenge), we must not
   // delete the room or the host would see "Host has left the room" on remount.
+  // Best-effort only: we do not await leaveGame so teardown is non-blocking;
+  // the promise is caught to avoid unhandled rejections.
   useEffect(() => {
     return () => {
       if (gameCode && !isHost) {
-        multiplayerGame.leaveGame(gameCode);
+        const p = multiplayerGame.leaveGame(gameCode);
+        if (p && typeof p.catch === 'function') {
+          p.catch((err) => console.error('leaveGame on unmount:', err));
+        }
       }
     };
   }, [gameCode, isHost, multiplayerGame.leaveGame]);

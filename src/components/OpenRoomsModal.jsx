@@ -5,6 +5,8 @@ import Modal from "./Modal";
 import { database, auth } from "../config/firebase";
 import { MULTIPLAYER_WAITING_TIMEOUT_MS } from "../lib/multiplayerConfig";
 import { validateGameCode } from "../lib/validation";
+import { useTimedMessage } from "../hooks/useTimedMessage";
+import GameToast from "./game/GameToast";
 import "./OpenRoomsModal.css";
 
 function formatDuration(ms) {
@@ -19,6 +21,7 @@ function formatDuration(ms) {
 
 export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = false }) {
   const navigate = useNavigate();
+  const { message: toastMessage, setTimedMessage } = useTimedMessage("");
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [closingAll, setClosingAll] = useState(false);
@@ -135,7 +138,7 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
     try {
       await remove(ref(database, `multiplayer/${code}`));
     } catch (e) {
-      // best-effort; errors are silently ignored in UI
+      setTimedMessage("Couldn't close room.", 4000);
     }
   };
 
@@ -154,7 +157,7 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
         allCodes.map((code) => remove(ref(database, `multiplayer/${code}`)))
       );
     } catch (e) {
-      // best-effort; errors are silently ignored in UI
+      setTimedMessage("Couldn't close room.", 4000);
     } finally {
       setClosingAll(false);
     }
@@ -162,6 +165,7 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
 
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+      <GameToast message={toastMessage} />
       <div className="openRoomsModalRoot">
         <div className="openRoomsHeader">
           <h2 className="openRoomsTitle">Open Rooms</h2>

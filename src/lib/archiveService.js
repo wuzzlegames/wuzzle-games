@@ -2,6 +2,7 @@ import { ref, get, set, remove } from 'firebase/database';
 import { database } from '../config/firebase';
 import { logError } from './errorUtils';
 import { getCurrentDateString } from './dailyWords';
+import { validateGameState } from './validation';
 
 /**
  * Archive service for storing and retrieving past game solutions and states
@@ -130,9 +131,15 @@ export async function loadArchiveGameState({ uid, mode, speedrunEnabled, dateStr
     const archiveKey = getArchiveKey(mode, speedrunEnabled);
     const gameStateRef = ref(database, `users/${uid}/archiveGames/${archiveKey}/${dateString}`);
     const snap = await get(gameStateRef);
-    
+
     if (snap.exists()) {
-      return snap.val();
+      const state = snap.val();
+      const validation = validateGameState(state);
+      if (!validation.isValid) {
+        logError(`Invalid archive game state: ${validation.errors.join(', ')}`, 'archiveService.loadArchiveGameState');
+        return null;
+      }
+      return state;
     }
     return null;
   } catch (err) {

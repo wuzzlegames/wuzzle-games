@@ -741,8 +741,8 @@ export default function GameSinglePlayer({
               }
 
               // Save game statistics for advanced stats
-              // Track for Daily Standard, Daily Speedrun 1 board, and Marathon modes
-              if ((mode === 'daily' && numBoards === 1) || mode === 'marathon') {
+              // Track for Daily Standard, Daily Speedrun 1 board, Marathon, and Solution Hunt modes
+              if ((mode === 'daily' && numBoards === 1) || mode === 'marathon' || mode === 'solutionhunt') {
                 const { saveGameStats } = await import('../../lib/statsService');
                 
                 if (mode === 'marathon') {
@@ -806,7 +806,7 @@ export default function GameSinglePlayer({
                     isMarathonComplete,
                   });
                 } else {
-                  // Daily mode
+                  // Daily or Solution Hunt mode (single game completion)
                   await saveGameStats({
                     uid: authUser.uid,
                     mode,

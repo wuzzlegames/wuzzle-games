@@ -56,8 +56,8 @@ export async function saveGameStats({
   if (!uid) return;
   
   try {
-    // Only track for streak-tracked modes: daily 1-board, marathon (any)
-    const shouldTrack = (mode === 'daily' && numBoards === 1) || mode === 'marathon';
+    // Only track for streak-tracked modes: daily 1-board, marathon (any), solutionhunt (any)
+    const shouldTrack = (mode === 'daily' && numBoards === 1) || mode === 'marathon' || mode === 'solutionhunt';
     if (!shouldTrack) return;
 
     const statsKey = getStatsKey(mode, speedrunEnabled);

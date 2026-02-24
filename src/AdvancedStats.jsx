@@ -20,6 +20,8 @@ const MODES = [
   { mode: 'daily', speedrunEnabled: true, label: 'Daily Speedrun' },
   { mode: 'marathon', speedrunEnabled: false, label: 'Marathon Standard' },
   { mode: 'marathon', speedrunEnabled: true, label: 'Marathon Speedrun' },
+  { mode: 'solutionhunt', speedrunEnabled: false, label: 'Solution Hunt Standard' },
+  { mode: 'solutionhunt', speedrunEnabled: true, label: 'Solution Hunt Speedrun' },
 ];
 
 export default function AdvancedStats() {
@@ -96,7 +98,9 @@ export default function AdvancedStats() {
 
   const getModeDisplayName = () => {
     const m = MODES.find(m => m.mode === mode && m.speedrunEnabled === speedrunEnabled);
-    return m ? m.label : `${mode === 'daily' ? 'Daily' : 'Marathon'} ${speedrunEnabled ? 'Speedrun' : 'Standard'}`;
+    if (m) return m.label;
+    const base = mode === 'daily' ? 'Daily' : mode === 'solutionhunt' ? 'Solution Hunt' : 'Marathon';
+    return `${base} ${speedrunEnabled ? 'Speedrun' : 'Standard'}`;
   };
 
   if (!authLoading && !user) {

@@ -6,8 +6,9 @@ import Modal from './Modal';
 import SubscribeModal from './SubscribeModal';
 
 /**
- * Modal for displaying advanced statistics
- * Premium users see all stats, non-premium see first stat only
+ * Modal for displaying advanced statistics.
+ * When isSubscriptionAllowed is true: premium users see all stats, non-premium see first stat only.
+ * When isSubscriptionAllowed is false: showSubscriptionGate is false from hook, so all stats are shown.
  */
 export default function AdvancedStatsModal({ 
   isOpen, 

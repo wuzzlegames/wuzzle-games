@@ -10,6 +10,7 @@ import "./Game.css"; // For utility classes like loadingContainer
 const Game = lazy(() => import("./Game"));
 const Profile = lazy(() => import("./Profile"));
 const AdvancedStats = lazy(() => import("./AdvancedStats"));
+const CrossModeComparison = lazy(() => import("./CrossModeComparison"));
 const Leaderboard = lazy(() => import("./components/Leaderboard"));
 const Faq = lazy(() => import("./Faq"));
 const HowToPlay = lazy(() => import("./HowToPlay"));
@@ -27,7 +28,7 @@ function App() {
   const { isOnline, queueSize, hasQueuedUpdates } = useConnectionStatus();
   const { user } = useAuth();
 
-  // Handle subscription success/cancel redirects from Stripe
+  // Handle subscription success/cancel redirects from Stripe. When subscription is disabled (isSubscriptionAllowed false), these params have no user-visible effect.
   useEffect(() => {
     const subscriptionStatus = searchParams.get('subscription');
     if (subscriptionStatus === 'success') {
@@ -157,6 +158,7 @@ function App() {
         {/* Static pages */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/stats" element={<AdvancedStats />} />
+        <Route path="/stats/compare" element={<CrossModeComparison />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/how-to-play" element={<HowToPlay />} />

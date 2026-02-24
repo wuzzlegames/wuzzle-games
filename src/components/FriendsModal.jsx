@@ -13,6 +13,7 @@ import {
 import "./FriendsModal.css";
 import { MAX_BOARDS } from "../lib/gameConstants";
 import { DURATION_OPTIONS } from "../lib/subscriptionConstants";
+import { isSubscriptionAllowed } from "../lib/subscriptionConfig";
 
 const ADMIN_EMAIL = "abhijeetsridhar14@gmail.com";
 
@@ -314,24 +315,26 @@ export default function FriendsModal({ isOpen, onRequestClose }) {
                     size="sm"
                   />
                   <div style={{ display: "flex", gap: "6px" }}>
-                    <button
-                      onClick={() => {
-                        setGiftModalRecipient(friend);
-                        setGiftModalDuration("1m");
-                      }}
-                      style={{
-                        padding: "6px 10px",
-                        borderRadius: "6px",
-                        border: "1px solid var(--c-correct)",
-                        background: "transparent",
-                        color: "var(--c-text)",
-                        fontWeight: "bold",
-                        fontSize: "11px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Gift
-                    </button>
+                    {isSubscriptionAllowed && (
+                      <button
+                        onClick={() => {
+                          setGiftModalRecipient(friend);
+                          setGiftModalDuration("1m");
+                        }}
+                        style={{
+                          padding: "6px 10px",
+                          borderRadius: "6px",
+                          border: "1px solid var(--c-correct)",
+                          background: "transparent",
+                          color: "var(--c-text)",
+                          fontWeight: "bold",
+                          fontSize: "11px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Gift
+                      </button>
+                    )}
                     <button
                       onClick={() => {
                         setSelectedFriendForChallenge(friend);
@@ -393,9 +396,9 @@ export default function FriendsModal({ isOpen, onRequestClose }) {
         </button>
       </div>
 
-      {/* Gift Premium modal – duration + recipient; admin can also grant self */}
+      {/* Gift Premium modal – duration + recipient; admin can also grant self (only when isSubscriptionAllowed) */}
       <Modal
-        isOpen={!!giftModalRecipient}
+        isOpen={!!giftModalRecipient && isSubscriptionAllowed}
         onRequestClose={() => {
           if (!giftModalLoading) setGiftModalRecipient(null);
         }}

@@ -3,6 +3,7 @@ import { ref, get, set, onValue, off } from 'firebase/database';
 import { collection, query, where, onSnapshot as onSnapshotFirestore } from 'firebase/firestore';
 import { database, firestore, auth } from '../config/firebase';
 import { grantBadge } from '../lib/badgeService';
+import { isSubscriptionAllowed } from '../lib/subscriptionConfig';
 
 const PREMIUM_BADGE_ID = 'premium_member';
 
@@ -235,7 +236,8 @@ export function useSubscription(user) {
     };
   }, [loading, isSubscribed]);
 
-  return { isSubscribed, loading, showSubscriptionGate, error, subscriptionData, stripeRole };
+  const effectiveShowSubscriptionGate = isSubscriptionAllowed && showSubscriptionGate;
+  return { isSubscribed, loading, showSubscriptionGate: effectiveShowSubscriptionGate, error, subscriptionData, stripeRole };
 }
 
 /**

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useUserBadges, useBadgesForUser } from "../hooks/useUserBadges";
 import { useSubscription } from "../hooks/useSubscription";
+import { isSubscriptionAllowed } from "../lib/subscriptionConfig";
 import { useDailyResetTimer } from "../hooks/useDailyResetTimer";
 import { useNotificationSeen, getUnseenNotificationCount, getUnseenWithLabels } from "../hooks/useNotificationSeen";
 import { getAllEarnedSorted } from "../lib/badges";
@@ -361,7 +362,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
               onClick={() => navigate("/profile")}
               size="sm"
               earnedBadges={earnedBadges}
-              isPremium={isPremium}
+              isPremium={isSubscriptionAllowed && isPremium}
             />
             {showSubscriptionGate && (
               <button

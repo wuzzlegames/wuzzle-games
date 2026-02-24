@@ -10,6 +10,7 @@ import { database } from "./config/firebase";
 import { ref, get } from "firebase/database";
 import { syncLocalStreaksToRemoteOnLogin } from "./lib/singlePlayerStore";
 import { ALL_BADGES, getEarnedBadgeDefs } from "./lib/badges";
+import { isSubscriptionAllowed } from "./lib/subscriptionConfig";
 import BadgeIcon from "./components/BadgeIcon";
 import {
   getSubscriptionDetailsCallable,
@@ -20,7 +21,6 @@ import {
 const FeedbackModal = lazy(() => import("./components/FeedbackModal"));
 import Modal from "./components/Modal";
 import ArchiveModal from "./components/ArchiveModal";
-import CrossModeComparisonModal from "./components/CrossModeComparisonModal";
 import "./Profile.css";
 
 export default function Profile() {
@@ -41,10 +41,11 @@ export default function Profile() {
   const [streakLoadError, setStreakLoadError] = useState(null);
   const [streakRetryCount, setStreakRetryCount] = useState(0);
   const [archiveModal, setArchiveModal] = useState({ isOpen: false, mode: null, speedrunEnabled: false });
-  const [showCrossModeComparison, setShowCrossModeComparison] = useState(false);
   const { userBadges, loading: badgesLoading } = useUserBadges(user);
   const earnedBadges = getEarnedBadgeDefs(userBadges);
   const { isSubscribed } = useSubscription(user);
+  const displayedEarnedBadges = isSubscriptionAllowed ? earnedBadges : earnedBadges.filter((b) => b.id !== "premium_member");
+  const displayedAllBadges = isSubscriptionAllowed ? ALL_BADGES : ALL_BADGES.filter((b) => b.id !== "premium_member");
   const [premiumDetails, setPremiumDetails] = useState(null);
   const [premiumDetailsLoading, setPremiumDetailsLoading] = useState(false);
   const [premiumDetailsError, setPremiumDetailsError] = useState(null);
@@ -378,10 +379,10 @@ export default function Profile() {
                     <details id="profile-your-badges" className="profileDetails">
                       <summary className="profileDetailsSummary">Your badges</summary>
                       <div className="profileBadgesList">
-                        {earnedBadges.length === 0 ? (
+                        {displayedEarnedBadges.length === 0 ? (
                           <p className="profileBadgesEmpty">You haven&apos;t earned any badges yet.</p>
                         ) : (
-                          earnedBadges.map((b) => (
+                          displayedEarnedBadges.map((b) => (
                             <div key={b.id} className="profileBadgeCard profileBadgeCardEarned">
                               <BadgeIcon badge={b} profileCard />
                               <div className="profileBadgeCardContent">
@@ -396,8 +397,8 @@ export default function Profile() {
                     <details className="profileDetails">
                       <summary className="profileDetailsSummary">All badges</summary>
                       <div className="profileBadgesList">
-                        {ALL_BADGES.map((b) => {
-                          const earned = earnedBadges.some((eb) => eb.id === b.id);
+                        {displayedAllBadges.map((b) => {
+                          const earned = displayedEarnedBadges.some((eb) => eb.id === b.id);
                           return (
                             <div
                               key={b.id}
@@ -684,7 +685,7 @@ export default function Profile() {
                     <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid var(--c-border)' }}>
                       <button
                         type="button"
-                        onClick={() => setShowCrossModeComparison(true)}
+                        onClick={() => navigate('/stats/compare')}
                         className="homeBtn homeBtnGreen"
                         style={{
                           width: '100%',
@@ -695,14 +696,16 @@ export default function Profile() {
                       >
                         View Cross-Mode Comparison
                       </button>
-                      <div style={{ 
-                        fontSize: 12, 
-                        color: 'var(--c-text)', 
-                        marginTop: 8, 
-                        textAlign: 'center' 
-                      }}>
-                        Compare your performance across all game modes (Premium)
-                      </div>
+                      {isSubscriptionAllowed && (
+                        <div style={{ 
+                          fontSize: 12, 
+                          color: 'var(--c-text)', 
+                          marginTop: 8, 
+                          textAlign: 'center' 
+                        }}>
+                          Compare your performance across all game modes (Premium)
+                        </div>
+                      )}
                     </div>
                       </div>
                     )}
@@ -710,7 +713,7 @@ export default function Profile() {
                   </div>
                 )}
 
-                {isSubscribed && (
+                {isSubscriptionAllowed && isSubscribed && (
                   <div className="profileSection profileSectionSpacing">
                     <details
                       className="profileDetails"
@@ -908,11 +911,6 @@ export default function Profile() {
           onRequestClose={() => setArchiveModal({ isOpen: false, mode: null, speedrunEnabled: false })}
           mode={archiveModal.mode}
           speedrunEnabled={archiveModal.speedrunEnabled}
-        />
-
-        <CrossModeComparisonModal
-          isOpen={showCrossModeComparison}
-          onRequestClose={() => setShowCrossModeComparison(false)}
         />
 
         {/* Confirm auto-renew change modal */}

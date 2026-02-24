@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useSubscription } from '../hooks/useSubscription';
 import { getArchiveDates, formatArchiveDate } from '../lib/archiveService';
+import { isSubscriptionAllowed } from '../lib/subscriptionConfig';
 import Modal from './Modal';
 import SubscribeModal from './SubscribeModal';
 
@@ -133,13 +134,15 @@ export default function ArchiveModal({
                 lineHeight: 1.4,
               }}
             >
-              {subscriptionLoading
-                ? 'Loading...'
-                : isSubscribed
-                  ? 'Select a date to play that day\'s game'
-                  : 'Subscribe to unlock archive access'}
+              {!isSubscriptionAllowed
+                ? 'Select a date to play that day\'s game'
+                : subscriptionLoading
+                  ? 'Loading...'
+                  : isSubscribed
+                    ? 'Select a date to play that day\'s game'
+                    : 'Subscribe to unlock archive access'}
             </p>
-            {isLocked && (
+            {isLocked && isSubscriptionAllowed && (
               <button
                 type="button"
                 onClick={() => setShowSubscribeModal(true)}

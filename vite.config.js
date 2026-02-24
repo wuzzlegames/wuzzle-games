@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       vitePrerenderPlugin({
+        renderTarget: '#root',
         routes: [
           '/',
           '/game',

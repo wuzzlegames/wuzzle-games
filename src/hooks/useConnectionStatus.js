@@ -7,9 +7,9 @@ import { defaultStateSync } from '../lib/stateSync';
  * @returns {Object} Connection status and queue information
  */
 export function useConnectionStatus() {
-  const [isOnline, setIsOnline] = useState(() => {
-    return typeof navigator !== 'undefined' ? navigator.onLine : true;
-  });
+  // Assume online on first paint; only show offline after an explicit 'offline' event.
+  // navigator.onLine can be false on initial load in some environments (cached load, etc.).
+  const [isOnline, setIsOnline] = useState(true);
   const [queueSize, setQueueSize] = useState(0);
   const isOnlineRef = useRef(isOnline);
   const lastQueueSizeRef = useRef(0);

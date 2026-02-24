@@ -7,34 +7,24 @@
 
 /**
  * Initialize Google Tag Manager
- * Should be called once when the app loads
+ * Should be called once when the app loads.
+ * GTM script and gtm.start are loaded/pushed only from index.html in production.
+ * Here we only ensure dataLayer exists so app code can push events safely.
  */
 export function initGTM() {
   const gtmId = import.meta.env.VITE_GTM_ID;
   const appEnv = import.meta.env.VITE_APP_ENV;
-  
-  // Only initialize in production or if explicitly enabled
+
+  // Ensure dataLayer exists (index.html creates it in production; app may push events before/without it)
+  window.dataLayer = window.dataLayer || [];
+
   if (appEnv !== 'production' || !gtmId || gtmId === 'GTM-XXXXXXX') {
     console.log('[GTM] Analytics disabled in development or GTM ID not configured');
     return false;
   }
 
-  // Check if GTM is already initialized
-  if (window.dataLayer && window.google_tag_manager) {
-    console.log('[GTM] Already initialized');
-    return true;
-  }
-
-  // Initialize dataLayer
-  window.dataLayer = window.dataLayer || [];
-  
-  // GTM initialization
-  window.dataLayer.push({
-    'gtm.start': new Date().getTime(),
-    event: 'gtm.js'
-  });
-
-  console.log('[GTM] Initialized with ID:', gtmId);
+  // index.html is the single source that loads the GTM script and pushes gtm.start/gtm.js
+  console.log('[GTM] dataLayer ready (container loaded from index.html)');
   return true;
 }
 

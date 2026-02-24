@@ -111,6 +111,7 @@ function App() {
           fontSize: '14px',
           fontWeight: '500',
           zIndex: 10000,
+          pointerEvents: 'none',
         }}>
           Offline - Changes will be saved when connection is restored
           {hasQueuedUpdates && ` (${queueSize} update${queueSize !== 1 ? 's' : ''} queued)`}
@@ -129,6 +130,7 @@ function App() {
           fontSize: '14px',
           fontWeight: '500',
           zIndex: 10000,
+          pointerEvents: 'none',
         }}>
           Syncing {queueSize} update{queueSize !== 1 ? 's' : ''}...
         </div>

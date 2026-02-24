@@ -727,6 +727,30 @@ export default function GameSinglePlayer({
               }
             }
 
+            // Earn streak badges (marathon only, when full run complete).
+            if (authUser?.uid && mode === 'marathon' && isMarathonComplete) {
+              const currentStreak = typeof streakInfo?.current === 'number' ? streakInfo.current : 0;
+              const badgeIds = [];
+
+              if (speedrunEnabled) {
+                if (currentStreak >= 10) badgeIds.push('marathon_speedrun_hot_streak');
+                if (currentStreak >= 20) badgeIds.push('marathon_speedrun_wildfire_streak');
+                if (currentStreak >= 50) badgeIds.push('marathon_speedrun_legendary_streak');
+                if (currentStreak >= 100) badgeIds.push('marathon_speedrun_century_streak');
+              } else {
+                if (currentStreak >= 10) badgeIds.push('marathon_standard_hot_streak');
+                if (currentStreak >= 20) badgeIds.push('marathon_standard_wildfire_streak');
+                if (currentStreak >= 50) badgeIds.push('marathon_standard_legendary_streak');
+                if (currentStreak >= 100) badgeIds.push('marathon_standard_century_streak');
+              }
+
+              if (badgeIds.length > 0) {
+                grantBadges({ database, uid: authUser.uid, badgeIds }).catch((err) => {
+                  logError(err, 'GameSinglePlayer.grantBadges.streak');
+                });
+              }
+            }
+
             // Save solution words to archive for streak-tracked modes
             // Only save for regular games (not archive games) - archive games already have solutions saved
             if (!archiveDate) {
@@ -745,8 +769,29 @@ export default function GameSinglePlayer({
               // Save game statistics for advanced stats
               // Track for Daily Standard, Daily Speedrun 1 board, Marathon, and Solution Hunt modes
               if ((mode === 'daily' && numBoards === 1) || mode === 'marathon' || mode === 'solutionhunt') {
-                const { saveGameStats } = await import('../../lib/statsService');
-                
+                const { saveGameStats, loadAggregatedStats } = await import('../../lib/statsService');
+
+                // Grant personal_best when speedrun time beats previous best (or first speedrun). Do before saveGameStats.
+                const shouldCheckPersonalBest = speedrunEnabled && authUser?.uid && (mode !== 'marathon' || isMarathonComplete);
+                if (shouldCheckPersonalBest) {
+                  const currentTimeMs = mode === 'marathon' && isMarathonComplete
+                    ? (savedPopupTotalMs || marathonCumulativeMs + finalStageMs)
+                    : finalStageMs;
+                  if (currentTimeMs > 0) {
+                    try {
+                      const aggregated = await loadAggregatedStats({ uid: authUser.uid, mode, speedrunEnabled });
+                      const prevFastest = aggregated?.fastestTimeMs ?? null;
+                      if (prevFastest === null || currentTimeMs < prevFastest) {
+                        grantBadges({ database, uid: authUser.uid, badgeIds: ['personal_best'] }).catch((err) => {
+                          logError(err, 'GameSinglePlayer.grantBadges.personal_best');
+                        });
+                      }
+                    } catch (err) {
+                      logError(err, 'GameSinglePlayer.loadAggregatedStats.personal_best');
+                    }
+                  }
+                }
+
                 if (mode === 'marathon') {
                   // For marathon, calculate total guesses and time when complete
                   let marathonTotalGuesses = null;

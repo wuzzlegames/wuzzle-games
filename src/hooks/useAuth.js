@@ -20,6 +20,7 @@ import { validateUsername } from '../lib/validation';
 import { logError, formatError } from '../lib/errorUtils';
 import { flushPendingLeaderboardOnLogin } from '../lib/pendingLeaderboard';
 import { syncLocalStreaksToRemoteOnLogin } from '../lib/singlePlayerStore';
+import { grantBadge } from '../lib/badgeService';
 import { CHALLENGE_EXPIRY_MS } from './useNotificationSeen';
 
 // Helper: determine whether a user is allowed to use social features (friends,
@@ -146,6 +147,9 @@ export function useAuth() {
         (async () => {
           try {
             const profileRef = ref(database, `users/${authUser.uid}/profile`);
+            const snap = await get(profileRef);
+            const isFirstProfile = !snap.exists();
+
             const email = authUser.email || null;
             const username = authUser.displayName || null;
             const nowIso = new Date().toISOString();
@@ -156,6 +160,12 @@ export function useAuth() {
               username,
               updatedAt: nowIso,
             });
+
+            if (isFirstProfile) {
+              grantBadge({ database, uid: authUser.uid, badgeId: 'wuzzle_games_member' }).catch((err) => {
+                logError(err, 'useAuth.grantBadge.wuzzle_games_member');
+              });
+            }
 
             if (username) {
               const usernameKey = username.trim().toLowerCase();

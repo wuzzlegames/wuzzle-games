@@ -263,4 +263,34 @@ describe('CommentsSection', () => {
     const key = keys[0];
     expect(key).toMatch(/^userReactions\/guest:/);
   });
+
+  it('shows Share Result button when shareTextForComment is provided and pre-fills comment on click without posting', () => {
+    render(
+      <CommentsSection
+        threadId="thread-1"
+        shareTextForComment="Wuzzle Games - Daily\nGuesses: 2/6\nSolved!"
+      />,
+    );
+
+    emitCommentsSnapshot({});
+
+    const shareButton = screen.getByRole('button', { name: /share result/i });
+    expect(shareButton).toBeInTheDocument();
+
+    const textarea = screen.getByRole('textbox', { name: /^comment$/i });
+    expect(textarea).toHaveValue('');
+
+    fireEvent.click(shareButton);
+
+    expect(textarea).toHaveValue(
+      'Wuzzle Games - Daily\nGuesses: 2/6\nSolved!',
+    );
+    expect(setMock).not.toHaveBeenCalled();
+  });
+
+  it('does not show Share Result button when shareTextForComment is not provided', () => {
+    render(<CommentsSection threadId="thread-1" />);
+    emitCommentsSnapshot({});
+    expect(screen.queryByRole('button', { name: /share result/i })).not.toBeInTheDocument();
+  });
 });

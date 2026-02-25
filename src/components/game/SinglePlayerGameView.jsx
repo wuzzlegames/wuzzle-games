@@ -66,6 +66,7 @@ export default function SinglePlayerGameView({
   setShowOutOfGuesses,
   showComments,
   commentThreadId,
+  shareTextForComment,
   canShare,
   streakLabel,
   wordListError,
@@ -275,7 +276,11 @@ export default function SinglePlayerGameView({
 
           {showComments && commentThreadId && (
             <div style={{ width: "100%", maxWidth: 600 }}>
-              <CommentsSection threadId={commentThreadId} setTimedMessage={setTimedMessage} />
+              <CommentsSection
+                threadId={commentThreadId}
+                setTimedMessage={setTimedMessage}
+                shareTextForComment={shareTextForComment}
+              />
             </div>
           )}
         </div>

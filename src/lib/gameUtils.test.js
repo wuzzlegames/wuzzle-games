@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateShareText } from './gameUtils.js';
+import { generateShareText, shareTextWithoutFooter } from './gameUtils.js';
 
 // Helper to create a board object
 function makeBoard(guesses, isSolved) {
@@ -534,5 +534,38 @@ describe('generateShareText', () => {
       0,
     );
     expect(text).toBe('Play Wuzzle Games!');
+  });
+});
+
+describe('shareTextWithoutFooter', () => {
+  it('removes trailing footer from full share text', () => {
+    const full =
+      'Wuzzle Games - Daily Standard\n\n🟩🟩🟩🟩🟩\n\nGuesses: 1/6\nSolved!\n\nPlay Wuzzle Games!\nhttps://wuzzlegames.com/';
+    const result = shareTextWithoutFooter(full);
+    expect(result).toBe(
+      'Wuzzle Games - Daily Standard\n\n🟩🟩🟩🟩🟩\n\nGuesses: 1/6\nSolved!',
+    );
+  });
+
+  it('returns empty string when text is only the footer', () => {
+    const onlyFooter = 'Play Wuzzle Games!\nhttps://wuzzlegames.com/';
+    expect(shareTextWithoutFooter(onlyFooter)).toBe('');
+  });
+
+  it('returns empty string for empty or undefined input', () => {
+    expect(shareTextWithoutFooter('')).toBe('');
+    expect(shareTextWithoutFooter(null)).toBe('');
+    expect(shareTextWithoutFooter(undefined)).toBe('');
+  });
+
+  it('leaves text unchanged when it has no footer', () => {
+    const noFooter = 'Wuzzle Games - Daily Standard\n\nGuesses: 2/6\nSolved!';
+    expect(shareTextWithoutFooter(noFooter)).toBe(noFooter);
+  });
+
+  it('handles URL with trailing slash', () => {
+    const withSlash =
+      'Heading\n\nPlay Wuzzle Games!\nhttps://wuzzlegames.com/';
+    expect(shareTextWithoutFooter(withSlash)).toBe('Heading');
   });
 });

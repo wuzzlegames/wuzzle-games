@@ -13,7 +13,7 @@ import {
 } from "../../lib/wordle";
 import { useGameEngine } from "../../hooks/useGameEngine";
 import { FLIP_COMPLETE_MS, MESSAGE_TIMEOUT_MS, DEFAULT_MAX_TURNS, SPEEDRUN_COUNTDOWN_MS } from "../../lib/gameConstants";
-import { generateShareText, buildMarathonShareTotals } from "../../lib/gameUtils";
+import { generateShareText, buildMarathonShareTotals, shareTextWithoutFooter } from "../../lib/gameUtils";
 import { getCurrentDateString } from "../../lib/dailyWords";
 import { formatArchiveDate } from "../../lib/archiveService";
 import { submitSpeedrunScore } from "../../hooks/useLeaderboard";
@@ -1267,6 +1267,8 @@ export default function GameSinglePlayer({
       )
     : null;
 
+  const shareTextForComment = shouldShowComments ? shareTextWithoutFooter(shareText) : "";
+
   // In test environments we skip the full‑screen loading fallback so tests can
   // render the game view immediately without depending on environment globals.
   const isTestEnv =
@@ -1346,6 +1348,7 @@ export default function GameSinglePlayer({
         setShowOutOfGuesses={setShowOutOfGuesses}
         showComments={shouldShowComments}
         commentThreadId={commentsThreadId}
+        shareTextForComment={shareTextForComment}
         canShare={canShare}
         streakLabel={streakLabel}
         countdownRemaining={countdownRemaining}

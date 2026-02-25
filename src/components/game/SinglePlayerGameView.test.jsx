@@ -75,6 +75,7 @@ describe('SinglePlayerGameView guess counter wiring', () => {
       setShowOutOfGuesses: () => {},
       showComments: false,
       commentThreadId: null,
+      shareTextForComment: '',
       ...overrides,
     };
 

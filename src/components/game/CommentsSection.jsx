@@ -14,7 +14,7 @@ import UserCardWithBadges from "../UserCardWithBadges";
  *   comments/<threadId>/<autoId>
  * Limits display to last 300 comments to prevent unbounded growth.
  */
-export default function CommentsSection({ threadId, setTimedMessage }) {
+export default function CommentsSection({ threadId, setTimedMessage, shareTextForComment }) {
   const { user } = useAuth();
 
   const [username, setUsername] = useState("");
@@ -167,18 +167,51 @@ export default function CommentsSection({ threadId, setTimedMessage }) {
         borderTop: "1px solid var(--c-border)",
       }}
     >
-      <h3
+      <div
         style={{
-          margin: 0,
-          marginBottom: 12,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
           fontSize: 16,
           fontWeight: "bold",
           letterSpacing: 1,
           textTransform: "uppercase",
+          marginBottom: 12,
         }}
       >
-        Comments
-      </h3>
+        <h3
+          style={{
+            margin: 0,
+            fontSize: 16,
+            fontWeight: "bold",
+            letterSpacing: 1,
+            textTransform: "uppercase",
+          }}
+        >
+          Comments
+        </h3>
+        {shareTextForComment && (
+          <button
+            type="button"
+            onClick={() => setComment(shareTextForComment)}
+            style={{
+              padding: "6px 12px",
+              borderRadius: 8,
+              border: "1px solid var(--c-border)",
+              backgroundColor: "var(--c-bg)",
+              color: "var(--c-text-strong)",
+              fontSize: 13,
+              fontWeight: "bold",
+              cursor: "pointer",
+              textTransform: "uppercase",
+              letterSpacing: 1,
+            }}
+          >
+            Share Result
+          </button>
+        )}
+      </div>
 
       <form onSubmit={handleSubmit} style={{ marginBottom: 16 }}>
         <div style={{ marginBottom: 8 }}>

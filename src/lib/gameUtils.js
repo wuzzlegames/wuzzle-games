@@ -202,6 +202,15 @@ export function generateShareText(
   return lines.join("\n");
 }
 
+// Remove the trailing "Play Wuzzle Games!" and "https://wuzzlegames.com/" footer
+// from share text. Used when pre-filling the comment field so the comment
+// does not include the promo lines.
+export function shareTextWithoutFooter(shareText) {
+  if (!shareText || typeof shareText !== "string") return "";
+  const footer = /(\n*)?Play Wuzzle Games!\nhttps:\/\/wuzzlegames\.com\/?\s*$/;
+  return shareText.replace(footer, "").trimEnd();
+}
+
 // Build aggregated marathon share totals (turns, max turns, solved counts, and
 // per-stage breakdown) for the current date. Returns null when no per-stage
 // data is available yet.

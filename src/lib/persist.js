@@ -83,7 +83,8 @@ function parseDateString(value) {
   if (parts.length !== 3) return null;
   const [y, m, d] = parts.map((p) => parseInt(p, 10));
   if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return null;
-  const dt = new Date(Date.UTC(y, m - 1, d));
+  // Use local date so "previous day" matches local daily reset (consistent with getCurrentDateString)
+  const dt = new Date(y, m - 1, d);
   if (Number.isNaN(dt.getTime())) return null;
   return dt;
 }

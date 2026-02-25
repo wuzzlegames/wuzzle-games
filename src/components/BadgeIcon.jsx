@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./BadgeIcon.css";
 
 /**
  * Badge icon using images from the /images folder (served from public). Image filename must match badge name (e.g. "Party starter.png").
+ * Falls back to a text initial when the image fails to load.
  *
  * @param {object} props
  * @param {{ id: string; name: string; description: string }} props.badge - Badge definition
@@ -12,9 +13,10 @@ import "./BadgeIcon.css";
  * @param {boolean} [props.profileCard] - When true, renders as full-height left section for profile badge cards
  */
 export default function BadgeIcon({ badge, className = "", size = "md", title, profileCard = false }) {
-  // Use absolute path from public folder - Vercel serves these correctly
+  const [imgError, setImgError] = useState(false);
   const src = `/images/${badge.name}.png`;
   const label = title ?? badge.name;
+  const fallbackInitial = badge.name && badge.name.length > 0 ? badge.name.charAt(0).toUpperCase() : "?";
 
   return (
     <span
@@ -23,7 +25,19 @@ export default function BadgeIcon({ badge, className = "", size = "md", title, p
       aria-label={label}
       title={label}
     >
-      <img src={src} alt="" className="badgeIcon-img" aria-hidden="true" />
+      {!imgError ? (
+        <img
+          src={src}
+          alt=""
+          className="badgeIcon-img"
+          aria-hidden="true"
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <span className="badgeIcon-fallback" aria-hidden="true">
+          {fallbackInitial}
+        </span>
+      )}
     </span>
   );
 }

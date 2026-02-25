@@ -6,6 +6,9 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { useConnectionStatus } from "./hooks/useConnectionStatus";
 import { useAuth } from "./hooks/useAuth";
 import { trackPageView } from "./lib/gtm";
+import { trackSubscription } from "./lib/analytics";
+import { MultiplayerFriendRequestProvider } from "./contexts/MultiplayerFriendRequestContext";
+import { BadgeEarnedToastProvider } from "./contexts/BadgeEarnedToastContext";
 import "./Game.css"; // For utility classes like loadingContainer
 const Game = lazy(() => import("./Game"));
 const Profile = lazy(() => import("./Profile"));
@@ -39,9 +42,8 @@ function App() {
         return newParams;
       });
       
-      // Show success message (you can customize this)
       console.log('Subscription successful! Premium features are now active.');
-      // Optionally show a toast/notification here
+      trackSubscription('complete');
       
       // Force refresh auth token to get latest custom claims (stripeRole)
       // This triggers the useSubscription hook to re-check the subscription status
@@ -62,6 +64,7 @@ function App() {
         return newParams;
       });
       console.log('Subscription cancelled.');
+      trackSubscription('cancelled');
     }
   }, [searchParams, setSearchParams, user]);
 
@@ -97,6 +100,8 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <MultiplayerFriendRequestProvider>
+      <BadgeEarnedToastProvider>
       {/* Connection status indicator */}
       {!isOnline && (
         <div style={{
@@ -173,6 +178,8 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
+      </BadgeEarnedToastProvider>
+      </MultiplayerFriendRequestProvider>
     </ErrorBoundary>
   );
 }

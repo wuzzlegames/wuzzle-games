@@ -48,7 +48,7 @@ export default function WordleSpeedrunLanding() {
         />
         <link
           rel="canonical"
-          href="https://wuzzlegames.com/wuzzle-speedrun/"
+          href="https://wuzzlegames.com/wuzzle-speedrun"
         />
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>

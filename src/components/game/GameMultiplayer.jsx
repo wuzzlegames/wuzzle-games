@@ -7,6 +7,8 @@ import { FLIP_COMPLETE_MS, MAX_BOARDS, TIMER_INTERVAL_MS, DEFAULT_MAX_TURNS, SPE
 import { useAuth } from "../../hooks/useAuth";
 import { useMultiplayerGame } from "../../hooks/useMultiplayerGame";
 import { useMultiplayerController } from "../../hooks/useMultiplayerController";
+import { useMultiplayerFriendRequest } from "../../contexts/MultiplayerFriendRequestContext";
+import { useMultiplayerGameAnalytics } from "../../hooks/useGameAnalytics";
 import { useTimedMessage } from "../../hooks/useTimedMessage";
 import { useShare } from "../../hooks/useShare";
 import { useKeyboard } from "../../hooks/useKeyboard";
@@ -94,6 +96,18 @@ export default function GameMultiplayer() {
     : null;
 
   const multiplayerGame = useMultiplayerGame(effectiveGameCode, isHost, speedrunEnabled, initialGameState);
+  const multiplayerFriendRequest = useMultiplayerFriendRequest();
+  const setMultiplayerFriendRequestContext = multiplayerFriendRequest?.setContext;
+
+  // Expose gameCode and setFriendRequestStatus so modals (Notifications/Friends) can clear sender's "Friend request sent" when recipient declines
+  useEffect(() => {
+    if (setMultiplayerFriendRequestContext && effectiveGameCode && multiplayerGame.setFriendRequestStatus) {
+      setMultiplayerFriendRequestContext(effectiveGameCode, multiplayerGame.setFriendRequestStatus);
+    }
+    return () => {
+      if (setMultiplayerFriendRequestContext) setMultiplayerFriendRequestContext(null, null);
+    };
+  }, [effectiveGameCode, multiplayerGame.setFriendRequestStatus, setMultiplayerFriendRequestContext]);
 
   const [boards, setBoards] = useState([]);
   const [currentGuess, setCurrentGuess] = useState("");
@@ -157,6 +171,15 @@ export default function GameMultiplayer() {
   const gs = multiplayerGame.gameState;
   const isPlayingSpeedrun = gs?.status === "playing" && !!gs?.speedrun;
   const startedAt = gs?.startedAt ?? null;
+
+  const playerCount = gs?.players ? Object.keys(gs.players).length : 0;
+  const roomType = gs?.isPublic ? "public" : "private";
+  useMultiplayerGameAnalytics({
+    roomType,
+    status: gs?.status ?? null,
+    playerCount,
+    winner: gs?.winner ?? null,
+  });
 
   // 3-2-1 countdown when entering speedrun playing. Reset when leaving playing.
   useEffect(() => {

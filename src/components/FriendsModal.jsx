@@ -4,6 +4,7 @@ import UserCardWithBadges from "./UserCardWithBadges";
 import { useAuth } from "../hooks/useAuth";
 import { useMultiplayerGame } from "../hooks/useMultiplayerGame";
 import { useTimedMessage } from "../hooks/useTimedMessage";
+import { useMultiplayerFriendRequest } from "../contexts/MultiplayerFriendRequestContext";
 import GameToast from "./game/GameToast";
 import { useNavigate } from "react-router-dom";
 import {
@@ -37,6 +38,7 @@ export default function FriendsModal({ isOpen, onRequestClose }) {
 
   // Lightweight multiplayer host hook used purely to create games for challenges.
   const multiplayerHost = useMultiplayerGame(null, true, false);
+  const multiplayerContext = useMultiplayerFriendRequest();
 
   const [selectedFriendForChallenge, setSelectedFriendForChallenge] = React.useState(null);
   const [challengeBoards, setChallengeBoards] = React.useState(1);
@@ -166,7 +168,7 @@ export default function FriendsModal({ isOpen, onRequestClose }) {
           <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", color: "var(--c-text)" }}>
             Add friend by email or username
           </label>
-          <div style={{ display: "flex", gap: "8px" }}>
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
             <input
               type="text"
               placeholder="friend@example.com or username"
@@ -258,7 +260,7 @@ export default function FriendsModal({ isOpen, onRequestClose }) {
                       Accept
                     </button>
                     <button
-                      onClick={() => declineFriendRequest(request.id)}
+                      onClick={() => declineFriendRequest(request.id, multiplayerContext?.gameCode ?? undefined, multiplayerContext?.setFriendRequestStatus ?? undefined)}
                       style={{
                         padding: "6px 10px",
                         borderRadius: "6px",
@@ -692,7 +694,7 @@ export default function FriendsModal({ isOpen, onRequestClose }) {
               >
                 Room visibility
               </div>
-              <div style={{ display: "flex", gap: "12px" }}>
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: 13, color: "var(--c-text)" }}>
                   <input
                     type="radio"
@@ -716,7 +718,7 @@ export default function FriendsModal({ isOpen, onRequestClose }) {
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
+            <div style={{ display: "flex", gap: "12px", marginTop: "12px", flexWrap: "wrap" }}>
               <button
                 onClick={() => setIsChallengeConfigOpen(false)}
                 style={{
@@ -821,7 +823,7 @@ export default function FriendsModal({ isOpen, onRequestClose }) {
           >
             Are you sure you want to remove {friendToRemove?.name} from your friends list? They will be removed from your list on both sides.
           </p>
-          <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
+          <div style={{ display: "flex", gap: "12px", marginTop: "12px", flexWrap: "wrap" }}>
             <button
               onClick={() => setFriendToRemove(null)}
               style={{

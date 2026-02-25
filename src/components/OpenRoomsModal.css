@@ -25,6 +25,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .openRoomsCodeInput {
@@ -80,6 +81,10 @@
   color: var(--c-text);
 }
 
+.openRoomsStatusError {
+  color: var(--c-incorrect, #c53030);
+}
+
 .openRoomsList {
   max-height: 320px;
   overflow-y: auto;
@@ -103,6 +108,7 @@
 .openRoomsItemMain {
   text-align: left;
   flex: 1;
+  min-width: 0;
 }
 
 .openRoomsItemTitle {

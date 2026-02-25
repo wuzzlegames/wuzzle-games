@@ -10,6 +10,7 @@ export default function NotificationToast({
   onClick,
   onDismiss,
   durationMs = DEFAULT_DURATION_MS,
+  ctaText = "Click to view",
 }) {
   useEffect(() => {
     if (!message || !onDismiss) return;
@@ -28,7 +29,7 @@ export default function NotificationToast({
       onClick={onClick}
       role="status"
       aria-live="polite"
-      aria-label={`${text} Click to view notifications`}
+      aria-label={`${text} ${ctaText}`}
       className="notificationToast"
     >
       {showBadge ? (
@@ -38,14 +39,14 @@ export default function NotificationToast({
           </span>
           <span className="notificationToast-text">
             <span className="notificationToast-message">{text}</span>
-            <span className="notificationToast-cta">Click to view</span>
+            <span className="notificationToast-cta">{ctaText}</span>
           </span>
         </>
       ) : (
         <>
           <span className="notificationToast-message">{text}</span>
           <span className="notificationToast-cta" style={{ fontSize: 12, opacity: 0.9 }}>
-            Click to view
+            {ctaText}
           </span>
         </>
       )}

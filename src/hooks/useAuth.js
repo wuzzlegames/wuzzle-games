@@ -21,6 +21,8 @@ import { logError, formatError } from '../lib/errorUtils';
 import { flushPendingLeaderboardOnLogin } from '../lib/pendingLeaderboard';
 import { syncLocalStreaksToRemoteOnLogin } from '../lib/singlePlayerStore';
 import { grantBadge } from '../lib/badgeService';
+import { getBadgeById } from '../lib/badges';
+import { badgeEarnedToastRef } from '../contexts/BadgeEarnedToastContext';
 import { CHALLENGE_EXPIRY_MS } from './useNotificationSeen';
 
 // Helper: determine whether a user is allowed to use social features (friends,
@@ -162,7 +164,10 @@ export function useAuth() {
             });
 
             if (isFirstProfile) {
-              grantBadge({ database, uid: authUser.uid, badgeId: 'wuzzle_games_member' }).catch((err) => {
+              grantBadge({ database, uid: authUser.uid, badgeId: 'wuzzle_games_member' }).then(() => {
+                const def = getBadgeById('wuzzle_games_member');
+                if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+              }).catch((err) => {
                 logError(err, 'useAuth.grantBadge.wuzzle_games_member');
               });
             }

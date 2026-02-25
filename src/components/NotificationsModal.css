@@ -42,4 +42,5 @@
   gap: 6px;
   align-items: center;
   flex-shrink: 0;
+  flex-wrap: wrap;
 }

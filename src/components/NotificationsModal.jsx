@@ -5,6 +5,7 @@ import BadgeIcon from "./BadgeIcon";
 import { useAuth } from "../hooks/useAuth";
 import { useBadgesForUser } from "../hooks/useUserBadges";
 import { useNotificationSeen } from "../hooks/useNotificationSeen";
+import { useMultiplayerFriendRequest } from "../contexts/MultiplayerFriendRequestContext";
 import { getAllEarnedSorted } from "../lib/badges";
 import { CHALLENGE_EXPIRY_MS } from "../hooks/useNotificationSeen";
 import "./NotificationsModal.css";
@@ -79,11 +80,13 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
     friendRequests,
     incomingChallenges,
     sentChallenges,
+    acceptFriendRequest,
     declineFriendRequest,
     dismissChallenge,
     cancelSentChallenge,
   } = useAuth();
   const { markNotificationsSeen } = useNotificationSeen(user);
+  const multiplayerContext = useMultiplayerFriendRequest();
 
   useEffect(() => {
     if (isOpen && user?.uid) {
@@ -96,21 +99,23 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
     return createdAt + CHALLENGE_EXPIRY_MS < Date.now();
   };
 
-  const handleDismissFriendRequest = async (requestId) => {
+  const handleAcceptFriendRequest = async (requestId, fromName) => {
     try {
-      await declineFriendRequest(requestId);
+      await acceptFriendRequest(requestId, fromName);
     } catch (err) {
-      alert(err?.message || "Failed to dismiss");
+      alert(err?.message || "Failed to accept");
     }
   };
 
-  const handleViewBadgesFriendRequest = async (requestId) => {
+  const handleDeclineFriendRequest = async (requestId) => {
     try {
-      await declineFriendRequest(requestId);
-      onRequestClose?.();
-      navigate("/profile", { state: { openYourBadges: true } });
+      await declineFriendRequest(
+        requestId,
+        multiplayerContext?.gameCode ?? undefined,
+        multiplayerContext?.setFriendRequestStatus ?? undefined
+      );
     } catch (err) {
-      alert(err?.message || "Failed to dismiss");
+      alert(err?.message || "Failed to decline");
     }
   };
 
@@ -183,23 +188,32 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
           </p>
         ) : (
           <>
-            {/* Friend requests: badge left, text right, Dismiss + View badges */}
+            {/* Friend requests: Accept and Decline only */}
             {hasFriendRequests && (
               <div style={{ marginBottom: "24px" }}>
                 <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "var(--c-text)", textAlign: "left" }}>
                   Friend Requests ({friendRequests.length})
                 </h3>
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid var(--c-border)" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid var(--c-border)" }}>
                   {friendRequests.map((request) => (
-                    <NotificationReceivedCard
+                    <div
                       key={request.id}
-                      fromUserId={request.id}
-                      title={request.fromName || "Someone"}
-                      subline="wants to be friends"
-                      isFriendRequest
-                      onDismiss={() => handleDismissFriendRequest(request.id)}
-                      onViewBadges={() => handleViewBadgesFriendRequest(request.id)}
-                    />
+                      className="notificationsModalCard notificationsModalCard--friendRequest"
+                      style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 14px", borderRadius: 8, border: "1px solid var(--c-border)", background: "var(--c-panel)" }}
+                    >
+                      <div className="notificationsModalCardContent" style={{ flex: 1, minWidth: 0 }}>
+                        <div className="notificationsModalCardTitle">{request.fromName || "Someone"}</div>
+                        <div className="notificationsModalCardSub">wants to be friends</div>
+                      </div>
+                      <div className="notificationsModalCardActions" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                        <button type="button" onClick={() => handleAcceptFriendRequest(request.id, request.fromName)} style={buttonStyle}>
+                          Accept
+                        </button>
+                        <button type="button" onClick={() => handleDeclineFriendRequest(request.id)} style={buttonSecondaryStyle}>
+                          Decline
+                        </button>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>

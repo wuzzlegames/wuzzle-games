@@ -7,6 +7,8 @@ import { clampBoards, clampPlayers, validateGameCode } from '../lib/validation';
 import { MAX_BOARDS, ABSOLUTE_MAX_PLAYERS, DEFAULT_MAX_PLAYERS, SPEEDRUN_COUNTDOWN_MS } from '../lib/gameConstants';
 import { logError } from '../lib/errorUtils';
 import { grantBadge } from '../lib/badgeService';
+import { getBadgeById } from '../lib/badges';
+import { badgeEarnedToastRef } from '../contexts/BadgeEarnedToastContext';
 
 const GAME_NOT_FOUND_HINT =
   'Ensure VITE_FIREBASE_DATABASE_URL in .env matches your Firebase Console Realtime Database URL.';
@@ -273,7 +275,10 @@ const createGame = useCallback(async (options = {}) => {
 
     try {
       await set(ref(database, gamePath), gameData);
-      grantBadge({ database, uid: user.uid, badgeId: 'party_starter' }).catch((err) =>
+      grantBadge({ database, uid: user.uid, badgeId: 'party_starter' }).then(() => {
+        const def = getBadgeById('party_starter');
+        if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+      }).catch((err) =>
         logError(err, 'useMultiplayerGame.grantBadge')
       );
       return { code, gameData };
@@ -561,10 +566,7 @@ const createGame = useCallback(async (options = {}) => {
 
 /**
    * Submit a guess.
-   *
-   * For 2-player non-speedrun games, this enforces turn order using the
-   * `currentTurn` field. For speedrun and/or multi-player rooms, all players
-   * may submit guesses concurrently.
+   * All players may submit guesses at any time (no turn enforcement).
    */
   const submitGuess = useCallback(async (code, guess, colors) => {
     if (!user) throw new Error('User must be signed in');
@@ -639,52 +641,12 @@ const createGame = useCallback(async (options = {}) => {
   }, [user]);
 
   /**
-   * Switch turn without adding a guess (for when a player has finished)
+   * No-op: there is no turn-based mode; all players may guess at any time.
+   * Kept for API compatibility.
    */
-  const switchTurn = useCallback(async (code) => {
-    if (!user) throw new Error('User must be signed in');
-
-    const gamePath = `multiplayer/${code}`;
-    const gameDataRef = ref(database, gamePath);
-
-    try {
-      const snapshot = await get(gameDataRef);
-
-      if (!snapshot.exists()) {
-        throw new Error('Game not found');
-      }
-
-      const gameData = snapshot.val();
-      if (!gameData || typeof gameData !== 'object') {
-        throw new Error('Invalid game state');
-      }
-      if (gameData.speedrun) {
-        // No turn switching in speedrun mode.
-        return;
-      }
-      const players = gameData.players || {};
-      const isHost = players[user.uid]?.isHost === true;
-      const isMyTurn = gameData.currentTurn === (isHost ? 'host' : 'guest');
-
-      if (!isMyTurn) {
-        throw new Error('Not your turn');
-      }
-
-      // Just switch the turn without adding a guess
-      if (isHost) {
-        await update(gameDataRef, {
-          currentTurn: 'guest'
-        });
-      } else {
-        await update(gameDataRef, {
-          currentTurn: 'host'
-        });
-      }
-    } catch (err) {
-      setError(err.message);
-      throw err;
-    }
-  }, [user]);
+  const switchTurn = useCallback(async () => {
+    // No turn enforcement; everyone can guess anytime.
+  }, []);
 
   /**
    * Set game winner

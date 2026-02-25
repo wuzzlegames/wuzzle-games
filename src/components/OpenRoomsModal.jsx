@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ref, onValue, off, remove } from "firebase/database";
+import { ref, onValue, off, remove, get } from "firebase/database";
 import Modal from "./Modal";
 import { database, auth } from "../config/firebase";
 import { MULTIPLAYER_WAITING_TIMEOUT_MS } from "../lib/multiplayerConfig";
@@ -28,6 +28,7 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
   const [nowMs, setNowMs] = useState(Date.now());
   const [joinCode, setJoinCode] = useState("");
   const [codeError, setCodeError] = useState("");
+  const [roomsError, setRoomsError] = useState("");
 
   // Local clock so age/expiry labels in the modal update while it is open.
   useEffect(() => {
@@ -40,11 +41,13 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
     if (!isOpen) return undefined;
 
     setLoading(true);
+    setRoomsError("");
     const roomsRef = ref(database, "multiplayer");
 
     const unsubscribe = onValue(
       roomsRef,
       (snapshot) => {
+        setRoomsError("");
         const value = snapshot.val() || {};
         const nextRooms = Object.entries(value)
           .map(([code, data]) => ({ code, data }))
@@ -83,9 +86,10 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
         setRooms(nextRooms);
         setLoading(false);
       },
-      () => {
+      (err) => {
         setRooms([]);
         setLoading(false);
+        setRoomsError("Could not load rooms. Try again.");
       }
     );
 
@@ -95,10 +99,40 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
     };
   }, [isOpen, adminMode]);
 
-  const handleJoinByCode = () => {
+  const handleJoinByCode = async () => {
     const result = validateGameCode(joinCode);
     if (!result.isValid) {
       setCodeError(result.errors.join('. ') || 'Enter a valid 6-digit code');
+      return;
+    }
+    setCodeError("");
+    try {
+      const roomRef = ref(database, `multiplayer/${result.value}`);
+      const snapshot = await get(roomRef);
+      const data = snapshot.val();
+      if (!data) {
+        setTimedMessage("Room not found or has expired.", 5000);
+        return;
+      }
+      const status = data.status || "waiting";
+      if (status !== "waiting") {
+        setTimedMessage("Game has already started.", 5000);
+        return;
+      }
+      const playersMap = data.players || {};
+      const playerCount = Object.keys(playersMap).length;
+      const maxPlayers = Number.isFinite(data.maxPlayers) ? data.maxPlayers : 2;
+      if (playerCount >= maxPlayers) {
+        setTimedMessage("Room is full.", 5000);
+        return;
+      }
+      const createdAt = typeof data.createdAt === "number" ? data.createdAt : 0;
+      if (createdAt && Date.now() - createdAt > MULTIPLAYER_WAITING_TIMEOUT_MS) {
+        setTimedMessage("Room not found or has expired.", 5000);
+        return;
+      }
+    } catch (e) {
+      setTimedMessage("Could not check room. Try again.", 5000);
       return;
     }
     onRequestClose?.();
@@ -193,12 +227,15 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
           </div>
         </div>
         {codeError && <div className="openRoomsCodeError">{codeError}</div>}
+        {roomsError && (
+          <div className="openRoomsStatus openRoomsStatusError">{roomsError}</div>
+        )}
 
         {loading ? (
           <div className="openRoomsStatus openRoomsStatusLoading">
             Loading rooms...
           </div>
-        ) : rooms.length === 0 ? (
+        ) : rooms.length === 0 && !roomsError ? (
           <div className="openRoomsStatus openRoomsStatusEmpty">
             {adminMode
               ? "There are no active rooms right now."

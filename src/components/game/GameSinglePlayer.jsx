@@ -30,8 +30,11 @@ import { useStageTimer } from "../../hooks/useStageTimer";
 import { loadStreakRemoteAware, saveStreakRemoteAware, saveSolvedState } from "../../lib/singlePlayerStore";
 import { addPendingLeaderboard } from "../../lib/pendingLeaderboard";
 import { grantBadges } from "../../lib/badgeService";
+import { getBadgeById } from "../../lib/badges";
+import { badgeEarnedToastRef } from "../../contexts/BadgeEarnedToastContext";
 import { clampBoards } from "../../lib/validation";
 import { logError } from "../../lib/errorUtils";
+import { useSinglePlayerGameAnalytics } from "../../hooks/useGameAnalytics";
 import { filterWordsByClues } from "../../lib/wordFilter";
 import SubscribeModal from "../SubscribeModal";
 import SinglePlayerGameView from "./SinglePlayerGameView";
@@ -502,6 +505,18 @@ export default function GameSinglePlayer({
     [boards, gameEngine]
   );
 
+  const turnsUsed = useMemo(() => getTurnsUsed(boards), [boards]);
+  const puzzleDate = archiveDate || getCurrentDateString();
+  useSinglePlayerGameAnalytics({
+    mode,
+    numBoards,
+    speedrunEnabled,
+    finished,
+    allSolved,
+    currentTurn: turnsUsed,
+    puzzleDate: mode === "daily" ? puzzleDate : undefined,
+  });
+
   const isInputBlocked = useCallback(() => {
     if (allSolved) return true;
     if (showPopup || showOutOfGuesses) return true;
@@ -668,8 +683,14 @@ export default function GameSinglePlayer({
       if (authUser?.uid) {
         const newlyEarned = ["first_solve"];
         if (speedrunEnabled) newlyEarned.push("speedrun_beginner");
-        if (mode !== "marathon" && numBoards >= 2) newlyEarned.push("multiboard_starter");
-        grantBadges({ database, uid: authUser.uid, badgeIds: newlyEarned }).catch((err) => {
+        if (numBoards >= 2) newlyEarned.push("multiboard_starter");
+        grantBadges({ database, uid: authUser.uid, badgeIds: newlyEarned }).then(() => {
+          const firstId = newlyEarned[0];
+          if (firstId) {
+            const def = getBadgeById(firstId);
+            if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+          }
+        }).catch((err) => {
           logError(err, 'GameSinglePlayer.grantBadges.onSolve');
         });
       }
@@ -721,7 +742,10 @@ export default function GameSinglePlayer({
               }
 
               if (badgeIds.length > 0) {
-                grantBadges({ database, uid: authUser.uid, badgeIds }).catch((err) => {
+                grantBadges({ database, uid: authUser.uid, badgeIds }).then(() => {
+                  const def = getBadgeById(badgeIds[0]);
+                  if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                }).catch((err) => {
                   logError(err, 'GameSinglePlayer.grantBadges.streak');
                 });
               }
@@ -745,7 +769,10 @@ export default function GameSinglePlayer({
               }
 
               if (badgeIds.length > 0) {
-                grantBadges({ database, uid: authUser.uid, badgeIds }).catch((err) => {
+                grantBadges({ database, uid: authUser.uid, badgeIds }).then(() => {
+                  const def = getBadgeById(badgeIds[0]);
+                  if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                }).catch((err) => {
                   logError(err, 'GameSinglePlayer.grantBadges.streak');
                 });
               }
@@ -782,7 +809,10 @@ export default function GameSinglePlayer({
                       const aggregated = await loadAggregatedStats({ uid: authUser.uid, mode, speedrunEnabled });
                       const prevFastest = aggregated?.fastestTimeMs ?? null;
                       if (prevFastest === null || currentTimeMs < prevFastest) {
-                        grantBadges({ database, uid: authUser.uid, badgeIds: ['personal_best'] }).catch((err) => {
+                        grantBadges({ database, uid: authUser.uid, badgeIds: ['personal_best'] }).then(() => {
+                          const def = getBadgeById('personal_best');
+                          if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                        }).catch((err) => {
                           logError(err, 'GameSinglePlayer.grantBadges.personal_best');
                         });
                       }
@@ -958,7 +988,6 @@ export default function GameSinglePlayer({
         .join(" · "),
     [boards]
   );
-  const turnsUsed = useMemo(() => getTurnsUsed(boards), [boards]);
 
   const statusText =
     speedrunEnabled

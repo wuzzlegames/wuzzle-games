@@ -13,6 +13,7 @@ import HamburgerMenu from "./HamburgerMenu";
 import UserCard from "./UserCard";
 import NotificationsModal from "./NotificationsModal";
 import NotificationToast from "./NotificationToast";
+import { useBadgeEarnedToast } from "../contexts/BadgeEarnedToastContext";
 
 // Persist across SiteHeader unmount/remount (navigation) so we don't re-toast on every page change
 const baselineIdsRef = { current: new Set() };
@@ -45,6 +46,9 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
   const [showSubscribeModal, setShowSubscribeModal] = useState(false);
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
   const [notificationToast, setNotificationToast] = useState(null);
+  const badgeEarnedContext = useBadgeEarnedToast();
+  const badgeEarnedToast = badgeEarnedContext?.badgeEarnedToast;
+  const clearBadgeEarned = badgeEarnedContext?.clearBadgeEarned;
   const toastFromUid = notificationToast
     ? (notificationToast.type === "friendRequest"
         ? notificationToast.id
@@ -406,7 +410,19 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
         onRequestClose={() => setShowNotificationsModal(false)}
       />
 
-      {notificationToast && (
+      {badgeEarnedToast && clearBadgeEarned && (
+        <NotificationToast
+          message={badgeEarnedToast.description}
+          badge={badgeEarnedToast}
+          ctaText="View all badges in profile"
+          onClick={() => {
+            clearBadgeEarned();
+            navigate("/profile", { state: { openYourBadges: true } });
+          }}
+          onDismiss={clearBadgeEarned}
+        />
+      )}
+      {notificationToast && !badgeEarnedToast && (
         <NotificationToast
           message={notificationToast.label}
           badge={toastPrimaryBadge}

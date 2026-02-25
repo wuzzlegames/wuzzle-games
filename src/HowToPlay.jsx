@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import SiteHeader from "./components/SiteHeader";
 import { Suspense, lazy } from "react";
+import { trackHowToPlayView } from "./lib/analytics";
 import "./HowToPlay.css";
 const FeedbackModal = lazy(() => import("./components/FeedbackModal"));
 
@@ -138,6 +139,10 @@ function KeyboardKey({ letter, colors = [], showGrid = false, gridCols = 2, grid
 export default function HowToPlay() {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [selectedMultiBoard, setSelectedMultiBoard] = useState(0);
+
+  useEffect(() => {
+    trackHowToPlayView();
+  }, []);
 
   // Single board example: CLOUD solution, DRONE guess
   // D is yellow (in word, wrong position), R is gray (not in word), O is green (correct), N is gray, E is gray

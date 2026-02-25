@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { loadJSON, makeSolvedKey } from "../lib/persist";
 import { getMaxTurns, createBoardState } from "../lib/wordle";
 import { loadWordLists } from "../lib/wordLists";
@@ -87,6 +87,8 @@ export function useSinglePlayerGame({
   // so we'll check premium access in the component level
   const flipPopupTimeoutRef = useRef(null);
   const isMountedRef = useRef(true);
+  const lastInitDateRef = useRef(null);
+  const [dateKey, setDateKey] = useState(() => getCurrentDateString());
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -289,6 +291,7 @@ export function useSinglePlayerGame({
             setMessage("");
             clearMessageTimer();
 
+            if (!archiveDate) lastInitDateRef.current = dateString;
             setIsLoading(false);
             return;
           }
@@ -377,6 +380,7 @@ export function useSinglePlayerGame({
         setRevealId(0);
         setIsFlipping(false);
 
+        if (!archiveDate) lastInitDateRef.current = dateString;
         setIsLoading(false);
       } catch (error) {
         logError(error, 'useSinglePlayerGame.initGame');
@@ -400,5 +404,18 @@ export function useSinglePlayerGame({
     // initGame uses stable imports (loadWordLists, loadGameState, selectDailyWords, etc.),
     // refs (isMountedRef, committedRef, flipPopupTimeoutRef), and config in deps below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [numBoards, mode, speedrunEnabled, marathonIndex, authUser, authLoading, archiveDate]);
+  }, [numBoards, mode, speedrunEnabled, marathonIndex, authUser, authLoading, archiveDate, dateKey]);
+
+  // Re-initialize when calendar date changes (e.g. tab open across midnight) so UI shows today's puzzle
+  useEffect(() => {
+    if (archiveDate) return;
+    const onFocus = () => {
+      const now = getCurrentDateString();
+      if (lastInitDateRef.current !== null && lastInitDateRef.current !== now) {
+        setDateKey(now);
+      }
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [archiveDate]);
 }

@@ -47,7 +47,7 @@ export default function MultiBoardWordleLanding() {
         />
         <link
           rel="canonical"
-          href="https://wuzzlegames.com/multi-board-wuzzle/"
+          href="https://wuzzlegames.com/multi-board-wuzzle"
         />
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>

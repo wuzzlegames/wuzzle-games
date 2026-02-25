@@ -91,7 +91,7 @@ describe('FriendsModal', () => {
     expect(acceptFriendRequest).toHaveBeenCalledWith('req1', 'Alice');
 
     fireEvent.click(screen.getByRole('button', { name: /decline/i }));
-    expect(declineFriendRequest).toHaveBeenCalledWith('req1');
+    expect(declineFriendRequest).toHaveBeenCalledWith('req1', undefined, undefined);
   });
 
   it('renders friends list with Challenge and Remove actions', async () => {

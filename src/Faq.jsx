@@ -1,11 +1,16 @@
-import React, { Suspense, lazy } from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import { Helmet } from "react-helmet-async";
 import SiteHeader from "./components/SiteHeader";
+import { trackFaqView } from "./lib/analytics";
 const FeedbackModal = lazy(() => import("./components/FeedbackModal"));
 import "./Faq.css";
 
 export default function Faq() {
   const [showFeedbackModal, setShowFeedbackModal] = React.useState(false);
+
+  useEffect(() => {
+    trackFaqView();
+  }, []);
 
   return (
     <div className="faqRoot">

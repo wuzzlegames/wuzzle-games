@@ -324,7 +324,7 @@ describe('useMultiplayerGame – DB operations', () => {
     expect(stored.players['host-1'].timeMs).toBe(16_000); // now 20_000 - effectiveStart 4_000
   });
 
-  it('switchTurn toggles between host and guest in non-speedrun mode', async () => {
+  it('switchTurn is a no-op (no turn enforcement; everyone can guess anytime)', async () => {
     __dbData['multiplayer/901234'] = {
       status: 'playing',
       speedrun: false,
@@ -342,7 +342,8 @@ describe('useMultiplayerGame – DB operations', () => {
     await act(async () => {
       await hookResult.switchTurn('901234');
     });
-    expect(__dbData['multiplayer/901234'].currentTurn).toBe('guest');
+    // switchTurn no longer updates state; game state unchanged
+    expect(__dbData['multiplayer/901234'].currentTurn).toBe('host');
   });
 
   it('setWinner marks winner and finished status', async () => {

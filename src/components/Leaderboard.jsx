@@ -1,7 +1,8 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLeaderboard } from '../hooks/useLeaderboard';
 import { useAuth } from '../hooks/useAuth';
+import { trackLeaderboardView } from '../lib/analytics';
 import { formatElapsed } from '../lib/wordle';
 import SiteHeader from './SiteHeader';
 import UserCardWithBadges from './UserCardWithBadges';
@@ -16,6 +17,10 @@ export default function Leaderboard() {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const { entries, loading, error } = useLeaderboard(mode, mode === 'daily' ? numBoards : null, 100);
+
+  useEffect(() => {
+    trackLeaderboardView('mode-specific');
+  }, []);
 
   // All possible board counts for filtering (1-32)
   const boardOptions = [

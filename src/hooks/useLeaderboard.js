@@ -102,10 +102,12 @@ export function useLeaderboard(mode, numBoards = null, limit = 100) {
     const basePath = resetsDaily ? `leaderboard/${mode}/${dateKey}` : `leaderboard/${mode}`;
     const leaderboardRef = ref(database, basePath);
 
-    // Fetch entries; we sort in JS by timeMs (ascending = faster is better), then timestamp for ties.
+    // Fetch a large window: limitToLast is by key order, not timeMs, so we fetch more and sort in JS.
+    // True "top N by time" would require a DB index on timeMs; this gives a best-effort approximation.
+    const fetchSize = Math.min(Math.max(limit * 20, 500), 2000);
     const leaderboardQuery = query(
       leaderboardRef,
-      limitToLast(Math.min(limit * 3, 500)) // Cap at 500 to prevent excessive data transfer
+      limitToLast(fetchSize)
     );
 
     const unsubscribe = onValue(

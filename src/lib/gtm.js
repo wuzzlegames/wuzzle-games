@@ -24,7 +24,7 @@ export function initGTM() {
   }
 
   // index.html is the single source that loads the GTM script and pushes gtm.start/gtm.js
-  console.log('[GTM] dataLayer ready (container loaded from index.html)');
+  // console.log('[GTM] dataLayer ready (container loaded from index.html)');
   return true;
 }
 
@@ -51,7 +51,7 @@ export function isGTMEnabled() {
  */
 export function pushToDataLayer(eventName, eventParams = {}) {
   if (!isGTMEnabled()) {
-    console.log('[GTM] Event not tracked (disabled):', eventName, eventParams);
+    // console.log('[GTM] Event not tracked (disabled):', eventName, eventParams);
     return;
   }
 
@@ -60,9 +60,9 @@ export function pushToDataLayer(eventName, eventParams = {}) {
       event: eventName,
       ...eventParams
     });
-    console.log('[GTM] Event tracked:', eventName, eventParams);
+    // console.log('[GTM] Event tracked:', eventName, eventParams);
   } catch (error) {
-    console.error('[GTM] Error pushing to dataLayer:', error);
+    // console.error('[GTM] Error pushing to dataLayer:', error);
   }
 }
 

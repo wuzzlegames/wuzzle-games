@@ -14,10 +14,17 @@ export function useGameMode() {
   const params = useParams();
   const [searchParams] = useSearchParams();
   const searchString = searchParams.toString();
+  const modeParam = params?.mode;
+  const boardsParam = params?.boards;
+  const variantParam = params?.variant;
+  const codeParam = params?.code;
 
   const gameConfig = useMemo(() => {
-    return parseGameUrl(params, searchParams);
-  }, [params, searchString]);
+    return parseGameUrl(
+      { mode: modeParam, boards: boardsParam, variant: variantParam, code: codeParam },
+      searchParams
+    );
+  }, [modeParam, boardsParam, variantParam, codeParam, searchString, searchParams]);
 
   const modeConfig = useMemo(() => {
     return getGameMode(gameConfig.mode);

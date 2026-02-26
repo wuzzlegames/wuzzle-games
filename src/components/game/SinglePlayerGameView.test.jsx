@@ -10,7 +10,7 @@ vi.mock('../Keyboard', () => ({
 
 vi.mock('./BoardSelector', () => ({
   __esModule: true,
-  default: () => <div data-testid="board-selector" />, // eslint-disable-line react-display-name
+  default: () => <div data-testid="board-selector" />, // eslint-disable-line react/display-name
 }));
 
 // We only care here that SinglePlayerGameView wires turnsUsed through to

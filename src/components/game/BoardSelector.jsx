@@ -94,7 +94,7 @@ export default function BoardSelector({
                 
                 return (
                   <button
-                    key={index}
+                    key={board.solution ?? `board-${index}`}
                     onClick={() => {
                       setSelectedBoardIndex(index);
                       setShowBoardSelector(false);

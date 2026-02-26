@@ -253,7 +253,7 @@ export default function SinglePlayerGameView({
           >
             {boards.map((board, index) => (
               <GameBoard
-                key={index}
+                key={board.solution ?? `board-${index}`}
                 board={board}
                 index={index}
                 numBoards={numBoards}
@@ -280,6 +280,7 @@ export default function SinglePlayerGameView({
                 threadId={commentThreadId}
                 setTimedMessage={setTimedMessage}
                 shareTextForComment={shareTextForComment}
+                onShare={handleShare}
               />
             </div>
           )}

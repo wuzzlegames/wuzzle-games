@@ -89,7 +89,7 @@ describe('SiteHeader', () => {
 
     render(<SiteHeader onOpenFeedback={vi.fn()} onSignUpComplete={vi.fn()} />);
 
-    expect(screen.getByText(/leaderboard/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /leaderboard/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /sign out/i })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /sign in/i })).not.toBeInTheDocument();
 
@@ -174,13 +174,9 @@ describe('SiteHeader', () => {
 
     render(<SiteHeader onOpenFeedback={vi.fn()} onSignUpComplete={vi.fn()} />);
 
-    // Open hamburger menu
-    const menuButton = screen.getByTitle('Menu');
-    await user.click(menuButton);
-
-    // Open Challenges modal
-    const challengesButton = screen.getByRole('button', { name: /challenges/i });
-    await user.click(challengesButton);
+    // Open Challenges modal via header Challenges icon (or open hamburger then click menu Challenges)
+    const challengesButtons = screen.getAllByRole('button', { name: /challenges/i });
+    await user.click(challengesButtons[0]);
 
     // Headings
     expect(screen.getByText(/sent/i)).toBeInTheDocument();

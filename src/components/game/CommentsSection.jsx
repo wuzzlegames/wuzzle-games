@@ -14,7 +14,7 @@ import UserCardWithBadges from "../UserCardWithBadges";
  *   comments/<threadId>/<autoId>
  * Limits display to last 300 comments to prevent unbounded growth.
  */
-export default function CommentsSection({ threadId, setTimedMessage, shareTextForComment }) {
+export default function CommentsSection({ threadId, setTimedMessage, shareTextForComment, onShare }) {
   const { user } = useAuth();
 
   const [username, setUsername] = useState("");
@@ -69,22 +69,29 @@ export default function CommentsSection({ threadId, setTimedMessage, shareTextFo
     const commentsRef = ref(database, `comments/${threadId}`);
     // Limit to last 300 comments to prevent unbounded growth
     const commentsQuery = query(commentsRef, limitToLast(300));
-    const unsubscribe = onValue(commentsQuery, (snapshot) => {
-      if (!snapshot.exists()) {
+    const unsubscribe = onValue(
+      commentsQuery,
+      (snapshot) => {
+        if (!snapshot.exists()) {
+          setComments([]);
+          return;
+        }
+        const raw = snapshot.val() || {};
+        const list = Object.entries(raw)
+          .map(([id, data]) => ({ id, ...(data || {}) }))
+          // Newest comments first: sort by createdAt descending, falling back to 0.
+          .sort((a, b) => {
+            const at = a.createdAt || 0;
+            const bt = b.createdAt || 0;
+            return bt - at;
+          });
+        setComments(list);
+      },
+      (err) => {
+        logError(err, "Comments subscription error");
         setComments([]);
-        return;
       }
-      const raw = snapshot.val() || {};
-      const list = Object.entries(raw)
-        .map(([id, data]) => ({ id, ...(data || {}) }))
-        // Newest comments first: sort by createdAt descending, falling back to 0.
-        .sort((a, b) => {
-          const at = a.createdAt || 0;
-          const bt = b.createdAt || 0;
-          return bt - at;
-        });
-      setComments(list);
-    });
+    );
 
     return () => {
       if (typeof unsubscribe === "function") {
@@ -192,24 +199,46 @@ export default function CommentsSection({ threadId, setTimedMessage, shareTextFo
           Comments
         </h3>
         {shareTextForComment && (
-          <button
-            type="button"
-            onClick={() => setComment(shareTextForComment)}
-            style={{
-              padding: "6px 12px",
-              borderRadius: 8,
-              border: "1px solid var(--c-border)",
-              backgroundColor: "var(--c-bg)",
-              color: "var(--c-text-strong)",
-              fontSize: 13,
-              fontWeight: "bold",
-              cursor: "pointer",
-              textTransform: "uppercase",
-              letterSpacing: 1,
-            }}
-          >
-            Share Result
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <button
+              type="button"
+              onClick={() => setComment(shareTextForComment)}
+              style={{
+                padding: "6px 12px",
+                borderRadius: 8,
+                border: "none",
+                background: "var(--c-accent-1)",
+                color: "var(--c-text-strong)",
+                fontSize: 13,
+                fontWeight: "bold",
+                cursor: "pointer",
+                textTransform: "uppercase",
+                letterSpacing: 1,
+              }}
+            >
+              Share in comments
+            </button>
+            {onShare && (
+              <button
+                type="button"
+                onClick={onShare}
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: 8,
+                  border: "none",
+                  background: "var(--c-accent-1)",
+                  color: "var(--c-text-strong)",
+                  fontSize: 13,
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textTransform: "uppercase",
+                  letterSpacing: 1,
+                }}
+              >
+                Share
+              </button>
+            )}
+          </div>
         )}
       </div>
 

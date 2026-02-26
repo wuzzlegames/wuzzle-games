@@ -19,6 +19,33 @@ import { ref, get } from "firebase/database";
 
 const BOARD_OPTIONS = Array.from({ length: MAX_BOARDS }, (_, i) => i + 1);
 
+const MODE_ROW_ICON_SIZE = 48;
+
+function ModeRowIcon({ iconImage, fallbackLetter }) {
+  const [useFallback, setUseFallback] = React.useState(!iconImage);
+  const src = iconImage ? `/images/${encodeURIComponent(iconImage)}` : null;
+
+  if (useFallback || !src) {
+    return (
+      <div className="modeRowIcon modeRowIcon--fallback" aria-hidden>
+        <span className="modeRowIconFallback">{fallbackLetter || "?"}</span>
+      </div>
+    );
+  }
+  return (
+    <div className="modeRowIcon" aria-hidden>
+      <img
+        src={src}
+        alt=""
+        width={MODE_ROW_ICON_SIZE}
+        height={MODE_ROW_ICON_SIZE}
+        style={{ objectFit: "contain", display: "block" }}
+        onError={() => setUseFallback(true)}
+      />
+    </div>
+  );
+}
+
 const ModeRow = React.memo(function ModeRow({
   title,
   desc,
@@ -27,6 +54,8 @@ const ModeRow = React.memo(function ModeRow({
   variant = "green",
   titleRight,
   modeVariant = "daily",
+  iconImage,
+  iconFallbackLetter,
 }) {
   const handleKeyDown = (event) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -72,20 +101,23 @@ const ModeRow = React.memo(function ModeRow({
       onClick={onClick}
       onKeyDown={handleKeyDown}
     >
-      <div className="modeRowText">
-        <div className="modeRowTitle">
-          {title}
-          {titleRight ? (
-            <span
-              className="modeRowTitleRight"
-              onMouseDownCapture={handleTitleRightMouseDownCapture}
-              onClickCapture={handleTitleRightClickCapture}
-            >
-              {titleRight}
-            </span>
-          ) : null}
+      <div className="modeRowInner">
+        <ModeRowIcon iconImage={iconImage} fallbackLetter={iconFallbackLetter} />
+        <div className="modeRowText">
+          <div className="modeRowTitle">
+            {title}
+            {titleRight ? (
+              <span
+                className="modeRowTitleRight"
+                onMouseDownCapture={handleTitleRightMouseDownCapture}
+                onClickCapture={handleTitleRightClickCapture}
+              >
+                {titleRight}
+              </span>
+            ) : null}
+          </div>
+          <div className="modeRowDesc">{desc}</div>
         </div>
-        <div className="modeRowDesc">{desc}</div>
       </div>
     </div>
   );
@@ -115,12 +147,14 @@ export default function Home({
   // Track separate stage indices for standard and speedrun marathon for display.
   const [marathonStandardIndexUI, setMarathonStandardIndexUI] = useState(0);
   const [marathonSpeedrunIndexUI, setMarathonSpeedrunIndexUI] = useState(0);
+  const [marathonMetaLoadError, setMarathonMetaLoadError] = useState(false);
 
   // Initialize stage indices from persisted marathon meta on mount. For
   // signed-in users we prefer the server copy so stage numbers stay in sync
   // across devices, falling back to local storage when offline or on error.
   useEffect(() => {
     let isMounted = true;
+    let hadRemoteError = false;
 
     const loadMetaFor = async (speedrunEnabledFlag) => {
       const metaKey = marathonMetaKey(speedrunEnabledFlag);
@@ -144,6 +178,8 @@ export default function Home({
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error("Failed to load remote marathon meta for home", err);
+          hadRemoteError = true;
+          setMarathonMetaLoadError(true);
         }
       }
 
@@ -160,6 +196,9 @@ export default function Home({
         loadMetaFor(true),
       ]);
 
+      if (!isMounted) return;
+
+      if (!hadRemoteError) setMarathonMetaLoadError(false);
       const standardIndex =
         standardMeta && typeof standardMeta.index === "number" ? standardMeta.index : 0;
       const speedrunIndex =
@@ -172,7 +211,7 @@ export default function Home({
     return () => {
       isMounted = false;
     };
-  }, [authUser]);
+  }, [authUser, marathonLevels]);
   
   const marathonMaxLabel = useMemo(() => marathonLevels[marathonLevels.length - 1], [marathonLevels]);
   const currentStandardBoards = useMemo(
@@ -458,6 +497,8 @@ export default function Home({
                       variant="green"
                       modeVariant="daily"
                       titleRight={dailyWordsRight}
+                      iconImage="Daily Standard.png"
+                      iconFallbackLetter="D"
                     />
                     <ModeRow
                       title="Daily (speedrun)"
@@ -467,6 +508,8 @@ export default function Home({
                       variant="green"
                       modeVariant="speedrun"
                       titleRight={dailyWordsRight}
+                      iconImage="Daily Speedrun.png"
+                      iconFallbackLetter="D"
                     />
                   </div>
                 </div>
@@ -481,6 +524,8 @@ export default function Home({
                       onClick={handleSolutionHunt}
                       variant="green"
                       modeVariant="daily"
+                      iconImage="Solution Hunt Standard.png"
+                      iconFallbackLetter="S"
                     />
                     <ModeRow
                       title="Solution Hunt (speedrun)"
@@ -489,12 +534,19 @@ export default function Home({
                       onClick={handleSolutionHuntSpeedrun}
                       variant="green"
                       modeVariant="speedrun"
+                      iconImage="Solution Hunt Speedrun.png"
+                      iconFallbackLetter="S"
                     />
                   </div>
                 </div>
 
-                {/* Marathon Row */}
+                {/* Marathon Row - no images, fallback only */}
                 <div className="spGridRowGroup">
+                  {marathonMetaLoadError && (
+                    <div className="marathonMetaError" style={{ marginBottom: 8, fontSize: 13, color: "var(--c-text)" }}>
+                      Couldn&apos;t sync marathon progress; showing local data.
+                    </div>
+                  )}
                   <div className="spGridRow">
                     <ModeRow
                       title="Marathon (standard)"
@@ -504,6 +556,8 @@ export default function Home({
                       variant="gold"
                       modeVariant="daily"
                       titleRight={`Stage ${marathonStandardIndexUI + 1}/${marathonLevels.length}`}
+                      iconImage="Marathon Standard.png"
+                      iconFallbackLetter="M"
                     />
                     <ModeRow
                       title="Marathon (speedrun)"
@@ -513,6 +567,8 @@ export default function Home({
                       variant="gold"
                       modeVariant="speedrun"
                       titleRight={`Stage ${marathonSpeedrunIndexUI + 1}/${marathonLevels.length}`}
+                      iconImage="Marathon Speedrun.png"
+                      iconFallbackLetter="M"
                     />
                   </div>
                 </div>
@@ -539,8 +595,13 @@ export default function Home({
                   onClick={handleJoinRoom}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleJoinRoom(); } }}
                 >
-                  <div className="mpGridBtnTitle">Join Room</div>
-                  <div className="mpGridBtnDesc">Browse open rooms or enter a room code.</div>
+                  <div className="mpGridBtnInner">
+                    <ModeRowIcon iconImage="Join Room.png" fallbackLetter="J" />
+                    <div className="mpGridBtnText">
+                      <div className="mpGridBtnTitle">Join Room</div>
+                      <div className="mpGridBtnDesc">Browse open rooms or enter a room code.</div>
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="mpGridBtn"
@@ -549,8 +610,13 @@ export default function Home({
                   onClick={handleHostRoom}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleHostRoom(); } }}
                 >
-                  <div className="mpGridBtnTitle">Host a Room</div>
-                  <div className="mpGridBtnDesc">Create a new room and configure settings.</div>
+                  <div className="mpGridBtnInner">
+                    <ModeRowIcon iconImage="Host Room.png" fallbackLetter="H" />
+                    <div className="mpGridBtnText">
+                      <div className="mpGridBtnTitle">Host a Room</div>
+                      <div className="mpGridBtnDesc">Create a new room and configure settings.</div>
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="mpGridBtn"
@@ -559,8 +625,13 @@ export default function Home({
                   onClick={handleChallengeFriend}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleChallengeFriend(); } }}
                 >
-                  <div className="mpGridBtnTitle">Challenge a Friend</div>
-                  <div className="mpGridBtnDesc">Pick a friend and start a battle.</div>
+                  <div className="mpGridBtnInner">
+                    <ModeRowIcon fallbackLetter="C" />
+                    <div className="mpGridBtnText">
+                      <div className="mpGridBtnTitle">Challenge a Friend</div>
+                      <div className="mpGridBtnDesc">Pick a friend and start a battle.</div>
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="mpGridBtn mpGridBtn--disabled"
@@ -568,8 +639,13 @@ export default function Home({
                   tabIndex={-1}
                   aria-disabled="true"
                 >
-                  <div className="mpGridBtnTitle">Ranked</div>
-                  <div className="mpGridBtnDesc">(Coming Soon)</div>
+                  <div className="mpGridBtnInner">
+                    <ModeRowIcon fallbackLetter="R" />
+                    <div className="mpGridBtnText">
+                      <div className="mpGridBtnTitle">Ranked</div>
+                      <div className="mpGridBtnDesc">(Coming Soon)</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </section>

@@ -684,8 +684,8 @@ export default function GameSinglePlayer({
         const newlyEarned = ["first_solve"];
         if (speedrunEnabled) newlyEarned.push("speedrun_beginner");
         if (numBoards >= 2) newlyEarned.push("multiboard_starter");
-        grantBadges({ database, uid: authUser.uid, badgeIds: newlyEarned }).then(() => {
-          const firstId = newlyEarned[0];
+        grantBadges({ database, uid: authUser.uid, badgeIds: newlyEarned }).then((grantedIds) => {
+          const firstId = grantedIds?.[0];
           if (firstId) {
             const def = getBadgeById(firstId);
             if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
@@ -742,9 +742,12 @@ export default function GameSinglePlayer({
               }
 
               if (badgeIds.length > 0) {
-                grantBadges({ database, uid: authUser.uid, badgeIds }).then(() => {
-                  const def = getBadgeById(badgeIds[0]);
-                  if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                grantBadges({ database, uid: authUser.uid, badgeIds }).then((grantedIds) => {
+                  const firstId = grantedIds?.[0];
+                  if (firstId) {
+                    const def = getBadgeById(firstId);
+                    if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                  }
                 }).catch((err) => {
                   logError(err, 'GameSinglePlayer.grantBadges.streak');
                 });
@@ -769,9 +772,12 @@ export default function GameSinglePlayer({
               }
 
               if (badgeIds.length > 0) {
-                grantBadges({ database, uid: authUser.uid, badgeIds }).then(() => {
-                  const def = getBadgeById(badgeIds[0]);
-                  if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                grantBadges({ database, uid: authUser.uid, badgeIds }).then((grantedIds) => {
+                  const firstId = grantedIds?.[0];
+                  if (firstId) {
+                    const def = getBadgeById(firstId);
+                    if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                  }
                 }).catch((err) => {
                   logError(err, 'GameSinglePlayer.grantBadges.streak');
                 });
@@ -809,9 +815,12 @@ export default function GameSinglePlayer({
                       const aggregated = await loadAggregatedStats({ uid: authUser.uid, mode, speedrunEnabled });
                       const prevFastest = aggregated?.fastestTimeMs ?? null;
                       if (prevFastest === null || currentTimeMs < prevFastest) {
-                        grantBadges({ database, uid: authUser.uid, badgeIds: ['personal_best'] }).then(() => {
-                          const def = getBadgeById('personal_best');
-                          if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                        grantBadges({ database, uid: authUser.uid, badgeIds: ['personal_best'] }).then((grantedIds) => {
+                          const firstId = grantedIds?.[0];
+                          if (firstId) {
+                            const def = getBadgeById(firstId);
+                            if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                          }
                         }).catch((err) => {
                           logError(err, 'GameSinglePlayer.grantBadges.personal_best');
                         });

@@ -877,7 +877,7 @@ export default function MultiplayerGameView({
             >
               {boards.map((board, index) => (
                 <GameBoard
-                  key={index}
+                  key={board.solution ?? `board-${index}`}
                   board={board}
                   index={index}
                   numBoards={boards.length}
@@ -934,14 +934,14 @@ export default function MultiplayerGameView({
                     gap: 8,
                   }}
                 >
-                  {summaryPlayers.map((p) => {
+                  {summaryPlayers.map((p, index) => {
                     const isSelf = authUser && p.id === authUser.uid;
                     const guesses = Array.isArray(p.guesses) ? p.guesses : [];
                     const perBoard = buildPerBoardStats(guesses);
 
                     return (
                       <div
-                        key={p.id || p.name}
+                        key={p.id || p.name || `player-${index}`}
                         style={{
                           padding: "8px 8px 6px",
                           borderRadius: 6,

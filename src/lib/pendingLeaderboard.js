@@ -51,19 +51,28 @@ export async function flushPendingLeaderboardOnLogin(authUser) {
 
   for (const item of pending) {
     try {
-      // If the pending entry is for a previous day, don't submit it into today's leaderboard.
-      if (modeResetsDaily(item.mode) && item.dateKey && item.dateKey !== today) {
-        continue;
+      const isPastDay = modeResetsDaily(item.mode) && item.dateKey && item.dateKey !== today;
+      if (isPastDay) {
+        // Submit only to all-time so we don't add to that day's board.
+        await submitSpeedrunScore(
+          authUser.uid,
+          userName,
+          item.mode,
+          item.numBoards,
+          item.timeMs,
+          item.dateKey ?? null,
+          { skipDateScoped: true }
+        );
+      } else {
+        await submitSpeedrunScore(
+          authUser.uid,
+          userName,
+          item.mode,
+          item.numBoards,
+          item.timeMs,
+          item.dateKey ?? null
+        );
       }
-
-      await submitSpeedrunScore(
-        authUser.uid,
-        userName,
-        item.mode,
-        item.numBoards,
-        item.timeMs,
-        item.dateKey ?? null
-      );
     } catch (err) {
       logError(err, "pendingLeaderboard.flush");
     }

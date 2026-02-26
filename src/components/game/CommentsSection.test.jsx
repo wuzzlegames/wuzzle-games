@@ -264,7 +264,7 @@ describe('CommentsSection', () => {
     expect(key).toMatch(/^userReactions\/guest:/);
   });
 
-  it('shows Share Result button when shareTextForComment is provided and pre-fills comment on click without posting', () => {
+  it('shows Share in comments button when shareTextForComment is provided and pre-fills comment on click without posting', () => {
     render(
       <CommentsSection
         threadId="thread-1"
@@ -274,13 +274,13 @@ describe('CommentsSection', () => {
 
     emitCommentsSnapshot({});
 
-    const shareButton = screen.getByRole('button', { name: /share result/i });
-    expect(shareButton).toBeInTheDocument();
+    const shareInCommentsButton = screen.getByRole('button', { name: /share in comments/i });
+    expect(shareInCommentsButton).toBeInTheDocument();
 
     const textarea = screen.getByRole('textbox', { name: /^comment$/i });
     expect(textarea).toHaveValue('');
 
-    fireEvent.click(shareButton);
+    fireEvent.click(shareInCommentsButton);
 
     expect(textarea).toHaveValue(
       'Wuzzle Games - Daily\nGuesses: 2/6\nSolved!',
@@ -288,9 +288,25 @@ describe('CommentsSection', () => {
     expect(setMock).not.toHaveBeenCalled();
   });
 
-  it('does not show Share Result button when shareTextForComment is not provided', () => {
+  it('does not show Share in comments button when shareTextForComment is not provided', () => {
     render(<CommentsSection threadId="thread-1" />);
     emitCommentsSnapshot({});
-    expect(screen.queryByRole('button', { name: /share result/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /share in comments/i })).not.toBeInTheDocument();
+  });
+
+  it('shows Share button when onShare is provided and shareTextForComment is set, and calls onShare on click', () => {
+    const onShare = vi.fn();
+    render(
+      <CommentsSection
+        threadId="thread-1"
+        shareTextForComment="Wuzzle Games - Daily\nSolved!"
+        onShare={onShare}
+      />,
+    );
+    emitCommentsSnapshot({});
+    const shareButton = screen.getByRole('button', { name: /^share$/i });
+    expect(shareButton).toBeInTheDocument();
+    fireEvent.click(shareButton);
+    expect(onShare).toHaveBeenCalledTimes(1);
   });
 });

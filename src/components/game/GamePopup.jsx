@@ -389,7 +389,7 @@ export default function GamePopup({
                       fontSize: 13,
                     }}
                   >
-                    {rankedPlayers.map((p) => {
+                    {rankedPlayers.map((p, index) => {
                       const isMe = currentUserId && p.id === currentUserId;
 
                       const primaryStat = isSpeedrun
@@ -406,7 +406,7 @@ export default function GamePopup({
 
                       return (
                         <div
-                          key={p.id || p.name}
+                          key={p.id || p.name || `player-${index}`}
                           style={{
                             display: "flex",
                             justifyContent: "space-between",
@@ -539,7 +539,7 @@ export default function GamePopup({
             >
               {(Array.isArray(boards) ? boards : []).map((b, i) => (
                 <div
-                  key={b?.solution ?? `board-${i}`}
+                  key={`board-${i}-${b?.solution ?? "unsolved"}`}
                   style={{
                     backgroundColor: b && b.isSolved ? "var(--c-correct)" : "var(--c-border)",
                     color: "var(--c-text-strong)",

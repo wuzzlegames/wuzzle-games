@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, Suspense, lazy } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useUserBadges, useBadgesForUser } from "../hooks/useUserBadges";
@@ -13,7 +13,28 @@ import HamburgerMenu from "./HamburgerMenu";
 import UserCard from "./UserCard";
 import NotificationsModal from "./NotificationsModal";
 import NotificationToast from "./NotificationToast";
+import { HeaderIcon, HEADER_ICON_SIZE, HEADER_SLOT_WIDTH } from "./HeaderIcon";
+import ChallengesModal from "./ChallengesModal";
 import { useBadgeEarnedToast } from "../contexts/BadgeEarnedToastContext";
+
+const FriendsModal = lazy(() => import("./FriendsModal"));
+
+function LogoImage() {
+  const [useFallback, setUseFallback] = useState(false);
+  if (useFallback) {
+    return (
+      <HeaderIcon name="logo" alt="Wuzzle Games" size={50} />
+    );
+  }
+  return (
+    <img
+      src="/images/logo.png"
+      alt="Wuzzle Games"
+      style={{ height: 50, display: "block" }}
+      onError={() => setUseFallback(true)}
+    />
+  );
+}
 
 // Persist across SiteHeader unmount/remount (navigation) so we don't re-toast on every page change
 const baselineIdsRef = { current: new Set() };
@@ -23,13 +44,26 @@ const prevUidRef = { current: null };
 const lastEntryTimeRef = { current: 0 };
 const BACKFILL_WINDOW_MS = 3000;
 
+const iconButtonStyle = {
+  width: HEADER_SLOT_WIDTH,
+  height: HEADER_ICON_SIZE,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: 4,
+  background: "transparent",
+  cursor: "pointer",
+  padding: 0,
+  flexShrink: 0,
+};
+
 /**
  * Global site header used across all pages.
  *
  * Layout:
- * Line 1 - WUZZLE GAMES centered, hamburger icon on the right.
- * Line 2 - "Reset in" text on the left, Sign in/Sign out and Leaderboard buttons on the right.
- * Line 3 (when signed in) - UserCard only; click navigates to profile.
+ * Line 1 - Logo (left, click = home); Leaderboard, Notifications, Hamburger icons (right).
+ * Line 2 - "Reset in" (left); Sign in icon (guest) or Friends, Challenges, Sign out icons (signed in) on right.
+ * Line 3 (when signed in) - Signed in as + UserCard + Subscribe.
  */
 export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeClick }) {
   const navigate = useNavigate();
@@ -41,14 +75,20 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
   const earnedBadges = getAllEarnedSorted(userBadges);
   const isPremium = isSubscribed || (userBadges && !!userBadges['premium_member']);
   const resetTime = useDailyResetTimer();
-  const unseenCount = getUnseenNotificationCount(friendRequests || [], incomingChallenges || [], notificationSeenAt);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
-  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
-  const [notificationToast, setNotificationToast] = useState(null);
   const badgeEarnedContext = useBadgeEarnedToast();
   const badgeEarnedToast = badgeEarnedContext?.badgeEarnedToast;
   const clearBadgeEarned = badgeEarnedContext?.clearBadgeEarned;
+  const recentBadgeEarnings = badgeEarnedContext?.recentBadgeEarnings ?? [];
+  const unseenCount =
+    getUnseenNotificationCount(friendRequests || [], incomingChallenges || [], notificationSeenAt) +
+    recentBadgeEarnings.length;
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
+  const [showFriendsModal, setShowFriendsModal] = useState(false);
+  const [showChallengesModal, setShowChallengesModal] = useState(false);
+  const [hamburgerOpen, setHamburgerOpen] = useState(false);
+  const [notificationToast, setNotificationToast] = useState(null);
   const toastFromUid = notificationToast
     ? (notificationToast.type === "friendRequest"
         ? notificationToast.id
@@ -140,6 +180,30 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
     setNotificationToast(null);
   }, []);
 
+  const handleOpenFriends = useCallback(() => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    if (!isVerifiedUser) {
+      alert('Verify your email or sign in with Google to use friends.');
+      return;
+    }
+    setShowFriendsModal(true);
+  }, [user, isVerifiedUser]);
+
+  const handleOpenChallenges = useCallback(() => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    if (!isVerifiedUser) {
+      alert('Verify your email or sign in with Google to use challenges.');
+      return;
+    }
+    setShowChallengesModal(true);
+  }, [user, isVerifiedUser]);
+
   return (
     <>
       <header
@@ -150,7 +214,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
           marginBottom: "12px",
         }}
       >
-        {/* Line 1: centered title with hamburger on the right */}
+        {/* Line 1: logo left (click = home), right: leaderboard, notifications, hamburger icons */}
         <div
           style={{
             display: "flex",
@@ -165,50 +229,36 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
             onClick={onHomeClick ?? handleHome}
             aria-label="Home"
             style={{
-              width: 32,
-              height: 32,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: 4,
-              border: "1px solid var(--c-border)",
+              padding: 0,
+              border: "none",
               background: "transparent",
               cursor: "pointer",
-              padding: 0,
             }}
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4 10.5L12 3L20 10.5V20H14V14H10V20H4V10.5Z"
-                stroke="var(--c-text-strong)"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <LogoImage />
           </button>
 
           <div
             style={{
-              flex: 1,
-              textAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
+              minWidth: HEADER_SLOT_WIDTH * 3,
+              justifyContent: "flex-end",
             }}
           >
-            <img
-              src="/images/logo.png"
-              alt="Wuzzle Games"
-              style={{ height: 50 }}
-            />
-          </div>
-
-          <div className="flexRow justifyEnd" style={{ alignItems: "center", gap: 8, minWidth: 32 }}>
-            {user && (
+            <button
+              type="button"
+              onClick={handleLeaderboard}
+              aria-label="Leaderboard"
+              style={{ ...iconButtonStyle, position: "relative" }}
+            >
+              <HeaderIcon name="leaderboard" size={HEADER_ICON_SIZE} />
+            </button>
+            {user ? (
               <button
                 type="button"
                 onClick={() => {
@@ -216,33 +266,9 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
                   setShowNotificationsModal(true);
                 }}
                 aria-label={unseenCount > 0 ? `Notifications, ${unseenCount} unread` : "Notifications"}
-                style={{
-                  position: "relative",
-                  width: 32,
-                  height: 32,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: 4,
-                  border: "1px solid var(--c-border)",
-                  background: "transparent",
-                  cursor: "pointer",
-                  padding: 0,
-                }}
+                style={{ ...iconButtonStyle, position: "relative" }}
               >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden
-                >
-                  <path
-                    d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
-                    fill="var(--c-text-strong)"
-                  />
-                </svg>
+                <HeaderIcon name="notifications" size={HEADER_ICON_SIZE} />
                 {unseenCount > 0 && (
                   <span
                     style={{
@@ -266,15 +292,31 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
                   </span>
                 )}
               </button>
+            ) : (
+              <span style={{ width: HEADER_SLOT_WIDTH, height: HEADER_ICON_SIZE, flexShrink: 0 }} aria-hidden />
             )}
-            <HamburgerMenu
-              onOpenFeedback={onOpenFeedback || (() => {})}
-              onSignUpComplete={onSignUpComplete}
-            />
+            <div style={{ position: "relative" }}>
+              <button
+                type="button"
+                onClick={() => setHamburgerOpen(!hamburgerOpen)}
+                aria-label="Menu"
+                style={iconButtonStyle}
+              >
+                <HeaderIcon name="hamburger" size={HEADER_ICON_SIZE} />
+              </button>
+              <HamburgerMenu
+                open={hamburgerOpen}
+                onOpenChange={setHamburgerOpen}
+                onOpenFeedback={onOpenFeedback || (() => {})}
+                onSignUpComplete={onSignUpComplete}
+                onOpenFriends={() => setShowFriendsModal(true)}
+                onOpenChallenges={() => setShowChallengesModal(true)}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Line 2: reset timer on left, auth + leaderboard on right */}
+        {/* Line 2: Reset in on left, sign-in or friends/challenges/sign-out icons on right */}
         <div
           style={{
             marginTop: 8,
@@ -299,51 +341,46 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 8,
-              marginLeft: "auto",
+              gap: 4,
+              minWidth: HEADER_SLOT_WIDTH * 3,
+              justifyContent: "flex-end",
             }}
           >
-            <button
-              type="button"
-              className="homeBtn homeBtnOutline"
-              onClick={handleLeaderboard}
-              style={{
-                padding: "4px 10px",
-                fontSize: 12,
-                textTransform: "uppercase",
-                letterSpacing: 0.5,
-              }}
-            >
-              Leaderboard
-            </button>
-
             {user ? (
-              <button
-                type="button"
-                className="homeBtn homeBtnOutline"
-                onClick={handleSignOut}
-                style={{
-                  padding: "4px 10px",
-                  fontSize: 12,
-                  textTransform: "uppercase",
-                  letterSpacing: 0.5,
-                }}
-              >
-                Sign Out
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={handleOpenFriends}
+                  aria-label="Friends"
+                  style={iconButtonStyle}
+                >
+                  <HeaderIcon name="friends" size={HEADER_ICON_SIZE} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleOpenChallenges}
+                  aria-label="Challenges"
+                  style={iconButtonStyle}
+                >
+                  <HeaderIcon name="challenges" size={HEADER_ICON_SIZE} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  aria-label="Sign out"
+                  style={iconButtonStyle}
+                >
+                  <HeaderIcon name="sign-out" size={HEADER_ICON_SIZE} />
+                </button>
+              </>
             ) : (
               <button
                 type="button"
-                className="homeBtn homeBtnOutline"
                 onClick={handleOpenAuth}
-                style={{
-                  padding: "4px 10px",
-                  fontSize: 12,
-                  textTransform: "uppercase",
-                  letterSpacing: 0.5,
-                }}
+                aria-label="Sign in"
+                style={iconButtonStyle}
               >
-                Sign In
+                <HeaderIcon name="sign-in" size={HEADER_ICON_SIZE} />
               </button>
             )}
           </div>
@@ -408,6 +445,18 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
       <NotificationsModal
         isOpen={showNotificationsModal}
         onRequestClose={() => setShowNotificationsModal(false)}
+      />
+
+      <Suspense fallback={null}>
+        <FriendsModal
+          isOpen={showFriendsModal}
+          onRequestClose={() => setShowFriendsModal(false)}
+        />
+      </Suspense>
+
+      <ChallengesModal
+        isOpen={showChallengesModal}
+        onRequestClose={() => setShowChallengesModal(false)}
       />
 
       {badgeEarnedToast && clearBadgeEarned && (

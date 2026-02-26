@@ -121,9 +121,11 @@ export function useSubscription(user) {
 
         // Grant premium badge if subscribed
         if (subscribed) {
-          grantBadge({ database, uid: user.uid, badgeId: PREMIUM_BADGE_ID }).then(() => {
-            const def = getBadgeById(PREMIUM_BADGE_ID);
-            if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+          grantBadge({ database, uid: user.uid, badgeId: PREMIUM_BADGE_ID }).then((grantedIds) => {
+            if (grantedIds?.length > 0) {
+              const def = getBadgeById(PREMIUM_BADGE_ID);
+              if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+            }
           }).catch((err) => {
             console.error('Failed to grant premium badge:', err);
           });
@@ -170,9 +172,11 @@ export function useSubscription(user) {
           if (active && !stateRef.current.isSubscribed) {
             // Only set if not already subscribed via Firestore (use ref for latest state)
             setIsSubscribed(true);
-            grantBadge({ database, uid: user.uid, badgeId: PREMIUM_BADGE_ID }).then(() => {
-              const def = getBadgeById(PREMIUM_BADGE_ID);
-              if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+            grantBadge({ database, uid: user.uid, badgeId: PREMIUM_BADGE_ID }).then((grantedIds) => {
+              if (grantedIds?.length > 0) {
+                const def = getBadgeById(PREMIUM_BADGE_ID);
+                if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+              }
             }).catch((err) => {
               console.error('Failed to grant premium badge:', err);
             });
@@ -199,9 +203,11 @@ export function useSubscription(user) {
         // If role changed to premium and we weren't subscribed, update subscription status
         if (role?.toLowerCase() === 'premium' && prevRole?.toLowerCase() !== 'premium') {
           setIsSubscribed(true);
-          grantBadge({ database, uid: user.uid, badgeId: PREMIUM_BADGE_ID }).then(() => {
-            const def = getBadgeById(PREMIUM_BADGE_ID);
-            if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+          grantBadge({ database, uid: user.uid, badgeId: PREMIUM_BADGE_ID }).then((grantedIds) => {
+            if (grantedIds?.length > 0) {
+              const def = getBadgeById(PREMIUM_BADGE_ID);
+              if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+            }
           }).catch((err) => {
             console.error('Failed to grant premium badge:', err);
           });
@@ -327,9 +333,11 @@ export async function activateSubscription(uid, paymentData) {
   await set(subscriptionRef, subscriptionData);
 
   // Grant premium badge
-  await grantBadge({ database, uid, badgeId: PREMIUM_BADGE_ID });
-  const def = getBadgeById(PREMIUM_BADGE_ID);
-  if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+  const grantedIds = await grantBadge({ database, uid, badgeId: PREMIUM_BADGE_ID });
+  if (grantedIds?.length > 0) {
+    const def = getBadgeById(PREMIUM_BADGE_ID);
+    if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+  }
 }
 
 /**

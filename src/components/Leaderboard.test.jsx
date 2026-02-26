@@ -56,13 +56,13 @@ describe('Leaderboard component', () => {
 
     await screen.findByRole('heading', { name: /speedrun leaderboard/i });
 
-    // Initial call should be for daily mode, default boards=1, limit 100
-    expect(useLeaderboard).toHaveBeenCalledWith('daily', 1, 100);
+    // Initial call should be for daily mode, default boards=1, limit 100, scope today
+    expect(useLeaderboard).toHaveBeenCalledWith('daily', 1, 100, 'today');
 
     // Switch to marathon via tab
     fireEvent.click(screen.getByRole('tab', { name: /marathon/i }));
 
-    expect(useLeaderboard).toHaveBeenCalledWith('marathon', null, 100);
+    expect(useLeaderboard).toHaveBeenCalledWith('marathon', null, 100, 'today');
     expect(screen.getByRole('tab', { name: /marathon/i }).className).toContain('leaderboardTab--active');
   });
 
@@ -80,9 +80,9 @@ describe('Leaderboard component', () => {
     // Change to a specific board count
     fireEvent.change(boardsSelect, { target: { value: '4' } });
 
-    // useLeaderboard should eventually be called with numBoards = 4
+    // useLeaderboard should eventually be called with numBoards = 4, scope today
     const calls = useLeaderboard.mock.calls;
-    expect(calls.some(([mode, boards]) => mode === 'daily' && boards === 4)).toBe(true);
+    expect(calls.some(([mode, boards, limit, scope]) => mode === 'daily' && boards === 4 && scope === 'today')).toBe(true);
 
     // Switch to solution hunt mode: boards filter should disappear
     fireEvent.click(screen.getByRole('tab', { name: /solution hunt/i }));
@@ -124,5 +124,37 @@ describe('Leaderboard component', () => {
     // Time formatting (shared formatElapsed mm:ss.tenths): 12_345 -> 00:12.3, 15_000 -> 00:15.0
     expect(screen.getByText('00:12.3')).toBeInTheDocument();
     expect(screen.getByText('00:15.0')).toBeInTheDocument();
+  });
+
+  it('shows Today / All Time toggle, default is Today', async () => {
+    render(<Leaderboard />);
+
+    await screen.findByRole('heading', { name: /speedrun leaderboard/i });
+
+    const todayBtn = screen.getByRole('button', { name: /^today$/i });
+    const allTimeBtn = screen.getByRole('button', { name: /all time/i });
+    expect(todayBtn).toBeInTheDocument();
+    expect(allTimeBtn).toBeInTheDocument();
+    expect(todayBtn.className).toContain('leaderboardScopeBtn--active');
+    expect(useLeaderboard).toHaveBeenCalledWith(expect.anything(), expect.anything(), 100, 'today');
+  });
+
+  it('switching to All Time calls useLeaderboard with scope allTime and shows Date column', async () => {
+    const entries = [
+      { id: '1', userId: 'u1', userName: 'Alice', numBoards: 3, timeMs: 12_345, dateKey: '2024-06-15' },
+    ];
+    useLeaderboard.mockReturnValue({ entries, loading: false, error: null });
+
+    render(<Leaderboard />);
+
+    await screen.findByRole('heading', { name: /speedrun leaderboard/i });
+
+    fireEvent.click(screen.getByRole('button', { name: /all time/i }));
+
+    expect(useLeaderboard).toHaveBeenCalledWith('daily', 1, 100, 'allTime');
+    expect(screen.getByText('Date')).toBeInTheDocument();
+    // dateKey 2024-06-15 is formatted by formatDateKey (e.g. "Jun 15, 2024" in en-US)
+    expect(screen.getByText(/2024/)).toBeInTheDocument();
+    expect(screen.getByText(/15/)).toBeInTheDocument();
   });
 });

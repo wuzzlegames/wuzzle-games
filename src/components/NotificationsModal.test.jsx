@@ -12,6 +12,9 @@ vi.mock('../hooks/useNotificationSeen', () => ({
 vi.mock('../hooks/useUserBadges', () => ({
   useBadgesForUser: () => ({ userBadges: {}, loading: false }),
 }));
+vi.mock('../contexts/BadgeEarnedToastContext', () => ({
+  useBadgeEarnedToast: () => ({ recentBadgeEarnings: [], dismissBadgeEarnedNotification: () => {} }),
+}));
 vi.mock('../lib/badges', () => ({ getAllEarnedSorted: () => [] }));
 vi.mock('./Modal', () => ({ default: ({ isOpen, children }) => (isOpen ? <div data-testid="modal">{children}</div> : null) }));
 

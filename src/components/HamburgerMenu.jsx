@@ -1,18 +1,11 @@
 import React, { useState, useCallback, Suspense, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { CHALLENGE_EXPIRY_MS } from "../hooks/useNotificationSeen";
-import Modal from "./Modal";
 import SignInRequiredModal from "./SignInRequiredModal";
-import UserCardWithBadges from "./UserCardWithBadges";
 
-function isChallengeExpired(ch) {
-  const createdAt = ch?.createdAt || 0;
-  return createdAt + CHALLENGE_EXPIRY_MS < Date.now();
-}
-
-const FriendsModal = lazy(() => import("./FriendsModal"));
 const OpenRoomsModal = lazy(() => import("./OpenRoomsModal"));
+const ChallengesModal = lazy(() => import("./ChallengesModal"));
+const FriendsModal = lazy(() => import("./FriendsModal"));
 
 const SIGN_IN_PROMPTS = {
   profile: { title: "Profile", message: "You need to sign in to access your profile." },
@@ -21,19 +14,19 @@ const SIGN_IN_PROMPTS = {
   openRooms: { title: "Open Rooms", message: "You need to sign in to browse open rooms." },
 };
 
-export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
+export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete, onOpenFriends, onOpenChallenges, open: controlledOpen, onOpenChange }) {
   const navigate = useNavigate();
   const {
     user,
     friendRequests,
     incomingChallenges,
-    sentChallenges,
     isVerifiedUser,
-    acceptChallenge,
-    dismissChallenge,
-    cancelSentChallenge,
   } = useAuth();
-  const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined && onOpenChange != null;
+  const showHamburgerMenu = isControlled ? controlledOpen : internalOpen;
+  const setShowHamburgerMenu = isControlled ? (v) => { if (!v) onOpenChange(false); } : setInternalOpen;
+
   const [showFriendsModal, setShowFriendsModal] = useState(false);
   const [showChallengesModal, setShowChallengesModal] = useState(false);
   const [showOpenRoomsModal, setShowOpenRoomsModal] = useState(false);
@@ -42,30 +35,38 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
 
   const requestSignIn = useCallback((key) => {
     setSignInRequired(SIGN_IN_PROMPTS[key] || { title: "Sign in required", message: "You need to sign in to access this feature." });
-    setShowHamburgerMenu(false);
-  }, []);
+    if (isControlled) onOpenChange(false);
+    else setInternalOpen(false);
+  }, [isControlled, onOpenChange]);
+
+  const closeMenu = useCallback(() => {
+    if (isControlled) onOpenChange(false);
+    else setInternalOpen(false);
+  }, [isControlled, onOpenChange]);
 
   return (
     <>
       <div style={{ position: "relative" }}>
-        <button
-          className="homeBtn homeBtnOutline"
-          onClick={() => setShowHamburgerMenu(!showHamburgerMenu)}
-          style={{
-            padding: "4px 6px",
-            fontSize: "18px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "none",
-            background: "transparent",
-            color: "var(--c-text-strong)",
-            cursor: "pointer"
-          }}
-          title="Menu"
-        >
-          ☰
-        </button>
+        {!isControlled && (
+          <button
+            className="homeBtn homeBtnOutline"
+            onClick={() => setInternalOpen(!internalOpen)}
+            style={{
+              padding: "4px 6px",
+              fontSize: "18px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "none",
+              background: "transparent",
+              color: "var(--c-text-strong)",
+              cursor: "pointer"
+            }}
+            title="Menu"
+          >
+            ☰
+          </button>
+        )}
         {showHamburgerMenu && (
           <div
             style={{
@@ -83,7 +84,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
             <button
               onClick={() => {
                 navigate('/');
-                setShowHamburgerMenu(false);
+                closeMenu();
               }}
               style={{
                 width: "100%",
@@ -107,7 +108,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
             <button
               onClick={() => {
                 navigate('/how-to-play');
-                setShowHamburgerMenu(false);
+                closeMenu();
               }}
               style={{
                 width: "100%",
@@ -135,7 +136,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                   return;
                 }
                 navigate('/profile');
-                setShowHamburgerMenu(false);
+                closeMenu();
               }}
               style={{
                 width: "100%",
@@ -164,11 +165,16 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 }
                 if (!isVerifiedUser) {
                   alert('Verify your email or sign in with Google to use friends.');
-                  setShowHamburgerMenu(false);
+                  closeMenu();
                   return;
                 }
-                setShowFriendsModal(true);
-                setShowHamburgerMenu(false);
+                if (onOpenFriends) {
+                  onOpenFriends();
+                  closeMenu();
+                } else {
+                  setShowFriendsModal(true);
+                  closeMenu();
+                }
               }}
               style={{
                 width: "100%",
@@ -217,11 +223,16 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                 }
                 if (!isVerifiedUser) {
                   alert('Verify your email or sign in with Google to use challenges.');
-                  setShowHamburgerMenu(false);
+                  closeMenu();
                   return;
                 }
-                setShowChallengesModal(true);
-                setShowHamburgerMenu(false);
+                if (onOpenChallenges) {
+                  onOpenChallenges();
+                  closeMenu();
+                } else {
+                  setShowChallengesModal(true);
+                  closeMenu();
+                }
               }}
               style={{
                 width: "100%",
@@ -271,7 +282,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
                   return;
                 }
                 setShowOpenRoomsModal(true);
-                setShowHamburgerMenu(false);
+                closeMenu();
               }}
               style={{
                 width: "100%",
@@ -297,7 +308,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
               <button
                 onClick={() => {
                   setShowAllRoomsModal(true);
-                  setShowHamburgerMenu(false);
+                  closeMenu();
                 }}
                 style={{
                   width: "100%",
@@ -322,7 +333,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
             <button
               onClick={() => {
                 onOpenFeedback();
-                setShowHamburgerMenu(false);
+                closeMenu();
               }}
               style={{
                 width: "100%",
@@ -348,7 +359,7 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
 
       {showHamburgerMenu && (
         <div
-          onClick={() => setShowHamburgerMenu(false)}
+          onClick={closeMenu}
           style={{
             position: "fixed",
             top: 0,
@@ -360,12 +371,14 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
         />
       )}
 
-      <Suspense fallback={null}>
-        <FriendsModal
-          isOpen={showFriendsModal}
-          onRequestClose={() => setShowFriendsModal(false)}
-        />
-      </Suspense>
+      {!onOpenFriends && (
+        <Suspense fallback={null}>
+          <FriendsModal
+            isOpen={showFriendsModal}
+            onRequestClose={() => setShowFriendsModal(false)}
+          />
+        </Suspense>
+      )}
 
       <Suspense fallback={null}>
         <OpenRoomsModal
@@ -383,302 +396,14 @@ export default function HamburgerMenu({ onOpenFeedback, onSignUpComplete }) {
         />
       </Suspense>
 
-      {/* Incoming multiplayer challenges modal */}
-      <Modal
-        isOpen={showChallengesModal}
-        onRequestClose={() => setShowChallengesModal(false)}
-      >
-        <div
-          style={{
-            padding: "24px",
-            width: "100%",
-            boxSizing: "border-box",
-          }}
-        >
-          <h2
-            style={{
-              margin: "0 0 16px 0",
-              fontSize: 20,
-              fontWeight: "bold",
-              color: "var(--c-text-strong)",
-            }}
-          >
-            Challenges
-          </h2>
-
-          {(!sentChallenges || sentChallenges.length === 0) && (!incomingChallenges || incomingChallenges.length === 0) ? (
-            <div
-              style={{
-                padding: "24px 8px 16px",
-                color: "var(--c-text)",
-                fontSize: 14,
-              }}
-            >
-              You have no challenges right now.
-            </div>
-          ) : (
-            <>
-              {/* Sent challenges */}
-              <h3
-                style={{
-                  margin: "8px 0 8px",
-                  fontSize: 14,
-                  fontWeight: "bold",
-                  color: "var(--c-text)",
-                  textAlign: "left",
-                }}
-              >
-                Sent
-              </h3>
-              {(!sentChallenges || sentChallenges.length === 0) ? (
-                <div
-                  style={{
-                    padding: "8px 0 12px",
-                    color: "var(--c-text)",
-                    fontSize: 12,
-                  }}
-                >
-                  You haven't sent any challenges yet.
-                </div>
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                    maxHeight: "160px",
-                    overflowY: "auto",
-                    marginBottom: "12px",
-                  }}
-                >
-                  {sentChallenges.map((ch) => {
-                    const expired = isChallengeExpired(ch);
-                    return (
-                      <div
-                        key={ch.id}
-                        style={{
-                          padding: "10px 12px",
-                          borderRadius: 8,
-                        border: "1px solid var(--c-border)",
-                        background: "var(--c-panel)",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <div style={{ textAlign: "left", flex: 1 }}>
-                          <div style={{ marginBottom: 2 }}>
-                            <UserCardWithBadges
-                              userId={ch.toUserId}
-                              username={ch.toUserName || ch.friendName || "Unknown friend"}
-                              size="sm"
-                            />
-                          </div>
-                          <div style={{ color: "var(--c-text)", fontSize: 12 }}>
-                            {ch.boards || 1} board{(ch.boards || 1) > 1 ? "s" : ""} · {ch.speedrun ? "Speedrun" : "Standard"}
-                            {expired && (
-                              <span style={{ marginLeft: 8, fontSize: 11, color: "var(--c-text)", fontWeight: "600" }}>Expired</span>
-                            )}
-                          </div>
-                        </div>
-                        {expired ? (
-                          <button
-                            onClick={async () => {
-                              try {
-                                await cancelSentChallenge(ch.gameCode || ch.id);
-                              } catch (err) {
-                                // eslint-disable-next-line no-alert
-                                alert(err?.message || 'Failed to dismiss challenge');
-                              }
-                            }}
-                            className="homeBtn homeBtnOutline"
-                            style={{
-                              padding: "6px 10px",
-                              fontSize: 11,
-                              borderRadius: 6,
-                              color: "var(--c-text)",
-                            }}
-                          >
-                            Dismiss
-                          </button>
-                        ) : (
-                          <div style={{ display: "flex", gap: "6px" }}>
-                            <button
-                              onClick={async () => {
-                                try {
-                                  await cancelSentChallenge(ch.gameCode || ch.id);
-                                } catch (err) {
-                                  // eslint-disable-next-line no-alert
-                                  alert(err?.message || 'Failed to cancel challenge');
-                                }
-                              }}
-                              className="homeBtn homeBtnOutline"
-                              style={{
-                                padding: "6px 10px",
-                                fontSize: 11,
-                                borderRadius: 6,
-                              }}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Received challenges */}
-              <h3
-                style={{
-                  margin: "8px 0 8px",
-                  fontSize: 14,
-                  fontWeight: "bold",
-                  color: "var(--c-text)",
-                  textAlign: "left",
-                }}
-              >
-                Received
-              </h3>
-              {(!incomingChallenges || incomingChallenges.length === 0) ? (
-                <div
-                  style={{
-                    padding: "8px 0 12px",
-                    color: "var(--c-text)",
-                    fontSize: 12,
-                  }}
-                >
-                  You have no incoming challenges.
-                </div>
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                    maxHeight: "160px",
-                    overflowY: "auto",
-                    marginBottom: "16px",
-                  }}
-                >
-                  {incomingChallenges.map((ch) => {
-                    const expired = isChallengeExpired(ch);
-                    return (
-                      <div
-                        key={ch.id}
-                        style={{
-                          padding: "10px 12px",
-                          borderRadius: 8,
-                        border: "1px solid var(--c-border)",
-                        background: "var(--c-panel)",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        gap: "10px",
-                      }}
-                    >
-                      <div style={{ textAlign: "left", flex: 1 }}>
-                        <div style={{ marginBottom: 2 }}>
-                          <UserCardWithBadges
-                            userId={ch.fromUserId}
-                            username={ch.fromUserName || "Unknown"}
-                              size="sm"
-                            />
-                          </div>
-                          <div style={{ color: "var(--c-text)", fontSize: 12 }}>
-                            {ch.boards || 1} board{(ch.boards || 1) > 1 ? "s" : ""} · {ch.variant === 'solutionhunt' ? 'Solution Hunt' : ch.variant === 'speedrun' || ch.speedrun ? 'Speedrun' : 'Standard'}
-                            {expired && (
-                              <span style={{ marginLeft: 8, fontSize: 11, color: "var(--c-text)", fontWeight: "600" }}>Expired</span>
-                            )}
-                          </div>
-                        </div>
-                        {!expired ? (
-                          <div style={{ display: "flex", gap: "6px" }}>
-                            <button
-                              onClick={async () => {
-                                try {
-                                  const data = await acceptChallenge(ch.id);
-                                  setShowChallengesModal(false);
-                                  // Navigate into the multiplayer waiting room as the guest.
-                                  const boards = data.boards || 1;
-                                  // Support both new variant and legacy speedrun fields
-                                  const variant = data.variant || (data.speedrun ? 'speedrun' : 'standard');
-                                  navigate(
-                                    `/game?mode=multiplayer&code=${data.gameCode}&variant=${variant}&boards=${boards}`,
-                                  );
-                                } catch (err) {
-                                  // eslint-disable-next-line no-alert
-                                  alert(err?.message || 'Failed to accept challenge');
-                                }
-                              }}
-                              className="homeBtn homeBtnGreen"
-                              style={{
-                                padding: "6px 10px",
-                                fontSize: 11,
-                                borderRadius: 6,
-                              }}
-                            >
-                              Accept
-                            </button>
-                            <button
-                              onClick={async () => {
-                                try {
-                                  await dismissChallenge(ch.id, ch.gameCode);
-                                } catch (err) {
-                                  // eslint-disable-next-line no-alert
-                                  alert(err?.message || 'Failed to dismiss challenge');
-                                }
-                              }}
-                              className="homeBtn homeBtnOutline"
-                              style={{
-                                padding: "6px 10px",
-                                fontSize: 11,
-                                borderRadius: 6,
-                              }}
-                            >
-                              Dismiss
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            onClick={async () => {
-                              try {
-                                await dismissChallenge(ch.id, ch.gameCode);
-                              } catch (err) {
-                                // eslint-disable-next-line no-alert
-                                alert(err?.message || 'Failed to dismiss challenge');
-                              }
-                            }}
-                            className="homeBtn homeBtnOutline"
-                            style={{
-                              padding: "6px 10px",
-                              fontSize: 11,
-                              borderRadius: 6,
-                              color: "var(--c-text)",
-                            }}
-                          >
-                            Dismiss
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </>
-          )}
-
-          <button
-            onClick={() => setShowChallengesModal(false)}
-            className="homeBtn homeBtnGreen homeBtnLg"
-            style={{ marginTop: 4 }}
-          >
-            Close
-          </button>
-        </div>
-      </Modal>
+      {!onOpenChallenges && (
+        <Suspense fallback={null}>
+          <ChallengesModal
+            isOpen={showChallengesModal}
+            onRequestClose={() => setShowChallengesModal(false)}
+          />
+        </Suspense>
+      )}
 
       {signInRequired && (
         <SignInRequiredModal

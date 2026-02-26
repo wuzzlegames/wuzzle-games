@@ -5,6 +5,7 @@ import BadgeIcon from "./BadgeIcon";
 import { useAuth } from "../hooks/useAuth";
 import { useBadgesForUser } from "../hooks/useUserBadges";
 import { useNotificationSeen } from "../hooks/useNotificationSeen";
+import { useBadgeEarnedToast } from "../contexts/BadgeEarnedToastContext";
 import { useMultiplayerFriendRequest } from "../contexts/MultiplayerFriendRequestContext";
 import { getAllEarnedSorted } from "../lib/badges";
 import { CHALLENGE_EXPIRY_MS } from "../hooks/useNotificationSeen";
@@ -87,6 +88,9 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
   } = useAuth();
   const { markNotificationsSeen } = useNotificationSeen(user);
   const multiplayerContext = useMultiplayerFriendRequest();
+  const badgeEarnedContext = useBadgeEarnedToast();
+  const recentBadgeEarnings = badgeEarnedContext?.recentBadgeEarnings ?? [];
+  const dismissBadgeEarnedNotification = badgeEarnedContext?.dismissBadgeEarnedNotification ?? (() => {});
 
   useEffect(() => {
     if (isOpen && user?.uid) {
@@ -170,10 +174,11 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
     );
   }
 
+  const hasBadgeEarnings = recentBadgeEarnings.length > 0;
   const hasFriendRequests = friendRequests && friendRequests.length > 0;
   const hasChallenges = incomingChallenges && incomingChallenges.length > 0;
   const hasSentChallenges = sentChallenges && sentChallenges.length > 0;
-  const hasAny = hasFriendRequests || hasChallenges || hasSentChallenges;
+  const hasAny = hasBadgeEarnings || hasFriendRequests || hasChallenges || hasSentChallenges;
 
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
@@ -188,6 +193,46 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
           </p>
         ) : (
           <>
+            {/* Badge earned: badge left, text right, Dismiss + View badges */}
+            {hasBadgeEarnings && (
+              <div style={{ marginBottom: "24px" }}>
+                <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "var(--c-text)", textAlign: "left" }}>
+                  Badge earned
+                </h3>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid var(--c-border)" }}>
+                  {recentBadgeEarnings.map((item) => (
+                    <div
+                      key={item.id}
+                      className="notificationsModalCard"
+                      style={{ display: "flex", alignItems: "stretch", gap: 0 }}
+                    >
+                      <BadgeIcon badge={item.badgeDef} profileCard />
+                      <div className="notificationsModalCardContent" style={{ flex: 1 }}>
+                        <div className="notificationsModalCardTitle">{item.badgeDef.name}</div>
+                        <div className="notificationsModalCardSub">{item.badgeDef.description || "Earned just now"}</div>
+                      </div>
+                      <div className="notificationsModalCardActions" style={{ padding: "12px 14px" }}>
+                        <button type="button" onClick={() => dismissBadgeEarnedNotification(item.id)} style={buttonSecondaryStyle}>
+                          Dismiss
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onRequestClose?.();
+                            navigate("/profile", { state: { openYourBadges: true } });
+                            dismissBadgeEarnedNotification(item.id);
+                          }}
+                          style={buttonStyle}
+                        >
+                          View badges
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Friend requests: Accept and Decline only */}
             {hasFriendRequests && (
               <div style={{ marginBottom: "24px" }}>

@@ -36,10 +36,51 @@
 
 .leaderboardFilters {
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 24px;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;
+}
+
+/* Today / All Time scope toggle */
+.leaderboardScopeBar {
+  display: flex;
+  gap: 4px;
+  background: var(--c-panel);
+  border-radius: 12px;
+  padding: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.leaderboardScopeBtn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--c-text);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  text-transform: uppercase;
+}
+
+.leaderboardScopeBtn:hover {
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+
+.leaderboardScopeBtn--active {
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
+}
+
+.leaderboardScopeBtn--active:hover {
+  background: var(--c-accent-1);
+  color: var(--c-text-strong);
 }
 
 /* Tab bar (mirrors Home page tabs) */
@@ -50,7 +91,6 @@
   background: var(--c-panel);
   border-radius: 12px;
   padding: 4px;
-  flex: 1;
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
@@ -159,6 +199,10 @@
   align-items: center;
 }
 
+.leaderboardRow--allTime {
+  grid-template-columns: max-content minmax(0, 1fr) max-content max-content;
+}
+
 .leaderboardRow:last-child {
   border-bottom: none;
 }
@@ -206,6 +250,14 @@
   font-weight: normal;
 }
 
+.leaderboardDate {
+  justify-self: end;
+  text-align: right;
+  font-size: 13px;
+  color: var(--c-text);
+  white-space: nowrap;
+}
+
 .leaderboardTime {
   justify-self: end;
   text-align: right;
@@ -236,12 +288,20 @@
     font-size: 14px;
   }
 
+  .leaderboardRow--allTime {
+    grid-template-columns: max-content minmax(0, 1fr) max-content max-content;
+  }
+
   .leaderboardRank {
     font-size: 12px;
   }
 
   .leaderboardName {
     font-size: 13px;
+  }
+
+  .leaderboardDate {
+    font-size: 12px;
   }
 
   .leaderboardTime {

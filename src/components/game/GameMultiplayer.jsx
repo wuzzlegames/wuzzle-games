@@ -361,6 +361,7 @@ export default function GameMultiplayer() {
         setAnswerWords(ANSWER_WORDS);
       } catch (err) {
         console.error('Failed to load answer words for Solution Hunt:', err);
+        setTimedMessage({ type: 'error', text: 'Failed to load word list. Please refresh.' });
       }
     })();
   }, [isSolutionHuntGame, gameState?.status, answerWords.length]);

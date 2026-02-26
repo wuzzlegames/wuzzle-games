@@ -52,21 +52,28 @@ export default function MultiplayerChat({ gameCode, authUser, setTimedMessage })
     const chatRef = ref(database, `multiplayer/${gameCode}/chat`);
     // Limit to last 100 messages to prevent unbounded growth
     const chatQuery = query(chatRef, limitToLast(100));
-    const unsubscribe = onValue(chatQuery, (snapshot) => {
-      if (!snapshot.exists()) {
+    const unsubscribe = onValue(
+      chatQuery,
+      (snapshot) => {
+        if (!snapshot.exists()) {
+          setMessages([]);
+          return;
+        }
+        const raw = snapshot.val() || {};
+        const list = Object.entries(raw)
+          .map(([id, data]) => ({ id, ...(data || {}) }))
+          .sort((a, b) => {
+            const at = typeof a.createdAt === "number" ? a.createdAt : 0;
+            const bt = typeof b.createdAt === "number" ? b.createdAt : 0;
+            return at - bt;
+          });
+        setMessages(list);
+      },
+      (err) => {
+        console.error('Chat subscription error:', err);
         setMessages([]);
-        return;
       }
-      const raw = snapshot.val() || {};
-      const list = Object.entries(raw)
-        .map(([id, data]) => ({ id, ...(data || {}) }))
-        .sort((a, b) => {
-          const at = typeof a.createdAt === "number" ? a.createdAt : 0;
-          const bt = typeof b.createdAt === "number" ? b.createdAt : 0;
-          return at - bt;
-        });
-      setMessages(list);
-    });
+    );
 
     return () => {
       if (typeof unsubscribe === "function") {
@@ -102,22 +109,29 @@ export default function MultiplayerChat({ gameCode, authUser, setTimedMessage })
     const reactionsRef = ref(database, `multiplayer/${gameCode}/reactions`);
     const reactionsQuery = query(reactionsRef, limitToLast(100));
 
-    const unsubscribe = onValue(reactionsQuery, (snapshot) => {
-      if (!snapshot.exists()) {
-        setReactionEvents([]);
-        return;
-      }
+    const unsubscribe = onValue(
+      reactionsQuery,
+      (snapshot) => {
+        if (!snapshot.exists()) {
+          setReactionEvents([]);
+          return;
+        }
 
-      const raw = snapshot.val() || {};
-      const list = Object.entries(raw)
-        .map(([id, data]) => ({ id, ...(data || {}) }))
-        .sort((a, b) => {
-          const at = typeof a.createdAt === "number" ? a.createdAt : 0;
-          const bt = typeof b.createdAt === "number" ? b.createdAt : 0;
-          return at - bt;
-        });
-      setReactionEvents(list);
-    });
+        const raw = snapshot.val() || {};
+        const list = Object.entries(raw)
+          .map(([id, data]) => ({ id, ...(data || {}) }))
+          .sort((a, b) => {
+            const at = typeof a.createdAt === "number" ? a.createdAt : 0;
+            const bt = typeof b.createdAt === "number" ? b.createdAt : 0;
+            return at - bt;
+          });
+        setReactionEvents(list);
+      },
+      (err) => {
+        console.error('Reactions subscription error:', err);
+        setReactionEvents([]);
+      }
+    );
 
     return () => {
       if (typeof unsubscribe === "function") unsubscribe();

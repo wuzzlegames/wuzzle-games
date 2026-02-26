@@ -66,7 +66,7 @@ function App() {
       console.log('Subscription cancelled.');
       trackSubscription('cancelled');
     }
-  }, [searchParams, setSearchParams, user]);
+  }, [searchParams, setSearchParams, user?.uid]);
 
   // Reset dailyBoards to 1 only when navigating to the actual home route.
   // This avoids coupling behavior to trailing slashes on non-home routes.
@@ -104,39 +104,49 @@ function App() {
       <BadgeEarnedToastProvider>
       {/* Connection status indicator */}
       {!isOnline && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: 'var(--c-error)',
-          color: 'var(--c-text)',
-          padding: '8px 16px',
-          textAlign: 'center',
-          fontSize: '14px',
-          fontWeight: '500',
-          zIndex: 10000,
-          pointerEvents: 'none',
-        }}>
+        <div
+          role="status"
+          aria-live="polite"
+          aria-label="Connection status: offline"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'var(--c-error)',
+            color: 'var(--c-text)',
+            padding: '8px 16px',
+            textAlign: 'center',
+            fontSize: '14px',
+            fontWeight: '500',
+            zIndex: 10000,
+            pointerEvents: 'none',
+          }}
+        >
           Offline - Changes will be saved when connection is restored
           {hasQueuedUpdates && ` (${queueSize} update${queueSize !== 1 ? 's' : ''} queued)`}
         </div>
       )}
       {isOnline && hasQueuedUpdates && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: 'var(--c-correct)',
-          color: 'var(--c-text)',
-          padding: '8px 16px',
-          textAlign: 'center',
-          fontSize: '14px',
-          fontWeight: '500',
-          zIndex: 10000,
-          pointerEvents: 'none',
-        }}>
+        <div
+          role="status"
+          aria-live="polite"
+          aria-label="Connection status: syncing"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'var(--c-correct)',
+            color: 'var(--c-text)',
+            padding: '8px 16px',
+            textAlign: 'center',
+            fontSize: '14px',
+            fontWeight: '500',
+            zIndex: 10000,
+            pointerEvents: 'none',
+          }}
+        >
           Syncing {queueSize} update{queueSize !== 1 ? 's' : ''}...
         </div>
       )}

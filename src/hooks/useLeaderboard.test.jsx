@@ -154,6 +154,29 @@ describe('useLeaderboard', () => {
     // Entries with invalid or missing timeMs should be dropped.
     expect(result.current.entries.map((e) => e.userName)).toEqual(['Good', 'Valid']);
   });
+
+  it('when scope is allTime uses leaderboard/mode/allTime path and caps at 100', () => {
+    const now = Date.now();
+    const raw = {};
+    for (let i = 0; i < 150; i++) {
+      raw[`e${i}`] = {
+        userId: `u${i}`,
+        userName: `User${i}`,
+        numBoards: 1,
+        timeMs: 10000 + i,
+        timestamp: now + i,
+        dateKey: '2024-01-01',
+      };
+    }
+
+    const { result } = renderHook(() => useLeaderboard('daily', null, 100, 'allTime'));
+    expect(refMock).toHaveBeenCalledWith(expect.anything(), 'leaderboard/daily/allTime');
+    triggerSnapshot(raw);
+
+    expect(result.current.entries.length).toBe(100);
+    expect(result.current.entries[0].userName).toBe('User0');
+    expect(result.current.entries[0].dateKey).toBe('2024-01-01');
+  });
 });
 
 describe('submitSpeedrunScore', () => {
@@ -167,7 +190,7 @@ describe('submitSpeedrunScore', () => {
     ).rejects.toThrow(/must be signed in/i);
   });
 
-  it('pushes and sets correct payload and returns entry key', async () => {
+  it('pushes and sets correct payload to date-scoped and allTime and returns date-scoped key', async () => {
     vi.setSystemTime(1_700_000_123_000);
 
     const resultKey = await submitSpeedrunScore(
@@ -178,18 +201,15 @@ describe('submitSpeedrunScore', () => {
       12_345,
     );
 
-    // Correct ref path (daily leaderboard is scoped by date key)
+    // Ref paths: date-scoped then allTime
     expect(refMock).toHaveBeenCalledWith(expect.anything(), 'leaderboard/daily/2024-01-01');
+    expect(refMock).toHaveBeenCalledWith(expect.anything(), 'leaderboard/daily/allTime');
 
-    // push called with that ref and returned our mock entryRef
-    const pushArgs = pushMock.mock.calls[0];
-    expect(pushArgs[0]).toEqual({ db: {}, path: 'leaderboard/daily/2024-01-01' });
+    expect(pushMock).toHaveBeenCalledTimes(2);
+    expect(setMock).toHaveBeenCalledTimes(2);
 
-    // set called with entryRef and payload (no score field)
-    expect(setMock).toHaveBeenCalledTimes(1);
-    const [entryRefArg, entryArg] = setMock.mock.calls[0];
-    expect(entryRefArg).toEqual({ key: 'new-key' });
-    expect(entryArg).toEqual({
+    const [, dateScopedEntry] = setMock.mock.calls[0];
+    expect(dateScopedEntry).toEqual({
       userId: 'uid123',
       userName: 'Alice',
       numBoards: 4,
@@ -197,22 +217,60 @@ describe('submitSpeedrunScore', () => {
       timestamp: 1_700_000_123_000,
       dateKey: '2024-01-01',
     });
-    expect(entryArg).not.toHaveProperty('score');
+    expect(dateScopedEntry).not.toHaveProperty('score');
+
+    const [, allTimeEntry] = setMock.mock.calls[1];
+    expect(allTimeEntry).toEqual({
+      userId: 'uid123',
+      userName: 'Alice',
+      numBoards: 4,
+      timeMs: 12_345,
+      timestamp: 1_700_000_123_000,
+      dateKey: '2024-01-01',
+    });
 
     expect(resultKey).toBe('new-key');
   });
 
-  it('defaults userName to "Anonymous" when falsy', async () => {
+  it('defaults userName to "Anonymous" when falsy and writes marathon + allTime with dateKey on allTime', async () => {
     vi.setSystemTime(1_700_000_200_000);
 
     await submitSpeedrunScore('uid456', '', 'marathon', 2, 5_000);
 
-    const [, lastEntry] = setMock.mock.calls[setMock.mock.calls.length - 1];
-    expect(lastEntry.userName).toBe('Anonymous');
-    expect(lastEntry.userId).toBe('uid456');
-    expect(lastEntry.numBoards).toBe(2);
-    expect(lastEntry.timeMs).toBe(5_000);
-    expect(lastEntry).not.toHaveProperty('score');
-    expect(lastEntry).not.toHaveProperty('dateKey');
+    expect(setMock).toHaveBeenCalledTimes(2);
+    const [, marathonEntry] = setMock.mock.calls[0];
+    expect(marathonEntry.userName).toBe('Anonymous');
+    expect(marathonEntry.userId).toBe('uid456');
+    expect(marathonEntry.numBoards).toBe(2);
+    expect(marathonEntry.timeMs).toBe(5_000);
+    expect(marathonEntry).not.toHaveProperty('score');
+    expect(marathonEntry).not.toHaveProperty('dateKey');
+
+    const [, allTimeEntry] = setMock.mock.calls[1];
+    expect(allTimeEntry.userName).toBe('Anonymous');
+    expect(allTimeEntry.dateKey).toBe('2024-01-01');
+  });
+
+  it('when skipDateScoped is true only writes to allTime path', async () => {
+    vi.setSystemTime(1_700_000_123_000);
+
+    await submitSpeedrunScore(
+      'uid99',
+      'Bob',
+      'daily',
+      2,
+      10_000,
+      '2024-01-15',
+      { skipDateScoped: true }
+    );
+
+    expect(refMock).toHaveBeenCalledWith(expect.anything(), 'leaderboard/daily/allTime');
+    expect(refMock).not.toHaveBeenCalledWith(expect.anything(), 'leaderboard/daily/2024-01-15');
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    expect(setMock).toHaveBeenCalledTimes(1);
+    const [, entry] = setMock.mock.calls[0];
+    expect(entry.userId).toBe('uid99');
+    expect(entry.userName).toBe('Bob');
+    expect(entry.dateKey).toBe('2024-01-15');
   });
 });

@@ -275,9 +275,11 @@ const createGame = useCallback(async (options = {}) => {
 
     try {
       await set(ref(database, gamePath), gameData);
-      grantBadge({ database, uid: user.uid, badgeId: 'party_starter' }).then(() => {
-        const def = getBadgeById('party_starter');
-        if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+      grantBadge({ database, uid: user.uid, badgeId: 'party_starter' }).then((grantedIds) => {
+        if (grantedIds?.length > 0) {
+          const def = getBadgeById('party_starter');
+          if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+        }
       }).catch((err) =>
         logError(err, 'useMultiplayerGame.grantBadge')
       );

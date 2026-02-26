@@ -122,15 +122,12 @@ export function useAuth() {
             logError(e, 'useAuth.flushPendingOnLogin');
           }
         })();
-        const hasPasswordProvider = (authUser.providerData || []).some(
-          (p) => p && p.providerId === 'password'
-        );
         const hasUsername = !!authUser.displayName;
-        if (hasPasswordProvider && !hasUsername) {
-          const randomDigits = Math.floor(Math.random() * 1000)
+        if (!hasUsername) {
+          const randomDigits = Math.floor(Math.random() * 100000)
             .toString()
-            .padStart(3, '0');
-          const generatedUsername = `wuzzle-games-player-${randomDigits}`;
+            .padStart(5, '0');
+          const generatedUsername = `wuzzler-${randomDigits}`;
 
           updateProfile(authUser, { displayName: generatedUsername })
             .then(() => {
@@ -164,9 +161,11 @@ export function useAuth() {
             });
 
             if (isFirstProfile) {
-              grantBadge({ database, uid: authUser.uid, badgeId: 'wuzzle_games_member' }).then(() => {
-                const def = getBadgeById('wuzzle_games_member');
-                if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+              grantBadge({ database, uid: authUser.uid, badgeId: 'wuzzle_games_member' }).then((grantedIds) => {
+                if (grantedIds?.length > 0) {
+                  const def = getBadgeById('wuzzle_games_member');
+                  if (def && badgeEarnedToastRef.current) badgeEarnedToastRef.current(def);
+                }
               }).catch((err) => {
                 logError(err, 'useAuth.grantBadge.wuzzle_games_member');
               });
@@ -226,6 +225,9 @@ export function useAuth() {
           } else {
             setFriends([]);
           }
+        }, (err) => {
+          logError('Friends subscription error', err);
+          setFriends([]);
         });
 
         // Load friend requests
@@ -241,6 +243,9 @@ export function useAuth() {
           } else {
             setFriendRequests([]);
           }
+        }, (err) => {
+          logError('Friend requests subscription error', err);
+          setFriendRequests([]);
         });
 
         // Load incoming multiplayer challenges for this user
@@ -259,6 +264,9 @@ export function useAuth() {
           } else {
             setIncomingChallenges([]);
           }
+        }, (err) => {
+          logError('Challenges subscription error', err);
+          setIncomingChallenges([]);
         });
 
         // Load outgoing (sent) multiplayer challenges created by this user.
@@ -277,6 +285,9 @@ export function useAuth() {
           } else {
             setSentChallenges([]);
           }
+        }, (err) => {
+          logError('Sent challenges subscription error', err);
+          setSentChallenges([]);
         });
         
         setLoading(false);

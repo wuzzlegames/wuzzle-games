@@ -10,13 +10,23 @@ import UserCardWithBadges from './UserCardWithBadges';
 const FeedbackModal = lazy(() => import('./FeedbackModal'));
 import './Leaderboard.css';
 
+function formatDateKey(dateKey) {
+  if (!dateKey || typeof dateKey !== 'string') return '—';
+  const [y, m, d] = dateKey.split('-').map(Number);
+  if (!y || !m || !d) return dateKey;
+  const date = new Date(y, m - 1, d);
+  if (Number.isNaN(date.getTime())) return dateKey;
+  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
 export default function Leaderboard() {
   const { user } = useAuth();
+  const [scope, setScope] = useState('today');
   const [mode, setMode] = useState('daily');
   const [numBoards, setNumBoards] = useState(1);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
-  const { entries, loading, error } = useLeaderboard(mode, mode === 'daily' ? numBoards : null, 100);
+  const { entries, loading, error } = useLeaderboard(mode, mode === 'daily' ? numBoards : null, 100, scope);
 
   useEffect(() => {
     trackLeaderboardView('mode-specific');
@@ -47,6 +57,22 @@ export default function Leaderboard() {
         <h1 className="leaderboardTitle">Speedrun Leaderboard</h1>
 
         <div className="leaderboardFilters">
+          <div className="leaderboardScopeBar" role="group" aria-label="Time range">
+            <button
+              type="button"
+              className={`leaderboardScopeBtn${scope === 'today' ? ' leaderboardScopeBtn--active' : ''}`}
+              onClick={() => setScope('today')}
+            >
+              Today
+            </button>
+            <button
+              type="button"
+              className={`leaderboardScopeBtn${scope === 'allTime' ? ' leaderboardScopeBtn--active' : ''}`}
+              onClick={() => setScope('allTime')}
+            >
+              All Time
+            </button>
+          </div>
           <div className="leaderboardTabBar" role="tablist" aria-label="Leaderboard mode">
             <button
               type="button"
@@ -110,10 +136,11 @@ export default function Leaderboard() {
             No entries yet. Be the first to submit a speedrun score!
           </div>
         ) : (
-          <div className="leaderboardTable">
-            <div className="leaderboardRow leaderboardHeaderRow">
+          <div className={`leaderboardTable${scope === 'allTime' ? ' leaderboardTable--allTime' : ''}`}>
+            <div className={`leaderboardRow leaderboardHeaderRow${scope === 'allTime' ? ' leaderboardRow--allTime' : ''}`}>
               <div className="leaderboardRank">Rank</div>
               <div className="leaderboardName">Player</div>
+              {scope === 'allTime' && <div className="leaderboardDate">Date</div>}
               <div className="leaderboardTime">Time</div>
             </div>
             {entries.map((entry, index) => {
@@ -121,7 +148,7 @@ export default function Leaderboard() {
               return (
                 <div
                   key={entry.id}
-                  className={`leaderboardRow ${isCurrentUser ? 'leaderboardRowCurrent' : ''}`}
+                  className={`leaderboardRow ${scope === 'allTime' ? 'leaderboardRow--allTime' : ''} ${isCurrentUser ? 'leaderboardRowCurrent' : ''}`}
                 >
                   <div className="leaderboardRank">#{index + 1}</div>
                   <div className="leaderboardName">
@@ -132,6 +159,7 @@ export default function Leaderboard() {
                       size="sm"
                     />
                   </div>
+                  {scope === 'allTime' && <div className="leaderboardDate">{formatDateKey(entry.dateKey)}</div>}
                   <div className="leaderboardTime">{formatElapsed(entry.timeMs)}</div>
                 </div>
               );

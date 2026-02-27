@@ -988,16 +988,6 @@ export default function GameSinglePlayer({
     else addLetter(key);
   };
 
-  const solutionsText = useMemo(
-    () =>
-      (Array.isArray(boards) ? boards : [])
-        .map((b) => (b && typeof b.solution === "string" ? b.solution : null))
-        .filter(Boolean)
-        .map((w) => w.toUpperCase())
-        .join(" · "),
-    [boards]
-  );
-
   const statusText =
     speedrunEnabled
       ? ""
@@ -1314,7 +1304,6 @@ export default function GameSinglePlayer({
         archiveDate={archiveDate}
         allSolved={allSolved}
         finished={finished}
-        solutionsText={solutionsText}
         message={message}
         boards={boards}
         maxTurns={maxTurns}

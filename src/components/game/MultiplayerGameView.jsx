@@ -479,10 +479,12 @@ export default function MultiplayerGameView({
     }
   }
 
-  // Show all solution words in header (similar to multi-board daily)
+  // Derive board count for header from current boards/config
   const solutionList = getSolutionArray(gameState);
-  const solutionsText = solutionList.map((w) => w.toUpperCase()).join(" · ");
-  const numBoardsForHeader = solutionList.length || 1;
+  const numBoardsForHeader =
+    Array.isArray(boards) && boards.length > 0
+      ? boards.length
+      : solutionList.length || 1;
 
   // Multiplayer is no longer turn-based; all players can guess concurrently.
   // We keep a single layout that always shows only the local player's boards.
@@ -648,23 +650,6 @@ export default function MultiplayerGameView({
             numBoards={numBoardsForHeader}
             speedrunEnabled={isSpeedrun}
           />
-
-          {solutionsText && solutionsText.length > 0 && (
-            <div
-              style={{
-                padding: "0 16px 8px",
-                fontSize: 12,
-                color: "var(--c-text)",
-                textTransform: "uppercase",
-                fontWeight: "normal",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
-              {solutionsText}
-            </div>
-          )}
 
           <div
             style={{

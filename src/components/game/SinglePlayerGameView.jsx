@@ -23,7 +23,6 @@ export default function SinglePlayerGameView({
   archiveDate = null,
   allSolved,
   finished,
-  solutionsText,
   message,
   boards,
   maxTurns,
@@ -140,23 +139,6 @@ export default function SinglePlayerGameView({
           speedrunEnabled={speedrunEnabled}
           archiveDate={archiveDate}
         />
-
-        {solutionsText && solutionsText.length > 0 && (
-          <div
-            style={{
-              padding: "0 16px 8px",
-              fontSize: 12,
-              color: "var(--c-text)",
-              textTransform: "uppercase",
-              fontWeight: "normal",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {solutionsText}
-          </div>
-        )}
 
         <div
           style={{

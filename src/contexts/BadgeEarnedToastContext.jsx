@@ -25,6 +25,10 @@ export function BadgeEarnedToastProvider({ children }) {
       const id = `${badgeDef.id}-${Date.now()}`;
       const earnedAt = Date.now();
       setRecentBadgeEarnings((prev) => {
+        // Don't add duplicate - user can only earn a badge once
+        if (prev.some((item) => item.badgeDef.id === badgeDef.id)) {
+          return prev;
+        }
         const next = [...prev, { id, badgeDef, earnedAt }];
         if (next.length > MAX_RECENT_BADGE_EARNINGS) {
           return next.slice(-MAX_RECENT_BADGE_EARNINGS);
@@ -40,6 +44,10 @@ export function BadgeEarnedToastProvider({ children }) {
     setRecentBadgeEarnings((prev) => prev.filter((item) => item.id !== notificationId));
   }, []);
 
+  const dismissAllBadgeNotifications = useCallback(() => {
+    setRecentBadgeEarnings([]);
+  }, []);
+
   useEffect(() => {
     badgeEarnedToastRef.current = showBadgeEarned;
     return () => { badgeEarnedToastRef.current = null; };
@@ -51,6 +59,7 @@ export function BadgeEarnedToastProvider({ children }) {
     clearBadgeEarned,
     recentBadgeEarnings,
     dismissBadgeEarnedNotification,
+    dismissAllBadgeNotifications,
   };
 
   return (

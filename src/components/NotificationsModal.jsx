@@ -91,6 +91,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
   const badgeEarnedContext = useBadgeEarnedToast();
   const recentBadgeEarnings = badgeEarnedContext?.recentBadgeEarnings ?? [];
   const dismissBadgeEarnedNotification = badgeEarnedContext?.dismissBadgeEarnedNotification ?? (() => {});
+  const dismissAllBadgeNotifications = badgeEarnedContext?.dismissAllBadgeNotifications ?? (() => {});
 
   useEffect(() => {
     if (isOpen && user?.uid) {
@@ -196,9 +197,14 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
             {/* Badge earned: badge left, text right, Dismiss + View badges */}
             {hasBadgeEarnings && (
               <div style={{ marginBottom: "24px" }}>
-                <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "var(--c-text)", textAlign: "left" }}>
-                  Badge earned
-                </h3>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                  <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "bold", color: "var(--c-text)", textAlign: "left" }}>
+                    Badge earned
+                  </h3>
+                  <button type="button" onClick={dismissAllBadgeNotifications} style={buttonSecondaryStyle}>
+                    Dismiss all
+                  </button>
+                </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid var(--c-border)" }}>
                   {recentBadgeEarnings.map((item) => (
                     <div

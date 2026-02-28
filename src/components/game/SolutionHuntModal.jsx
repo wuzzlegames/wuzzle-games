@@ -48,6 +48,7 @@ export default function SolutionHuntModal({
       onRequestClose={handleClose}
       titleId="solution-hunt-modal-title"
       panelClassName="modalPanel--wide solutionHuntModal"
+      disableAutoFocus
     >
       <div className="solutionHuntModalContent">
         <h2 id="solution-hunt-modal-title" className="solutionHuntTitle">

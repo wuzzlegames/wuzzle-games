@@ -36,6 +36,7 @@ const Game = ({
         <GameMultiplayer />
       ) : (
         <GameSinglePlayer
+          key={`${mode ?? "daily"}-${!!speedrun}`}
           mode={mode}
           boardsParam={boardsParam}
           speedrunEnabled={speedrun}

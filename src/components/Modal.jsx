@@ -22,6 +22,7 @@ export default function Modal({
   zIndex = 2000,
   disableAutoFocus = false,
   panelClassName = "",
+  showCloseButton = true,
 }) {
   const panelRef = useRef(null);
   const lastFocusedRef = useRef(null);
@@ -109,6 +110,16 @@ export default function Modal({
         tabIndex={-1}
         onMouseDown={(e) => e.stopPropagation()}
       >
+        {showCloseButton && onRequestClose && (
+          <button
+            type="button"
+            className="modalCloseBtn"
+            onClick={onRequestClose}
+            aria-label="Close"
+          >
+            ×
+          </button>
+        )}
         {children}
       </div>
     </div>

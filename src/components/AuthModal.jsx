@@ -327,28 +327,6 @@ export default React.memo(function AuthModal({ isOpen, onRequestClose, onSignUpC
             </button>
           )}
         </div>
-
-        <button
-          onClick={handleClose}
-          style={{
-            position: 'absolute',
-            top: '0',
-            right: '0',
-            background: 'none',
-            border: 'none',
-            color: 'var(--c-text)',
-            fontSize: '24px',
-            cursor: 'pointer',
-            padding: '0',
-            width: '32px',
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          ×
-        </button>
       </div>
     </Modal>
   );

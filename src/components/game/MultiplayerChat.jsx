@@ -15,7 +15,7 @@ const HIDE_EMOJIS_KEY_PREFIX = "mw:multiplayerHideEmojis:";
  * Messages live under: multiplayer/<gameCode>/chat/<autoId>
  * Limits display to last 100 messages to prevent unbounded growth.
  */
-export default function MultiplayerChat({ gameCode, authUser, setTimedMessage }) {
+export default function MultiplayerChat({ gameCode, authUser, setTimedMessage, hasBoardSelector = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -414,15 +414,15 @@ export default function MultiplayerChat({ gameCode, authUser, setTimedMessage })
         </div>
       )}
 
-      {/* Floating emoji picker button - above room chat */}
+      {/* Floating emoji picker button - left side, above board selector when present else left bottom */}
       <button
         ref={emojiButtonRef}
         type="button"
         onClick={() => setIsEmojiPickerOpen((prev) => !prev)}
         style={{
           position: "fixed",
-          bottom: KEYBOARD_HEIGHT + 20 + 56,
-          right: 20,
+          bottom: hasBoardSelector ? KEYBOARD_HEIGHT + 20 + 56 : KEYBOARD_HEIGHT + 20,
+          left: 20,
           padding: "8px 14px",
           borderRadius: 999,
           backgroundColor: "var(--c-bg)",
@@ -463,8 +463,8 @@ export default function MultiplayerChat({ gameCode, authUser, setTimedMessage })
           onClick={(e) => e.stopPropagation()}
           style={{
             position: "fixed",
-            bottom: KEYBOARD_HEIGHT + 20 + 56 + 54,
-            right: 20,
+            bottom: (hasBoardSelector ? KEYBOARD_HEIGHT + 20 + 56 : KEYBOARD_HEIGHT + 20) + 54,
+            left: 20,
             width: 220,
             maxWidth: "90vw",
             backgroundColor: "var(--c-panel)",

@@ -198,7 +198,7 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose} disableAutoFocus>
       <GameToast message={toastMessage} />
       <div className="openRoomsModalRoot">
         <div className="openRoomsHeader">

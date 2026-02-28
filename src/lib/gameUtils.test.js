@@ -297,6 +297,53 @@ describe('generateShareText', () => {
     expect(text).toBe(expected);
   });
 
+  it('matches Solution Hunt Speedrun - 1 board', () => {
+    const boards = [
+      makeBoard(
+        [
+          { word: 'G1', colors: ['grey', 'grey', 'grey', 'grey', 'grey'] },
+          { word: 'G2', colors: ['grey', 'grey', 'grey', 'grey', 'yellow'] },
+          { word: 'G3', colors: ['yellow', 'yellow', 'grey', 'grey', 'yellow'] },
+          { word: 'G4', colors: ['green', 'grey', 'grey', 'grey', 'yellow'] },
+          { word: 'G5', colors: ['green', 'green', 'green', 'green', 'green'] },
+        ],
+        true,
+      ),
+    ];
+
+    const text = generateShareText(
+      boards,
+      'solutionhunt',
+      1,
+      true,
+      12_500,
+      12_500,
+      () => '00:12.5',
+      5,
+      6,
+      true,
+      1,
+    );
+
+    const expected = [
+      'Wuzzle Games - Daily Solution Hunt Speedrun',
+      '',
+      '⬛⬛⬛⬛⬛',
+      '⬛⬛⬛⬛🟨',
+      '🟨🟨⬛⬛🟨',
+      '🟩⬛⬛⬛🟨',
+      '🟩🟩🟩🟩🟩',
+      '',
+      'Time: 00:12.5',
+      'Guesses: 5',
+      '',
+      'Play Wuzzle Games!',
+      'https://wuzzlegames.com/',
+    ].join('\n');
+
+    expect(text).toBe(expected);
+  });
+
   it('matches Daily speedrun - multiple boards', () => {
     const boards = [makeBoard([], true), makeBoard([], true)];
 

@@ -61,7 +61,9 @@ export function generateShareText(
 
   // Heading matches "Wuzzle Games - <Mode> <Variant>" from ShareText.md
   let heading = "Wuzzle Games";
-  if (isSolutionHunt) {
+  if (isSolutionHunt && speedrunEnabled) {
+    heading = "Wuzzle Games - Daily Solution Hunt Speedrun";
+  } else if (isSolutionHunt) {
     heading = "Wuzzle Games - Daily Solution Hunt";
   } else if (isDaily && speedrunEnabled) {
     heading = "Wuzzle Games - Daily Speedrun";
@@ -153,8 +155,13 @@ export function generateShareText(
 
     lines.push("");
 
-    if (isSolutionHunt) {
-      // Solution Hunt – 1 board (no speedrun)
+    if (isSolutionHunt && speedrunEnabled) {
+      // Solution Hunt Speedrun – 1 board
+      const timeMs = popupTotalMs || stageElapsedMs || 0;
+      lines.push(`Time: ${formatElapsed(timeMs)}`);
+      lines.push(`Guesses: ${turnsUsed}`);
+    } else if (isSolutionHunt) {
+      // Solution Hunt Standard
       lines.push(`Guesses: ${turnsUsed}/${maxTurns}`);
       lines.push(allSolved ? "Solved!" : "Not solved!");
     } else if (speedrunEnabled) {

@@ -1033,6 +1033,10 @@ export default function GameSinglePlayer({
       // Reset timer seed and start flag so the next stage runs countdown and starts the speedrun timer.
       setStageTimerSeed({ elapsedMs: 0, frozen: false });
       hasStartedStageTimerRef.current = false;
+      // Reset stage-specific flags so comments and popup behavior are correct for the next stage.
+      setHasCompletedStage(false);
+      setAllowNextStageAfterPopup(true);
+      setForceCanShareAfterPopup(false);
       // Re-render so we read new meta and useSinglePlayerGame runs with new marathonIndex/numBoards.
       setMarathonStageKey((k) => k + 1);
     }

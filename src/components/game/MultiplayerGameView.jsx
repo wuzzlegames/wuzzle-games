@@ -62,6 +62,7 @@ export default function MultiplayerGameView({
   const gameState = multiplayerGame?.gameState;
   const playersMap = gameState && gameState.players && typeof gameState.players === "object" ? gameState.players : null;
   const playerCount = playersMap ? Object.keys(playersMap).length : 0;
+  const hasBoardSelector = gameState?.status === "playing" && (boards?.length ?? 0) > 1;
 
   // If we're still resolving auth, show a simple loading state that includes the header.
   if (authLoading) {
@@ -265,7 +266,7 @@ export default function MultiplayerGameView({
           onInviteFriend={onInviteFriend}
         />
 
-        <MultiplayerChat gameCode={gameCode || ""} authUser={authUser} setTimedMessage={setTimedMessage} />
+        <MultiplayerChat gameCode={gameCode || ""} authUser={authUser} setTimedMessage={setTimedMessage} hasBoardSelector={hasBoardSelector} />
       </div>
     );
   }
@@ -1082,7 +1083,7 @@ export default function MultiplayerGameView({
           </div>
         )}
 
-        <MultiplayerChat gameCode={gameCode || ""} authUser={authUser} setTimedMessage={setTimedMessage} />
+        <MultiplayerChat gameCode={gameCode || ""} authUser={authUser} setTimedMessage={setTimedMessage} hasBoardSelector={hasBoardSelector} />
       </div>
     </>
   );

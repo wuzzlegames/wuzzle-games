@@ -54,9 +54,6 @@ function formatAuthError(err) {
 
 const LINK_GOOGLE_RETURN_KEY = 'linkGoogleReturnTo';
 
-/** Guard: only one profile setup can run per uid at a time (prevents duplicate member badge on rapid onAuthStateChanged). */
-const profileSetupUidRef = { current: null };
-
 export function useAuth() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -146,9 +143,6 @@ export function useAuth() {
 
         // Ensure a minimal profile + lookup indexes exist in the Realtime Database
         // so we can look up users by email or username when sending friend requests.
-        // Guard: skip if profile setup already in progress for this user (prevents duplicate member badge).
-        if (profileSetupUidRef.current === authUser.uid) return;
-        profileSetupUidRef.current = authUser.uid;
         (async () => {
           try {
             const profileRef = ref(database, `users/${authUser.uid}/profile`);
@@ -201,8 +195,6 @@ export function useAuth() {
           } catch (indexErr) {
             // Index failures should never block authentication.
             console.error('Failed to update user profile indexes:', indexErr);
-          } finally {
-            profileSetupUidRef.current = null;
           }
         })();
       }

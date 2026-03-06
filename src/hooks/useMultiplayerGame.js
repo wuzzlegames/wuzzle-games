@@ -110,6 +110,7 @@ export function useMultiplayerGame(gameCode = null, isHost = false, speedrun = f
         setError(ROOM_CLOSED_MESSAGE);
         return;
       }
+      if (!isMountedRef.current) return;
       dataReceivedRef.current = true;
       setBootstrapInStorage(gameCode, data);
       setGameState(data);

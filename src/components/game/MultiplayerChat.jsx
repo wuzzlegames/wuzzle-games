@@ -49,12 +49,14 @@ export default function MultiplayerChat({ gameCode, authUser, setTimedMessage, h
   useEffect(() => {
     if (!gameCode) return undefined;
 
+    let isMounted = true;
     const chatRef = ref(database, `multiplayer/${gameCode}/chat`);
     // Limit to last 100 messages to prevent unbounded growth
     const chatQuery = query(chatRef, limitToLast(100));
     const unsubscribe = onValue(
       chatQuery,
       (snapshot) => {
+        if (!isMounted) return;
         if (!snapshot.exists()) {
           setMessages([]);
           return;
@@ -70,12 +72,14 @@ export default function MultiplayerChat({ gameCode, authUser, setTimedMessage, h
         setMessages(list);
       },
       (err) => {
+        if (!isMounted) return;
         console.error('Chat subscription error:', err);
         setMessages([]);
       }
     );
 
     return () => {
+      isMounted = false;
       if (typeof unsubscribe === "function") {
         unsubscribe();
       }
@@ -106,12 +110,14 @@ export default function MultiplayerChat({ gameCode, authUser, setTimedMessage, h
   useEffect(() => {
     if (!gameCode) return undefined;
 
+    let isMounted = true;
     const reactionsRef = ref(database, `multiplayer/${gameCode}/reactions`);
     const reactionsQuery = query(reactionsRef, limitToLast(100));
 
     const unsubscribe = onValue(
       reactionsQuery,
       (snapshot) => {
+        if (!isMounted) return;
         if (!snapshot.exists()) {
           setReactionEvents([]);
           return;
@@ -128,12 +134,14 @@ export default function MultiplayerChat({ gameCode, authUser, setTimedMessage, h
         setReactionEvents(list);
       },
       (err) => {
+        if (!isMounted) return;
         console.error('Reactions subscription error:', err);
         setReactionEvents([]);
       }
     );
 
     return () => {
+      isMounted = false;
       if (typeof unsubscribe === "function") unsubscribe();
     };
   }, [gameCode]);

@@ -122,6 +122,7 @@ export function useLeaderboard(mode, numBoards = null, limit = 100, scope = 'tod
     setLoading(true);
     setError(null);
 
+    let isMounted = true;
     const isAllTime = scope === 'allTime';
     const basePath = isAllTime
       ? `leaderboard/${mode}/allTime`
@@ -141,6 +142,7 @@ export function useLeaderboard(mode, numBoards = null, limit = 100, scope = 'tod
     const unsubscribe = onValue(
       leaderboardQuery,
       (snapshot) => {
+        if (!isMounted) return;
         try {
           const data = snapshot.val();
           if (!data) {
@@ -199,12 +201,14 @@ export function useLeaderboard(mode, numBoards = null, limit = 100, scope = 'tod
         }
       },
       (err) => {
+        if (!isMounted) return;
         setError(err.message);
         setLoading(false);
       }
     );
 
     return () => {
+      isMounted = false;
       unsubscribe();
     };
   }, [mode, numBoards, limit, scope, resetsDaily, dateKey]);

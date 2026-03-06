@@ -111,6 +111,7 @@ export default function Profile() {
         };
 
         if (!user) {
+          if (!isMounted) return;
           setStreaks(local);
           return;
         }
@@ -123,6 +124,7 @@ export default function Profile() {
           } catch (e) {
             // Non-fatal; we still show local streaks
           }
+          if (!isMounted) return;
           setStreaks(local);
           return;
         }
@@ -150,6 +152,7 @@ export default function Profile() {
           solutionhuntSpeedrun: normalizeStreak(raw.solutionhuntSpeedrun),
         };
 
+        if (!isMounted) return;
         setStreaks(merged);
       } catch (err) {
         console.error("Failed to load streaks in profile", err);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from './hooks/useAuth';
@@ -37,13 +37,18 @@ export default function AdvancedStats() {
   const [marathonStageStats, setMarathonStageStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const isMountedRef = useRef(true);
 
   const mode = MODES.some(m => m.mode === modeParam) ? modeParam : 'daily';
   const speedrunEnabled = speedrunParam;
 
   useEffect(() => {
     if (!user) return;
+    isMountedRef.current = true;
     loadStats();
+    return () => {
+      isMountedRef.current = false;
+    };
   }, [user, mode, speedrunEnabled]);
 
   async function loadStats() {
@@ -56,6 +61,7 @@ export default function AdvancedStats() {
           loadGameRecords({ uid: user.uid, mode, speedrunEnabled }),
           loadMarathonStageRecords({ uid: user.uid, speedrunEnabled }),
         ]);
+        if (!isMountedRef.current) return;
         if (gameRecords === null) {
           setError('Failed to load statistics.');
           setStats(null);
@@ -72,6 +78,7 @@ export default function AdvancedStats() {
           mode,
           speedrunEnabled,
         });
+        if (!isMountedRef.current) return;
         if (gameRecords === null) {
           setError('Failed to load statistics.');
           setStats(null);
@@ -83,12 +90,13 @@ export default function AdvancedStats() {
       }
     } catch (err) {
       console.error('Failed to load stats:', err);
+      if (!isMountedRef.current) return;
       setError('Failed to load statistics.');
       setStats(null);
       setMarathonSummary(null);
       setMarathonStageStats(null);
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) setLoading(false);
     }
   }
 

@@ -40,6 +40,7 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
   useEffect(() => {
     if (!isOpen) return undefined;
 
+    let isMounted = true;
     setLoading(true);
     setRoomsError("");
     const roomsRef = ref(database, "multiplayer");
@@ -47,6 +48,7 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
     const unsubscribe = onValue(
       roomsRef,
       (snapshot) => {
+        if (!isMounted) return;
         setRoomsError("");
         const value = snapshot.val() || {};
         const nextRooms = Object.entries(value)
@@ -87,6 +89,7 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
         setLoading(false);
       },
       (err) => {
+        if (!isMounted) return;
         setRooms([]);
         setLoading(false);
         setRoomsError("Could not load rooms. Try again.");
@@ -94,6 +97,7 @@ export default function OpenRoomsModal({ isOpen, onRequestClose, adminMode = fal
     );
 
     return () => {
+      isMounted = false;
       off(roomsRef);
       if (typeof unsubscribe === "function") unsubscribe();
     };

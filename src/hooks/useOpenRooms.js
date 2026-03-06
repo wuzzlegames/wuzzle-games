@@ -12,6 +12,7 @@ export function useOpenRooms() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
     const roomsRef = ref(database, 'multiplayer');
     const now = Date.now();
     const minCreatedAt = now - MULTIPLAYER_WAITING_TIMEOUT_MS;
@@ -27,6 +28,7 @@ export function useOpenRooms() {
     const unsubscribe = onValue(
       roomsQuery,
       (snapshot) => {
+        if (!isMounted) return;
         const data = snapshot.val() || {};
         const list = Object.entries(data)
           .map(([code, room]) => {
@@ -76,11 +78,13 @@ export function useOpenRooms() {
         setLoading(false);
       },
       () => {
+        if (!isMounted) return;
         setLoading(false);
       },
     );
 
     return () => {
+      isMounted = false;
       // Cleanup: unsubscribe from the listener
       if (typeof unsubscribe === 'function') {
         unsubscribe();

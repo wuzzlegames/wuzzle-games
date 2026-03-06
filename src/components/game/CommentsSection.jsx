@@ -66,12 +66,14 @@ export default function CommentsSection({ threadId, setTimedMessage, shareTextFo
   useEffect(() => {
     if (!threadId) return undefined;
 
+    let isMounted = true;
     const commentsRef = ref(database, `comments/${threadId}`);
     // Limit to last 300 comments to prevent unbounded growth
     const commentsQuery = query(commentsRef, limitToLast(300));
     const unsubscribe = onValue(
       commentsQuery,
       (snapshot) => {
+        if (!isMounted) return;
         if (!snapshot.exists()) {
           setComments([]);
           return;
@@ -88,12 +90,14 @@ export default function CommentsSection({ threadId, setTimedMessage, shareTextFo
         setComments(list);
       },
       (err) => {
+        if (!isMounted) return;
         logError(err, "Comments subscription error");
         setComments([]);
       }
     );
 
     return () => {
+      isMounted = false;
       if (typeof unsubscribe === "function") {
         unsubscribe();
       }

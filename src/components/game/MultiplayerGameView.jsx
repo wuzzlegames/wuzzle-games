@@ -387,9 +387,7 @@ export default function MultiplayerGameView({
           gap: "16px",
         }}
       >
-        {!authUser ? (
-          <>Loading authentication...</>
-        ) : isAuthenticatedNotVerified ? (
+        {isAuthenticatedNotVerified ? (
           <div style={{ textAlign: "center" }}>
             <div>You must verify your email to play Multiplayer Mode.</div>
             <button

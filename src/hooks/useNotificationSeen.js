@@ -24,17 +24,23 @@ export function useNotificationSeen(user) {
       return;
     }
 
+    let isMounted = true;
     const path = `users/${user.uid}/notificationSeenAt`;
     const seenRef = ref(database, path);
     const unsubscribe = onValue(seenRef, (snapshot) => {
+      if (!isMounted) return;
       const val = snapshot.val();
       setNotificationSeenAt(typeof val === 'number' ? val : null);
       setLoading(false);
     }, (err) => {
+      if (!isMounted) return;
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, [user?.uid]);
 
   const markNotificationsSeen = useCallback(async () => {

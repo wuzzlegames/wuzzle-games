@@ -84,6 +84,7 @@ export function useSubscription(user) {
     const unsubscribeFirestore = onSnapshotFirestore(
       subscriptionsQuery,
       async (snapshot) => {
+        if (!isMounted) return;
         // Check if user has an active subscription
         const activeSubscriptions = snapshot.docs.filter((doc) => {
           const data = doc.data();
@@ -101,6 +102,7 @@ export function useSubscription(user) {
         // Re-check custom claim when subscription changes
         // This ensures we have the latest stripeRole after subscription updates
         const currentRole = await checkCustomClaim();
+        if (!isMounted) return;
         stripeRoleRef.current = currentRole;
         setStripeRole(currentRole);
 
@@ -157,6 +159,7 @@ export function useSubscription(user) {
     const unsubscribeRealtime = onValue(
       subscriptionRefPath,
       (snap) => {
+        if (!isMounted) return;
         const data = snap.val();
         // Only use Realtime DB data if Firestore doesn't have subscription
         // This is for backward compatibility

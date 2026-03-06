@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from './hooks/useAuth';
@@ -25,10 +25,15 @@ export default function CrossModeComparison() {
   const [comparisonData, setComparisonData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
     if (user) {
+      isMountedRef.current = true;
       loadComparisonData();
+      return () => {
+        isMountedRef.current = false;
+      };
     } else if (!authLoading) {
       setError('You must be signed in to view cross-mode comparisons.');
       setLoading(false);
@@ -47,6 +52,7 @@ export default function CrossModeComparison() {
           mode,
           speedrunEnabled,
         });
+        if (!isMountedRef.current) return;
         if (gameRecords !== null) {
           const calculatedStats = calculateAdvancedStats(gameRecords);
           allStats[label] = {
@@ -64,12 +70,14 @@ export default function CrossModeComparison() {
           };
         }
       }
+      if (!isMountedRef.current) return;
       setComparisonData(allStats);
     } catch (err) {
       console.error('Failed to load comparison data:', err);
+      if (!isMountedRef.current) return;
       setError('Failed to load comparison data.');
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) setLoading(false);
     }
   };
 

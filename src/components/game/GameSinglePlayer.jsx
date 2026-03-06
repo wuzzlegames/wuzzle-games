@@ -194,13 +194,16 @@ export default function GameSinglePlayer({
   const hasStartedStageTimerRef = useRef(false);
   const flipPopupTimeoutsRef = useRef([]);
   const countdownTimeoutsRef = useRef([]);
+  const isMountedRef = useRef(true);
 
   // Countdown (3, 2, 1) before timer starts in speedrun. Only for fresh games, not resumed.
   const [countdownRemaining, setCountdownRemaining] = useState(null);
 
   // Clear flip/popup and countdown timeouts on unmount to avoid setState after unmount.
   useEffect(() => {
+    isMountedRef.current = true;
     return () => {
+      isMountedRef.current = false;
       flipPopupTimeoutsRef.current.forEach((id) => clearTimeout(id));
       flipPopupTimeoutsRef.current = [];
       countdownTimeoutsRef.current.forEach((id) => clearTimeout(id));
@@ -257,6 +260,7 @@ export default function GameSinglePlayer({
           mode,
           speedrunEnabled,
         });
+        if (!isMounted) return;
         if (!remoteAware) return;
         setStreakLabel(buildStreakLabel(mode, speedrunEnabled, remoteAware));
       } catch (err) {
@@ -722,6 +726,7 @@ export default function GameSinglePlayer({
               streakInfo,
             });
 
+            if (!isMountedRef.current) return;
             setStreakLabel(buildStreakLabel(mode, speedrunEnabled, streakInfo));
 
             // Earn streak badges (daily only).

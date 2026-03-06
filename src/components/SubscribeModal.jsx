@@ -17,6 +17,7 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
   const [selectedDuration, setSelectedDuration] = useState('1m');
   const unsubscribeRef = useRef(null);
   const timeoutRef = useRef(null);
+  const isMountedRef = useRef(true);
 
   const priceIdMap = {
     '1m': import.meta.env.VITE_STRIPE_PRICE_ID_1M,
@@ -29,7 +30,9 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
 
   // Cleanup on unmount
   useEffect(() => {
+    isMountedRef.current = true;
     return () => {
+      isMountedRef.current = false;
       if (unsubscribeRef.current) {
         unsubscribeRef.current();
         unsubscribeRef.current = null;
@@ -88,6 +91,7 @@ export default function SubscribeModal({ isOpen, onRequestClose, onSubscriptionC
 
       // Listen for the sessionId from the extension
       const unsubscribe = onSnapshot(docRef, (doc) => {
+        if (!isMountedRef.current) return;
         if (!doc.exists()) return;
         
         const data = doc.data();

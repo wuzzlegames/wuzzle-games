@@ -69,8 +69,10 @@ export function useAuth() {
   // Handle redirect result from linkWithRedirect (Connect Google flow).
   // Must run on mount to detect when user returns from Google sign-in.
   useEffect(() => {
+    let isMounted = true;
     getRedirectResult(auth)
       .then((result) => {
+        if (!isMounted) return;
         if (result) {
           setUser(auth.currentUser);
           setLinkGoogleJustCompleted(true);
@@ -80,6 +82,7 @@ export function useAuth() {
         }
       })
       .catch((err) => {
+        if (!isMounted) return;
         if (err.code === 'auth/credential-already-in-use' || err.code === 'auth/provider-already-linked') {
           setError('Google account is already linked.');
         } else {
@@ -87,6 +90,9 @@ export function useAuth() {
         }
         sessionStorage.removeItem(LINK_GOOGLE_RETURN_KEY);
       });
+    return () => {
+      isMounted = false;
+    };
   }, [navigate]);
 
   useEffect(() => {
@@ -215,6 +221,7 @@ export function useAuth() {
         // Load friends list
         const friendsRef = ref(database, `users/${authUser.uid}/friends`);
         unsubscribeFriends = onValue(friendsRef, (snapshot) => {
+          if (!isMounted) return;
           if (snapshot.exists()) {
             const friendsData = snapshot.val();
             const friendsList = Object.entries(friendsData).map(([id, data]) => ({
@@ -226,6 +233,7 @@ export function useAuth() {
             setFriends([]);
           }
         }, (err) => {
+          if (!isMounted) return;
           logError('Friends subscription error', err);
           setFriends([]);
         });
@@ -233,6 +241,7 @@ export function useAuth() {
         // Load friend requests
         const requestsRef = ref(database, `users/${authUser.uid}/friendRequests`);
         unsubscribeRequests = onValue(requestsRef, (snapshot) => {
+          if (!isMounted) return;
           if (snapshot.exists()) {
             const requestsData = snapshot.val();
             const requestsList = Object.entries(requestsData).map(([id, data]) => ({
@@ -244,6 +253,7 @@ export function useAuth() {
             setFriendRequests([]);
           }
         }, (err) => {
+          if (!isMounted) return;
           logError('Friend requests subscription error', err);
           setFriendRequests([]);
         });
@@ -251,6 +261,7 @@ export function useAuth() {
         // Load incoming multiplayer challenges for this user
         const challengesRef = ref(database, `users/${authUser.uid}/challenges`);
         unsubscribeChallenges = onValue(challengesRef, (snapshot) => {
+          if (!isMounted) return;
           if (snapshot.exists()) {
             const raw = snapshot.val();
             const list = Object.entries(raw).map(([id, data]) => ({ id, ...data }));
@@ -265,6 +276,7 @@ export function useAuth() {
             setIncomingChallenges([]);
           }
         }, (err) => {
+          if (!isMounted) return;
           logError('Challenges subscription error', err);
           setIncomingChallenges([]);
         });
@@ -272,6 +284,7 @@ export function useAuth() {
         // Load outgoing (sent) multiplayer challenges created by this user.
         const sentRef = ref(database, `users/${authUser.uid}/sentChallenges`);
         unsubscribeSentChallenges = onValue(sentRef, (snapshot) => {
+          if (!isMounted) return;
           if (snapshot.exists()) {
             const raw = snapshot.val();
             const list = Object.entries(raw).map(([id, data]) => ({ id, ...data }));
@@ -286,6 +299,7 @@ export function useAuth() {
             setSentChallenges([]);
           }
         }, (err) => {
+          if (!isMounted) return;
           logError('Sent challenges subscription error', err);
           setSentChallenges([]);
         });

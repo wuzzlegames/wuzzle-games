@@ -93,7 +93,9 @@ export default function SinglePlayerGameView({
       }}
     >
       {inRouter && (
-        <SiteHeader onOpenFeedback={() => setShowFeedbackModal(true)} />
+        <div style={{ padding: 20, boxSizing: "border-box" }}>
+          <SiteHeader onOpenFeedback={() => setShowFeedbackModal(true)} />
+        </div>
       )}
 
       {speedrunEnabled && countdownRemaining != null && countdownRemaining > 0 && (
@@ -133,13 +135,6 @@ export default function SinglePlayerGameView({
             (finished ? 16 : KEYBOARD_HEIGHT) + (showNextStageBar ? 62 : 16),
         }}
       >
-        <GameHeader
-          mode={mode}
-          numBoards={numBoards}
-          speedrunEnabled={speedrunEnabled}
-          archiveDate={archiveDate}
-        />
-
         <div
           style={{
             padding: "16px",
@@ -150,6 +145,12 @@ export default function SinglePlayerGameView({
             boxSizing: "border-box",
           }}
         >
+          <GameHeader
+            mode={mode}
+            numBoards={numBoards}
+            speedrunEnabled={speedrunEnabled}
+            archiveDate={archiveDate}
+          />
           {/* Status bar: boards, guesses, timer */}
           <div style={{ width: "100%", maxWidth: 600, marginBottom: 12 }}>
             <GameStatusBar

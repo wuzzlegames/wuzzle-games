@@ -34,8 +34,9 @@ export default function GameHeader({
   return (
     <div
       style={{
-        padding: "16px 16px 8px",
-        backgroundColor: "var(--c-bg)",
+        marginTop: 8,
+        marginBottom: 8,
+        padding: "0 16px",
         textAlign: "center",
       }}
     >

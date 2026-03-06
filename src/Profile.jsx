@@ -307,7 +307,7 @@ export default function Profile() {
       </Helmet>
       <div className="profileRoot">
       <div className="profileContainer">
-        {loading ? (
+        {loading && !user ? (
           <div className="profileLoading">
             Loading...
           </div>

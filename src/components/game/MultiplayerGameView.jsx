@@ -64,8 +64,9 @@ export default function MultiplayerGameView({
   const playerCount = playersMap ? Object.keys(playersMap).length : 0;
   const hasBoardSelector = gameState?.status === "playing" && (boards?.length ?? 0) > 1;
 
-  // If we're still resolving auth, show a simple loading state that includes the header.
-  if (authLoading) {
+  // If we're still resolving auth and don't yet have a user, show loading.
+  // When user is already set (e.g. after sign-in), proceed to avoid indefinite loading.
+  if (authLoading && !authUser) {
     return (
       <div
         style={{
@@ -76,7 +77,9 @@ export default function MultiplayerGameView({
           color: "var(--c-text-strong)",
         }}
       >
-        <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
+        <div style={{ padding: 20, boxSizing: "border-box" }}>
+          <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
+        </div>
         <div
           style={{
             flex: 1,
@@ -105,7 +108,9 @@ export default function MultiplayerGameView({
             color: "var(--c-text-strong)",
           }}
         >
-          <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
+          <div style={{ padding: 20, boxSizing: "border-box" }}>
+            <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
+          </div>
           <main
             style={{
               flex: 1,
@@ -178,7 +183,9 @@ export default function MultiplayerGameView({
     const declinedBy = gameState.cancelledByName || "Your friend";
     return (
       <div style={{ minHeight: "100vh", backgroundColor: "var(--c-bg)", color: "var(--c-text-strong)" }}>
-        <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
+        <div style={{ padding: 20, boxSizing: "border-box" }}>
+          <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
+        </div>
         <div
           style={{
             minHeight: "60vh",
@@ -233,14 +240,17 @@ export default function MultiplayerGameView({
     const roomName = gameState.roomName || null;
 
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "var(--c-bg)", color: "var(--c-text-strong)" }}>
-        <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
-        <GameHeader
-          mode={mode}
-          numBoards={waitingBoards}
-          speedrunEnabled={false}
-        />
-        <MultiplayerWaitingRoom
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "var(--c-bg)", color: "var(--c-text-strong)" }}>
+        <div style={{ padding: 20, boxSizing: "border-box" }}>
+          <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
+        </div>
+        <main style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
+          <GameHeader
+            mode={mode}
+            numBoards={waitingBoards}
+            speedrunEnabled={false}
+          />
+          <MultiplayerWaitingRoom
           gameCode={gameCode || ""}
           gameState={gameState}
           isHost={isPlayerHost}
@@ -267,6 +277,7 @@ export default function MultiplayerGameView({
         />
 
         <MultiplayerChat gameCode={gameCode || ""} authUser={authUser} setTimedMessage={setTimedMessage} hasBoardSelector={hasBoardSelector} />
+        </main>
       </div>
     );
   }
@@ -601,7 +612,9 @@ export default function MultiplayerGameView({
           color: "var(--c-text-strong)",
         }}
       >
-        <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
+        <div style={{ padding: 20, boxSizing: "border-box" }}>
+          <SiteHeader onOpenFeedback={onOpenFeedback} onHomeClick={onHomeClick} />
+        </div>
 
         {isSpeedrun &&
           gameState.status === "playing" &&
@@ -646,12 +659,6 @@ export default function MultiplayerGameView({
               (gameState.status === "finished" ? 16 : KEYBOARD_HEIGHT) + 16,
           }}
         >
-          <GameHeader
-            mode={mode}
-            numBoards={numBoardsForHeader}
-            speedrunEnabled={isSpeedrun}
-          />
-
           <div
             style={{
               padding: "16px",
@@ -663,6 +670,11 @@ export default function MultiplayerGameView({
               width: "100%",
             }}
           >
+            <GameHeader
+              mode={mode}
+              numBoards={numBoardsForHeader}
+              speedrunEnabled={isSpeedrun}
+            />
             {expiryLabel && (
               <div
                 style={{

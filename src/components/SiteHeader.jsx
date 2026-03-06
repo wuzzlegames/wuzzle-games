@@ -206,229 +206,231 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
 
   return (
     <>
-      <header
-        style={{
-          padding: "10px 16px 8px",
-          borderBottom: "1px solid var(--c-border)",
-          backgroundColor: "var(--c-bg)",
-          marginBottom: "12px",
-        }}
-      >
-        {/* Line 1: logo left (click = home), right: leaderboard, notifications, hamburger icons */}
-        <div
+      <div style={{ maxWidth: 860, margin: "0 auto" }}>
+        <header
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: 12,
+            padding: "10px 20px 8px",
+            borderBottom: "1px solid var(--c-border)",
+            backgroundColor: "var(--c-bg)",
+            marginBottom: "12px",
           }}
         >
-          <button
-            type="button"
-            onClick={onHomeClick ?? handleHome}
-            aria-label="Home"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 0,
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-            }}
-          >
-            <LogoImage />
-          </button>
-
+          {/* Line 1: logo left (click = home), right: leaderboard, notifications, hamburger icons */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 4,
-              minWidth: HEADER_SLOT_WIDTH * 3,
-              justifyContent: "flex-end",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: 12,
             }}
           >
             <button
               type="button"
-              onClick={handleLeaderboard}
-              aria-label="Leaderboard"
-              style={{ ...iconButtonStyle, position: "relative" }}
+              onClick={onHomeClick ?? handleHome}
+              aria-label="Home"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 0,
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+              }}
             >
-              <HeaderIcon name="leaderboard" size={HEADER_ICON_SIZE} />
+              <LogoImage />
             </button>
-            {user ? (
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
+                minWidth: HEADER_SLOT_WIDTH * 3,
+                justifyContent: "flex-end",
+              }}
+            >
               <button
                 type="button"
-                onClick={() => {
-                  markNotificationsSeen();
-                  setShowNotificationsModal(true);
-                }}
-                aria-label={unseenCount > 0 ? `Notifications, ${unseenCount} unread` : "Notifications"}
+                onClick={handleLeaderboard}
+                aria-label="Leaderboard"
                 style={{ ...iconButtonStyle, position: "relative" }}
               >
-                <HeaderIcon name="notifications" size={HEADER_ICON_SIZE} />
-                {unseenCount > 0 && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: -4,
-                      right: -4,
-                      minWidth: 18,
-                      height: 18,
-                      borderRadius: 9,
-                      background: "var(--c-error)",
-                      color: "var(--c-text-strong)",
-                      fontSize: 11,
-                      fontWeight: "bold",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "0 4px",
-                    }}
-                  >
-                    {unseenCount > 99 ? "99+" : unseenCount}
-                  </span>
-                )}
+                <HeaderIcon name="leaderboard" size={HEADER_ICON_SIZE} />
               </button>
-            ) : (
-              <span style={{ width: HEADER_SLOT_WIDTH, height: HEADER_ICON_SIZE, flexShrink: 0 }} aria-hidden />
-            )}
-            <div style={{ position: "relative" }}>
-              <button
-                type="button"
-                onClick={() => setHamburgerOpen(!hamburgerOpen)}
-                aria-label="Menu"
-                style={iconButtonStyle}
-              >
-                <HeaderIcon name="hamburger" size={HEADER_ICON_SIZE} />
-              </button>
-              <HamburgerMenu
-                open={hamburgerOpen}
-                onOpenChange={setHamburgerOpen}
-                onOpenFeedback={onOpenFeedback || (() => {})}
-                onSignUpComplete={onSignUpComplete}
-                onOpenFriends={() => setShowFriendsModal(true)}
-                onOpenChallenges={() => setShowChallengesModal(true)}
-              />
+              {user ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    markNotificationsSeen();
+                    setShowNotificationsModal(true);
+                  }}
+                  aria-label={unseenCount > 0 ? `Notifications, ${unseenCount} unread` : "Notifications"}
+                  style={{ ...iconButtonStyle, position: "relative" }}
+                >
+                  <HeaderIcon name="notifications" size={HEADER_ICON_SIZE} />
+                  {unseenCount > 0 && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: -4,
+                        right: -4,
+                        minWidth: 18,
+                        height: 18,
+                        borderRadius: 9,
+                        background: "var(--c-error)",
+                        color: "var(--c-text-strong)",
+                        fontSize: 11,
+                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "0 4px",
+                      }}
+                    >
+                      {unseenCount > 99 ? "99+" : unseenCount}
+                    </span>
+                  )}
+                </button>
+              ) : (
+                <span style={{ width: HEADER_SLOT_WIDTH, height: HEADER_ICON_SIZE, flexShrink: 0 }} aria-hidden />
+              )}
+              <div style={{ position: "relative" }}>
+                <button
+                  type="button"
+                  onClick={() => setHamburgerOpen(!hamburgerOpen)}
+                  aria-label="Menu"
+                  style={iconButtonStyle}
+                >
+                  <HeaderIcon name="hamburger" size={HEADER_ICON_SIZE} />
+                </button>
+                <HamburgerMenu
+                  open={hamburgerOpen}
+                  onOpenChange={setHamburgerOpen}
+                  onOpenFeedback={onOpenFeedback || (() => {})}
+                  onSignUpComplete={onSignUpComplete}
+                  onOpenFriends={() => setShowFriendsModal(true)}
+                  onOpenChallenges={() => setShowChallengesModal(true)}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Line 2: Reset in on left, sign-in or friends/challenges/sign-out icons on right */}
-        <div
-          style={{
-            marginTop: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 12,
-            flexWrap: "wrap",
-          }}
-        >
+          {/* Line 2: Reset in on left, sign-in or friends/challenges/sign-out icons on right */}
           <div
             style={{
-              fontSize: 12,
-              color: "var(--c-text)",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Reset in: {resetTime}
-          </div>
-
-          <div
-            style={{
+              marginTop: 8,
               display: "flex",
               alignItems: "center",
-              gap: 4,
-              minWidth: HEADER_SLOT_WIDTH * 3,
-              justifyContent: "flex-end",
-            }}
-          >
-            {user ? (
-              <>
-                <button
-                  type="button"
-                  onClick={handleOpenFriends}
-                  aria-label="Friends"
-                  style={iconButtonStyle}
-                >
-                  <HeaderIcon name="friends" size={HEADER_ICON_SIZE} />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleOpenChallenges}
-                  aria-label="Challenges"
-                  style={iconButtonStyle}
-                >
-                  <HeaderIcon name="challenges" size={HEADER_ICON_SIZE} />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  aria-label="Sign out"
-                  style={iconButtonStyle}
-                >
-                  <HeaderIcon name="sign-out" size={HEADER_ICON_SIZE} />
-                </button>
-              </>
-            ) : (
-              <button
-                type="button"
-                onClick={handleOpenAuth}
-                aria-label="Sign in"
-                style={iconButtonStyle}
-              >
-                <HeaderIcon name="sign-in" size={HEADER_ICON_SIZE} />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Line 3: Signed in as + UserCard when signed in; click card → profile */}
-        {user && (
-          <div
-            style={{
-              marginTop: 6,
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
+              justifyContent: "space-between",
+              gap: 12,
               flexWrap: "wrap",
             }}
           >
-            <span style={{ fontSize: 12, color: "var(--c-text)" }}>Signed in as</span>
-            <UserCard
-              username={user.displayName || user.email || "Unknown user"}
-              onClick={() => navigate("/profile")}
-              size="sm"
-              earnedBadges={earnedBadges}
-              isPremium={isSubscriptionAllowed && isPremium}
-            />
-            {showSubscriptionGate && (
-              <button
-                type="button"
-                className="homeBtn"
-                onClick={handleOpenSubscribe}
-                style={{
-                  padding: "4px 12px",
-                  fontSize: 12,
-                  textTransform: "uppercase",
-                  letterSpacing: 0.5,
-                  background: "var(--c-accent-1)",
-                  color: "var(--c-text-strong)",
-                  border: "none",
-                  borderRadius: 4,
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                Subscribe
-              </button>
-            )}
+            <div
+              style={{
+                fontSize: 12,
+                color: "var(--c-text)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Reset in: {resetTime}
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
+                minWidth: HEADER_SLOT_WIDTH * 3,
+                justifyContent: "flex-end",
+              }}
+            >
+              {user ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={handleOpenFriends}
+                    aria-label="Friends"
+                    style={iconButtonStyle}
+                  >
+                    <HeaderIcon name="friends" size={HEADER_ICON_SIZE} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleOpenChallenges}
+                    aria-label="Challenges"
+                    style={iconButtonStyle}
+                  >
+                    <HeaderIcon name="challenges" size={HEADER_ICON_SIZE} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    aria-label="Sign out"
+                    style={iconButtonStyle}
+                  >
+                    <HeaderIcon name="sign-out" size={HEADER_ICON_SIZE} />
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleOpenAuth}
+                  aria-label="Sign in"
+                  style={iconButtonStyle}
+                >
+                  <HeaderIcon name="sign-in" size={HEADER_ICON_SIZE} />
+                </button>
+              )}
+            </div>
           </div>
-        )}
-      </header>
+
+          {/* Line 3: Signed in as + UserCard when signed in; click card → profile */}
+          {user && (
+            <div
+              style={{
+                marginTop: 6,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                flexWrap: "wrap",
+              }}
+            >
+              <span style={{ fontSize: 12, color: "var(--c-text)" }}>Signed in as</span>
+              <UserCard
+                username={user.displayName || user.email || "Unknown user"}
+                onClick={() => navigate("/profile")}
+                size="sm"
+                earnedBadges={earnedBadges}
+                isPremium={isSubscriptionAllowed && isPremium}
+              />
+              {showSubscriptionGate && (
+                <button
+                  type="button"
+                  className="homeBtn"
+                  onClick={handleOpenSubscribe}
+                  style={{
+                    padding: "4px 12px",
+                    fontSize: 12,
+                    textTransform: "uppercase",
+                    letterSpacing: 0.5,
+                    background: "var(--c-accent-1)",
+                    color: "var(--c-text-strong)",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Subscribe
+                </button>
+              )}
+            </div>
+          )}
+        </header>
+      </div>
 
       <AuthModal
         isOpen={showAuthModal}

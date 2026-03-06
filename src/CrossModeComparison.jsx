@@ -141,7 +141,7 @@ export default function CrossModeComparison() {
     return null;
   }
 
-  if (authLoading) {
+  if (authLoading && !user) {
     return (
       <div className="stats-page">
         <SiteHeader />

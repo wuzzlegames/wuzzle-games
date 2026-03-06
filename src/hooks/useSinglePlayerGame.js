@@ -92,9 +92,10 @@ export function useSinglePlayerGame({
 
   useEffect(() => {
     isMountedRef.current = true;
-    // Defer initialization until Firebase auth has resolved so we know
-    // whether to use remote or local state.
-    if (authLoading) return;
+    // Defer initialization until we know auth state: either loading is done, or we
+    // already have a user (so we can load remote state). Avoid blocking forever when
+    // auth reports loading but user is already set (e.g. after sign-in or provider re-mount).
+    if (authLoading && !authUser) return;
 
     async function initGame() {
       // Premium check for archive games is handled at component level

@@ -108,7 +108,7 @@ export default function AdvancedStats() {
     return null;
   }
 
-  if (authLoading) {
+  if (authLoading && !user) {
     return (
       <div className="stats-page">
         <SiteHeader />

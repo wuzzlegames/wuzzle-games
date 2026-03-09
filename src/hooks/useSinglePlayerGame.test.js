@@ -114,7 +114,7 @@ describe('useSinglePlayerGame resumed completed stage behaviour', () => {
     };
   }
 
-  it('shows popup on init when resuming a stage that was exited after out-of-guesses', async () => {
+  it('does not show popup on revisit when stage was exited after out-of-guesses', async () => {
     const solvedState = {
       boards: [
         { solution: 'APPLE', guesses: [], isSolved: false, isDead: true },
@@ -131,16 +131,15 @@ describe('useSinglePlayerGame resumed completed stage behaviour', () => {
 
     const { setBoards, setShowPopup, setIsLoading } = setupHookWithSolvedState(solvedState);
 
-    // Allow async path + timeout to complete.
+    // Allow async path to complete.
     await act(async () => {
       vi.runAllTimers();
     });
 
     expect(setBoards).toHaveBeenCalledTimes(1);
     expect(setIsLoading).toHaveBeenLastCalledWith(false);
-    // Popup should be shown on load so the user sees the end-of-stage state
-    // instead of an in-progress grid.
-    expect(setShowPopup).toHaveBeenCalled();
+    // On revisit we do not show the popup; only the letter flip runs.
+    expect(setShowPopup).not.toHaveBeenCalled();
   });
 
   it('marks lastRevealId for all guessed boards when resuming out-of-guesses exit', async () => {

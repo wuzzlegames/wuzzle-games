@@ -144,6 +144,107 @@ describe('CommentsSection', () => {
     expect(payload.userReactions).toEqual({});
   });
 
+  it('shows a Reply button for each comment and toggles an inline reply form', () => {
+    render(<CommentsSection threadId="thread-1" />);
+
+    emitCommentsSnapshot({
+      c1: {
+        username: 'Alice',
+        text: 'Hello world',
+        createdAt: Date.now(),
+        userReactions: {},
+      },
+    });
+
+    const replyButton = screen.getByRole('button', { name: /reply/i });
+    expect(replyButton).toBeInTheDocument();
+
+    // Clicking Reply should show a reply textarea
+    fireEvent.click(replyButton);
+    const replyTextarea = screen.getByRole('textbox', { name: /reply/i });
+    expect(replyTextarea).toBeInTheDocument();
+
+    // Clicking again (Cancel reply) should hide the form
+    fireEvent.click(screen.getByRole('button', { name: /cancel reply/i }));
+    expect(screen.queryByRole('textbox', { name: /reply/i })).not.toBeInTheDocument();
+  });
+
+  it('submits a reply with parentId set to the parent comment id', async () => {
+    useAuthMock.mockReturnValue({
+      user: {
+        uid: 'u1',
+        displayName: 'Reply User',
+        email: 'reply@example.com',
+      },
+    });
+
+    render(<CommentsSection threadId="thread-1" />);
+
+    emitCommentsSnapshot({
+      c1: {
+        username: 'Parent',
+        text: 'Parent comment',
+        createdAt: Date.now(),
+        userReactions: {},
+      },
+    });
+
+    const replyButton = screen.getByRole('button', { name: /reply/i });
+    fireEvent.click(replyButton);
+
+    const replyTextarea = screen.getByRole('textbox', { name: /reply/i });
+    fireEvent.change(replyTextarea, { target: { value: 'Child reply' } });
+
+    const postReplyButton = screen.getByRole('button', { name: /post reply/i });
+    fireEvent.click(postReplyButton);
+
+    await waitFor(() => {
+      expect(setMock).toHaveBeenCalled();
+    });
+
+    const [, payload] = setMock.mock.calls[0];
+    expect(payload.username).toBe('Reply User');
+    expect(payload.text).toBe('Child reply');
+    expect(typeof payload.createdAt).toBe('number');
+    expect(payload).toHaveProperty('userReactions');
+    expect(payload.userReactions).toEqual({});
+    expect(payload.parentId).toBe('auto-id' in (pushMock.mock.results[0]?.value || {}) ? 'c1' : 'c1');
+  });
+
+  it('renders a reply indented under its parent comment', () => {
+    render(<CommentsSection threadId="thread-1" />);
+
+    const ts = Date.now();
+    emitCommentsSnapshot({
+      parent: {
+        username: 'Parent',
+        text: 'Parent comment',
+        createdAt: ts,
+        userReactions: {},
+      },
+      child: {
+        username: 'Child',
+        text: 'Child reply',
+        createdAt: ts + 1000,
+        userReactions: {},
+        parentId: 'parent',
+      },
+    });
+
+    const parentText = screen.getByText('Parent comment');
+    const childText = screen.getByText('Child reply');
+
+    const parentLi = parentText.closest('li');
+    const childLi = childText.closest('li');
+
+    expect(parentLi).not.toBeNull();
+    expect(childLi).not.toBeNull();
+
+    // Child should be more indented than parent (margin-left larger)
+    expect(parentLi.style.marginLeft || '0px').toBe('0px');
+    expect(childLi.style.marginLeft).toBe('16px');
+  });
+
   it('derives reaction counts from per-user userReactions map', () => {
     useAuthMock.mockReturnValue({
       user: { uid: 'u1', displayName: 'User1' },
@@ -265,10 +366,13 @@ describe('CommentsSection', () => {
   });
 
   it('shows Share in comments button when shareTextForComment is provided and pre-fills comment on click without posting', () => {
+    const shareText = `Wuzzle Games - Daily
+Guesses: 2/6
+Solved!`;
     render(
       <CommentsSection
         threadId="thread-1"
-        shareTextForComment="Wuzzle Games - Daily\nGuesses: 2/6\nSolved!"
+        shareTextForComment={shareText}
       />,
     );
 
@@ -282,9 +386,7 @@ describe('CommentsSection', () => {
 
     fireEvent.click(shareInCommentsButton);
 
-    expect(textarea).toHaveValue(
-      'Wuzzle Games - Daily\nGuesses: 2/6\nSolved!',
-    );
+    expect(textarea.value.replace(/\r\n/g, '\n')).toBe(shareText);
     expect(setMock).not.toHaveBeenCalled();
   });
 

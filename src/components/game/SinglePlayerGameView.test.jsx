@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import SinglePlayerGameView from './SinglePlayerGameView';
 
 vi.mock('../Keyboard', () => ({
@@ -79,7 +80,11 @@ describe('SinglePlayerGameView guess counter wiring', () => {
       ...overrides,
     };
 
-    render(<SinglePlayerGameView {...props} />);
+    render(
+      <MemoryRouter>
+        <SinglePlayerGameView {...props} />
+      </MemoryRouter>,
+    );
   }
 
   it('shows guesses equal to global turnsUsed, not sum of per-board guesses', () => {

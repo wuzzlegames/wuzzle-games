@@ -20,6 +20,9 @@ vi.mock('../hooks/useNotificationSeen', () => ({
   getUnseenWithLabels: vi.fn(() => []),
   CHALLENGE_EXPIRY_MS: 30 * 60 * 1000,
 }));
+vi.mock('../hooks/useCommentNotifications', () => ({
+  useCommentNotifications: vi.fn(() => ({ commentNotifications: [] })),
+}));
 
 vi.mock('../hooks/useDailyResetTimer', () => ({
   useDailyResetTimer: vi.fn(),

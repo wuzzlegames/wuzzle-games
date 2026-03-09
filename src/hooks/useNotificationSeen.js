@@ -73,16 +73,18 @@ function getFriendRequestTime(r) {
 
 /**
  * Compute the number of unseen notifications for the header badge.
- * Unseen = friend requests received after seenAt + incoming challenges created after seenAt.
+ * Unseen = friend requests received after seenAt + incoming challenges created after seenAt
+ * + comment notifications (replies/reactions) after seenAt.
  * When the user opens the modal or notifications page, markNotificationsSeen() sets seenAt
  * to now, so the count goes to zero.
  *
  * @param {Array<{ id: string; fromName?: string; timestamp?: number; sentAt?: string }>} friendRequests
  * @param {Array<{ id: string; createdAt?: number }>} incomingChallenges
  * @param {number | null} notificationSeenAt
+ * @param {Array<{ createdAt?: number }>} [commentNotifications]
  * @returns {number}
  */
-export function getUnseenNotificationCount(friendRequests, incomingChallenges, notificationSeenAt) {
+export function getUnseenNotificationCount(friendRequests, incomingChallenges, notificationSeenAt, commentNotifications) {
   const seenAt = notificationSeenAt || 0;
 
   const friendCount = Array.isArray(friendRequests)
@@ -93,7 +95,11 @@ export function getUnseenNotificationCount(friendRequests, incomingChallenges, n
     ? incomingChallenges.filter((c) => (c.createdAt || 0) > seenAt).length
     : 0;
 
-  return friendCount + challengeCount;
+  const commentCount = Array.isArray(commentNotifications)
+    ? commentNotifications.filter((n) => (n.createdAt || 0) > seenAt).length
+    : 0;
+
+  return friendCount + challengeCount + commentCount;
 }
 
 /**
@@ -103,9 +109,10 @@ export function getUnseenNotificationCount(friendRequests, incomingChallenges, n
  * @param {Array<{ id: string; fromName?: string; timestamp?: number; sentAt?: string }>} friendRequests
  * @param {Array<{ id: string; createdAt?: number; fromUserName?: string }>} incomingChallenges
  * @param {number | null} notificationSeenAt
- * @returns {Array<{ id: string; type: 'friendRequest' | 'challenge'; label: string; time: number; fromUserId: string }>}
+ * @param {Array<{ id: string; type?: string; fromUid?: string; fromUsername?: string; createdAt?: number; emoji?: string }>} [commentNotifications]
+ * @returns {Array<{ id: string; type: 'friendRequest' | 'challenge' | 'commentReply' | 'commentReaction'; label: string; time: number; fromUserId: string }>}
  */
-export function getUnseenWithLabels(friendRequests, incomingChallenges, notificationSeenAt) {
+export function getUnseenWithLabels(friendRequests, incomingChallenges, notificationSeenAt, commentNotifications) {
   const seenAt = notificationSeenAt || 0;
 
   const friendItems = Array.isArray(friendRequests)
@@ -132,7 +139,26 @@ export function getUnseenWithLabels(friendRequests, incomingChallenges, notifica
         }))
     : [];
 
-  return [...friendItems, ...challengeItems].sort((a, b) => b.time - a.time);
+  const commentItems = Array.isArray(commentNotifications)
+    ? commentNotifications
+        .filter((n) => (n.createdAt || 0) > seenAt)
+        .map((n) => {
+          const fromUsername = n.fromUsername || 'Someone';
+          const label =
+            n.type === 'reply'
+              ? `${fromUsername} replied to your comment`
+              : `${fromUsername} reacted ${n.emoji || ''} to your comment`.trim();
+          return {
+            id: n.id,
+            type: n.type === 'reply' ? 'commentReply' : 'commentReaction',
+            label,
+            time: n.createdAt || 0,
+            fromUserId: n.fromUid || '',
+          };
+        })
+    : [];
+
+  return [...friendItems, ...challengeItems, ...commentItems].sort((a, b) => b.time - a.time);
 }
 
 export { CHALLENGE_EXPIRY_MS };

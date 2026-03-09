@@ -163,7 +163,7 @@ describe('useSinglePlayerGame', () => {
     });
   });
 
-  it('replays solved state and schedules popup when mode already solved', async () => {
+  it('replays solved state and does not show popup when mode already solved', async () => {
     const solvedBoards = [
       { isSolved: true, lastRevealId: null },
       { isSolved: true, lastRevealId: null },
@@ -225,15 +225,15 @@ describe('useSinglePlayerGame', () => {
       expect(setBoards).toHaveBeenCalled();
     });
 
-    // savedSolvedStateRef should be patched with lastRevealId for solved boards
+    // savedSolvedStateRef should be patched with lastRevealId for solved boards (flip still runs).
     expect(refs.savedSolvedStateRef.current).not.toBeNull();
     const patchedBoards = refs.savedSolvedStateRef.current.boards;
     expect(patchedBoards[0].lastRevealId).toBe(1);
     expect(patchedBoards[1].lastRevealId).toBe(1);
+    expect(setRevealId).toHaveBeenCalledWith(1);
 
-    // Popup should be scheduled after FLIP_COMPLETE_MS (100ms)
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    expect(setShowPopup).toHaveBeenCalledWith(true);
+    // On revisit we do not show the popup.
+    expect(setShowPopup).not.toHaveBeenCalled();
   });
 
   it('resumes an in-progress saved speedrun game instead of starting a new one', async () => {

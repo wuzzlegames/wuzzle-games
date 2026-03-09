@@ -154,7 +154,6 @@ describe('Leaderboard component', () => {
     expect(useLeaderboard).toHaveBeenCalledWith('daily', 1, 100, 'allTime');
     expect(screen.getByText('Date')).toBeInTheDocument();
     // dateKey 2024-06-15 is formatted by formatDateKey (e.g. "Jun 15, 2024" in en-US)
-    expect(screen.getByText(/2024/)).toBeInTheDocument();
-    expect(screen.getByText(/15/)).toBeInTheDocument();
+    expect(screen.getByText(/Jun 15, 2024/)).toBeInTheDocument();
   });
 });

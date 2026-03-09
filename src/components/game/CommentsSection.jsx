@@ -23,6 +23,10 @@ export default function CommentsSection({ threadId, setTimedMessage, shareTextFo
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [comments, setComments] = useState([]);
+  const [replyingToId, setReplyingToId] = useState(null);
+  const [replyText, setReplyText] = useState("");
+  const [isReplySubmitting, setIsReplySubmitting] = useState(false);
+  const [replyError, setReplyError] = useState(null);
 
   // Stable random guest username for the lifetime of this component.
   const guestDefaultName = useMemo(() => {
@@ -104,6 +108,52 @@ export default function CommentsSection({ threadId, setTimedMessage, shareTextFo
     };
   }, [threadId]);
 
+  /**
+   * Build a simple parent/child mapping from the flat comments array so we can
+   * render replies indented under their parent comment. Comments without a
+   * parentId are treated as top-level.
+   */
+  const { topLevelComments, childrenByParentId } = useMemo(() => {
+    if (!comments || comments.length === 0) {
+      return { topLevelComments: [], childrenByParentId: new Map() };
+    }
+
+    const childrenMap = new Map();
+    const topLevel = [];
+
+    comments.forEach((c) => {
+      const parentId = c.parentId || null;
+      if (!parentId) {
+        topLevel.push(c);
+      } else {
+        const existing = childrenMap.get(parentId) || [];
+        existing.push(c);
+        childrenMap.set(parentId, existing);
+      }
+    });
+
+    // Preserve newest-first ordering for top-level comments.
+    topLevel.sort((a, b) => {
+      const at = a.createdAt || 0;
+      const bt = b.createdAt || 0;
+      return bt - at;
+    });
+
+    // For replies under a given parent, render oldest-first so the thread reads naturally.
+    childrenMap.forEach((list, parentId) => {
+      childrenMap.set(
+        parentId,
+        list.slice().sort((a, b) => {
+          const at = a.createdAt || 0;
+          const bt = b.createdAt || 0;
+          return at - bt;
+        })
+      );
+    });
+
+    return { topLevelComments: topLevel, childrenByParentId: childrenMap };
+  }, [comments]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!threadId) return;
@@ -159,6 +209,28 @@ export default function CommentsSection({ threadId, setTimedMessage, shareTextFo
           : { [`userReactions/${reactionUserId}`]: emoji };
 
       await update(commentRef, updates);
+
+      const comment = comments.find((c) => c.id === commentId);
+      if (
+        comment?.uid &&
+        comment.uid !== user?.uid &&
+        user?.uid
+      ) {
+        const notifRef = ref(
+          database,
+          `users/${comment.uid}/commentNotifications`
+        );
+        const newNotifRef = push(notifRef);
+        set(newNotifRef, {
+          type: 'reaction',
+          fromUid: user.uid,
+          fromUsername: user.displayName || user.email || 'Someone',
+          emoji,
+          commentId,
+          threadId,
+          createdAt: Date.now(),
+        }).catch((err) => logError(err, 'CommentsSection.notifyReaction'));
+      }
     } catch (err) {
       logError(err, 'CommentsSection.handleReaction');
       if (typeof setTimedMessage === 'function') {
@@ -166,6 +238,349 @@ export default function CommentsSection({ threadId, setTimedMessage, shareTextFo
       }
     }
   };
+
+  const handleStartReply = (commentId) => {
+    setReplyingToId(commentId);
+    setReplyText("");
+    setReplyError(null);
+  };
+
+  const handleCancelReply = () => {
+    setReplyingToId(null);
+    setReplyText("");
+    setReplyError(null);
+  };
+
+  const handleReplySubmit = async (e, parentId) => {
+    e.preventDefault();
+    if (!threadId || !parentId) return;
+
+    const trimmedReply = replyText.trim();
+    const trimmedUsername = username.trim();
+    if (!trimmedReply || !trimmedUsername) {
+      return;
+    }
+
+    setIsReplySubmitting(true);
+    setReplyError(null);
+
+    try {
+      const commentsRef = ref(database, `comments/${threadId}`);
+      const newRef = push(commentsRef);
+      await set(newRef, {
+        username: trimmedUsername,
+        text: trimmedReply,
+        createdAt: Date.now(),
+        uid: user?.uid || null,
+        userReactions: {},
+        parentId,
+      });
+      setReplyText("");
+      setReplyingToId(null);
+
+      const parentComment = comments.find((c) => c.id === parentId);
+      if (
+        parentComment?.uid &&
+        parentComment.uid !== user?.uid &&
+        newRef.key
+      ) {
+        const notifRef = ref(
+          database,
+          `users/${parentComment.uid}/commentNotifications`
+        );
+        const newNotifRef = push(notifRef);
+        set(newNotifRef, {
+          type: 'reply',
+          fromUid: user.uid,
+          fromUsername: trimmedUsername,
+          commentId: newRef.key,
+          parentId,
+          threadId,
+          createdAt: Date.now(),
+        }).catch((err) => logError(err, 'CommentsSection.notifyReply'));
+      }
+    } catch (err) {
+      logError(err, 'CommentsSection.handleReplySubmit');
+      setReplyError("Failed to submit reply. Please try again.");
+    } finally {
+      setIsReplySubmitting(false);
+    }
+  };
+
+  const renderComments = (items, depth = 0) =>
+    items.map((c) => {
+      const createdAtDate = c.createdAt ? new Date(c.createdAt) : null;
+      const timeLabel = createdAtDate
+        ? createdAtDate.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })
+        : null;
+
+      const REACTIONS = ["👍", "❤️", "😂", "😮", "😢"];
+
+      const reactionUserId = (user && user.uid) || clientId || null;
+
+      const userReactions =
+        c.userReactions && typeof c.userReactions === "object"
+          ? c.userReactions
+          : null;
+
+      let reactionCounts = {};
+      let myReactionEmoji = null;
+
+      if (userReactions) {
+        REACTIONS.forEach((emoji) => {
+          reactionCounts[emoji] = 0;
+        });
+        Object.values(userReactions).forEach((emoji) => {
+          if (REACTIONS.includes(emoji)) {
+            reactionCounts[emoji] = (reactionCounts[emoji] || 0) + 1;
+          }
+        });
+        if (reactionUserId && userReactions[reactionUserId]) {
+          myReactionEmoji = userReactions[reactionUserId];
+        }
+      } else {
+        reactionCounts = {};
+      }
+
+      const isReplyingHere = replyingToId === c.id;
+      const childComments = childrenByParentId.get(c.id) || [];
+
+      return (
+        <li
+          key={c.id}
+          style={{
+            padding: "8px 10px",
+            borderRadius: 10,
+            backgroundColor: "var(--c-panel)",
+            border: "1px solid var(--c-border)",
+            marginLeft: depth * 16,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 4,
+              gap: 8,
+            }}
+          >
+            <div style={{ flexShrink: 0, minWidth: 0 }}>
+              <UserCardWithBadges
+                userId={c.uid || null}
+                username={c.username || "Unknown"}
+                size="sm"
+              />
+            </div>
+            {timeLabel && (
+              <div
+                style={{
+                  fontSize: 11,
+                  color: "var(--c-text)",
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
+                }}
+              >
+                {timeLabel}
+              </div>
+            )}
+          </div>
+
+          <div
+            style={{
+              fontSize: 14,
+              color: "var(--c-text)",
+              whiteSpace: "pre-wrap",
+              marginBottom: 6,
+            }}
+          >
+            {c.text}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              gap: 6,
+              flexWrap: "wrap",
+              alignItems: "center",
+              marginTop: 2,
+            }}
+          >
+            {REACTIONS.map((emoji) => {
+              const count = Number(reactionCounts[emoji] || 0);
+              const isMine = myReactionEmoji === emoji;
+              return (
+                <button
+                  key={emoji}
+                  type="button"
+                  onClick={() => handleReaction(c.id, emoji)}
+                  style={{
+                    border: "none",
+                    borderRadius: 999,
+                    padding: "2px 8px",
+                    backgroundColor: isMine
+                      ? "var(--c-accent-2)"
+                      : count > 0
+                      ? "var(--c-panel)"
+                      : "var(--c-panel)",
+                    color: "var(--c-text)",
+                    fontSize: 12,
+                    fontWeight: isMine ? "bold" : "normal",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 4,
+                  }}
+                >
+                  <span>{emoji}</span>
+                  {count > 0 && <span>{count}</span>}
+                </button>
+              );
+            })}
+
+            <button
+              type="button"
+              onClick={() =>
+                isReplyingHere ? handleCancelReply() : handleStartReply(c.id)
+              }
+              style={{
+                border: "none",
+                background: "none",
+                padding: 0,
+                color: "var(--c-text)",
+                fontSize: 12,
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+            >
+              {isReplyingHere ? "Cancel reply" : "Reply"}
+            </button>
+          </div>
+
+          {isReplyingHere && (
+            <form
+              onSubmit={(e) => handleReplySubmit(e, c.id)}
+              style={{ marginTop: 8 }}
+            >
+              <div style={{ marginBottom: 6 }}>
+                <label
+                  htmlFor={`reply-text-${c.id}`}
+                  style={{
+                    display: "block",
+                    fontSize: 12,
+                    marginBottom: 4,
+                    color: "var(--c-text)",
+                  }}
+                >
+                  Reply
+                </label>
+                <textarea
+                  id={`reply-text-${c.id}`}
+                  rows={2}
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "6px 8px",
+                    borderRadius: 8,
+                    border: "1px solid var(--c-border)",
+                    backgroundColor: "var(--c-bg)",
+                    color: "var(--c-text-strong)",
+                    fontSize: 13,
+                    resize: "vertical",
+                  }}
+                />
+              </div>
+              {replyError && (
+                <div
+                  style={{
+                    color: "var(--c-text)",
+                    fontSize: 12,
+                    marginBottom: 6,
+                    border: "1px solid var(--c-error)",
+                    borderRadius: 8,
+                    padding: "6px 8px",
+                    background: "var(--c-bg)",
+                  }}
+                >
+                  {replyError}
+                </div>
+              )}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  alignItems: "center",
+                }}
+              >
+                <button
+                  type="submit"
+                  disabled={
+                    isReplySubmitting || !replyText.trim() || !username.trim()
+                  }
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: 8,
+                    border: "none",
+                    backgroundColor:
+                      isReplySubmitting || !replyText.trim() || !username.trim()
+                        ? "var(--c-border)"
+                        : "var(--c-accent-1)",
+                    color: "var(--c-text-strong)",
+                    fontSize: 13,
+                    fontWeight: "bold",
+                    cursor:
+                      isReplySubmitting ||
+                      !replyText.trim() ||
+                      !username.trim()
+                        ? "default"
+                        : "pointer",
+                    textTransform: "uppercase",
+                    letterSpacing: 1,
+                  }}
+                >
+                  {isReplySubmitting ? "Submitting..." : "Post reply"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancelReply}
+                  style={{
+                    padding: "6px 10px",
+                    borderRadius: 8,
+                    border: "none",
+                    backgroundColor: "transparent",
+                    color: "var(--c-text)",
+                    fontSize: 12,
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
+
+          {childComments.length > 0 && (
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                margin: 8,
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+              }}
+            >
+              {renderComments(childComments, depth + 1)}
+            </ul>
+          )}
+        </li>
+      );
+    });
 
   if (!threadId) return null;
 
@@ -347,137 +762,7 @@ export default function CommentsSection({ threadId, setTimedMessage, shareTextFo
               gap: 10,
             }}
           >
-            {comments.map((c) => {
-              const createdAtDate = c.createdAt ? new Date(c.createdAt) : null;
-              const timeLabel = createdAtDate
-                ? createdAtDate.toLocaleTimeString([], {
-                    hour: "numeric",
-                    minute: "2-digit",
-                  })
-                : null;
-
-              const REACTIONS = ["👍", "❤️", "😂", "😮", "😢"];
-
-              const reactionUserId = (user && user.uid) || clientId || null;
-
-              const userReactions =
-                c.userReactions && typeof c.userReactions === "object"
-                  ? c.userReactions
-                  : null;
-
-              let reactionCounts = {};
-              let myReactionEmoji = null;
-
-              if (userReactions) {
-                REACTIONS.forEach((emoji) => {
-                  reactionCounts[emoji] = 0;
-                });
-                Object.values(userReactions).forEach((emoji) => {
-                  if (REACTIONS.includes(emoji)) {
-                    reactionCounts[emoji] = (reactionCounts[emoji] || 0) + 1;
-                  }
-                });
-                if (reactionUserId && userReactions[reactionUserId]) {
-                  myReactionEmoji = userReactions[reactionUserId];
-                }
-              } else {
-                reactionCounts = {};
-              }
-
-              return (
-                <li
-                  key={c.id}
-                  style={{
-                    padding: "8px 10px",
-                    borderRadius: 10,
-                    backgroundColor: "var(--c-panel)",
-                    border: "1px solid var(--c-border)",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginBottom: 4,
-                      gap: 8,
-                    }}
-                  >
-                    <div style={{ flexShrink: 0, minWidth: 0 }}>
-                      <UserCardWithBadges
-                        userId={c.uid || null}
-                        username={c.username || "Unknown"}
-                        size="sm"
-                      />
-                    </div>
-                    {timeLabel && (
-                      <div
-                        style={{
-                          fontSize: 11,
-                          color: "var(--c-text)",
-                          whiteSpace: "nowrap",
-                          flexShrink: 0,
-                        }}
-                      >
-                        {timeLabel}
-                      </div>
-                    )}
-                  </div>
-
-                  <div
-                    style={{
-                      fontSize: 14,
-                      color: "var(--c-text)",
-                      whiteSpace: "pre-wrap",
-                      marginBottom: 6,
-                    }}
-                  >
-                    {c.text}
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: 6,
-                      flexWrap: "wrap",
-                      marginTop: 2,
-                    }}
-                  >
-                    {REACTIONS.map((emoji) => {
-                      const count = Number(reactionCounts[emoji] || 0);
-                      const isMine = myReactionEmoji === emoji;
-                      return (
-                        <button
-                          key={emoji}
-                          type="button"
-                          onClick={() => handleReaction(c.id, emoji)}
-                          style={{
-                            border: "none",
-                            borderRadius: 999,
-                            padding: "2px 8px",
-                            backgroundColor: isMine
-                              ? "var(--c-accent-2)"
-                              : count > 0
-                              ? "var(--c-panel)"
-                              : "var(--c-panel)",
-                            color: "var(--c-text)",
-                            fontSize: 12,
-                            fontWeight: isMine ? "bold" : "normal",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 4,
-                          }}
-                        >
-                          <span>{emoji}</span>
-                          {count > 0 && <span>{count}</span>}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </li>
-              );
-            })}
+            {renderComments(topLevelComments, 0)}
           </ul>
         )}
       </div>

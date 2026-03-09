@@ -494,11 +494,14 @@ export default function GameSinglePlayer({
   }, [boards, isUnlimited, maxTurns, gameEngine]);
 
   // Mark the stage as fully completed the first time the end-of-game popup
-  // is shown. This happens both when the player solves all boards and when
-  // they choose to exit after running out of guesses (including when
-  // revisiting an already-solved puzzle from local storage).
+  // is shown, or when we have loaded a saved solved state (revisit). That way
+  // comments stay visible on revisit even though we no longer show the popup.
   useEffect(() => {
-    if (!hasCompletedStage && finished && showPopup) {
+    if (
+      !hasCompletedStage &&
+      finished &&
+      (showPopup || savedSolvedStateRef.current)
+    ) {
       setHasCompletedStage(true);
     }
   }, [hasCompletedStage, finished, showPopup]);

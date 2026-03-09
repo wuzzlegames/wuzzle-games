@@ -5,6 +5,7 @@ import BadgeIcon from "./BadgeIcon";
 import { useAuth } from "../hooks/useAuth";
 import { useBadgesForUser } from "../hooks/useUserBadges";
 import { useNotificationSeen } from "../hooks/useNotificationSeen";
+import { useCommentNotifications } from "../hooks/useCommentNotifications";
 import { useBadgeEarnedToast } from "../contexts/BadgeEarnedToastContext";
 import { useMultiplayerFriendRequest } from "../contexts/MultiplayerFriendRequestContext";
 import { getAllEarnedSorted } from "../lib/badges";
@@ -87,6 +88,7 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
     cancelSentChallenge,
   } = useAuth();
   const { markNotificationsSeen } = useNotificationSeen(user);
+  const { commentNotifications = [], removeCommentNotification } = useCommentNotifications(user);
   const multiplayerContext = useMultiplayerFriendRequest();
   const badgeEarnedContext = useBadgeEarnedToast();
   const recentBadgeEarnings = badgeEarnedContext?.recentBadgeEarnings ?? [];
@@ -179,7 +181,9 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
   const hasFriendRequests = friendRequests && friendRequests.length > 0;
   const hasChallenges = incomingChallenges && incomingChallenges.length > 0;
   const hasSentChallenges = sentChallenges && sentChallenges.length > 0;
-  const hasAny = hasBadgeEarnings || hasFriendRequests || hasChallenges || hasSentChallenges;
+  const hasCommentNotifications = commentNotifications.length > 0;
+  const commentNotificationsToShow = commentNotifications.slice(0, 50);
+  const hasAny = hasBadgeEarnings || hasFriendRequests || hasChallenges || hasSentChallenges || hasCommentNotifications;
 
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
@@ -235,6 +239,55 @@ export default function NotificationsModal({ isOpen, onRequestClose }) {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* Comment activity: replies and reactions on the user's comments */}
+            {hasCommentNotifications && (
+              <div style={{ marginBottom: "24px" }}>
+                <h3 style={{ margin: "0 0 12px 0", fontSize: "16px", fontWeight: "bold", color: "var(--c-text)", textAlign: "left" }}>
+                  Comment activity
+                </h3>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid var(--c-border)" }}>
+                  {commentNotificationsToShow.map((n) => {
+                    const title =
+                      n.type === "reply"
+                        ? `${n.fromUsername || "Someone"} replied to your comment`
+                        : `${n.fromUsername || "Someone"} reacted ${n.emoji || ""} to your comment`.trim();
+                    return (
+                      <div
+                        key={n.id}
+                        style={{
+                          padding: "10px 12px",
+                          borderRadius: 8,
+                          border: "1px solid var(--c-border)",
+                          background: "var(--c-panel)",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        <div style={{ textAlign: "left", flex: 1, minWidth: 0 }}>
+                          <div style={{ color: "var(--c-text-strong)", fontWeight: "600", fontSize: 13 }}>
+                            {title}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            removeCommentNotification?.(n.id);
+                            onRequestClose?.();
+                            navigate("/game", { state: { scrollToCommentThread: n.threadId } });
+                          }}
+                          style={buttonStyle}
+                        >
+                          View
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}

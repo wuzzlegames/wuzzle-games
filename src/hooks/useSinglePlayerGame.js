@@ -3,7 +3,7 @@ import { loadJSON, makeSolvedKey } from "../lib/persist";
 import { getMaxTurns, createBoardState } from "../lib/wordle";
 import { loadWordLists } from "../lib/wordLists";
 import { selectDailyWords, getCurrentDateString } from "../lib/dailyWords";
-import { FLIP_COMPLETE_MS, LONG_MESSAGE_TIMEOUT_MS } from "../lib/gameConstants";
+import { LONG_MESSAGE_TIMEOUT_MS } from "../lib/gameConstants";
 import { useAuth } from "./useAuth";
 import { database } from "../config/firebase";
 import { loadSolvedState, loadGameState } from "../lib/singlePlayerStore";
@@ -206,20 +206,7 @@ export function useSinglePlayerGame({
 
           setIsLoading(false);
 
-          if (exitedDueToOutOfGuesses) {
-            // When resuming a stage that ended due to running out of guesses,
-            // show the popup immediately so the user sees the end-of-stage state
-            // instead of an in-progress grid.
-            setShowPopup(true);
-          } else {
-            // For fully solved stages, delay popup to ensure any potential
-            // animations are complete before showing the results.
-            if (flipPopupTimeoutRef.current) clearTimeout(flipPopupTimeoutRef.current);
-            flipPopupTimeoutRef.current = setTimeout(() => {
-              flipPopupTimeoutRef.current = null;
-              if (isMountedRef.current) setShowPopup(true);
-            }, FLIP_COMPLETE_MS);
-          }
+          // On revisit we do not show the end-game popup; only the letter flip runs.
           return;
         }
 

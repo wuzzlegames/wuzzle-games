@@ -1,5 +1,5 @@
-import React, { Suspense, lazy } from "react";
-import { useInRouterContext } from "react-router-dom";
+import React, { Suspense, lazy, useRef, useEffect } from "react";
+import { useInRouterContext, useLocation, useNavigate } from "react-router-dom";
 import GameHeader from "./GameHeader";
 import GameStatusBar from "./GameStatusBar";
 import GameToast from "./GameToast";
@@ -81,6 +81,28 @@ export default function SinglePlayerGameView({
   setTimedMessage,
 }) {
   const inRouter = useInRouterContext();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const commentsSectionRef = useRef(null);
+
+  useEffect(() => {
+    const threadIdFromState = location.state?.scrollToCommentThread;
+    if (
+      threadIdFromState &&
+      showComments &&
+      commentThreadId &&
+      threadIdFromState === commentThreadId &&
+      commentsSectionRef.current
+    ) {
+      const id = setTimeout(() => {
+        commentsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        const nextState = { ...location.state };
+        delete nextState.scrollToCommentThread;
+        navigate(location.pathname + location.search, { replace: true, state: nextState });
+      }, 300);
+      return () => clearTimeout(id);
+    }
+  }, [location.state?.scrollToCommentThread, showComments, commentThreadId, navigate, location.pathname, location.search, location.state]);
 
   return (
     <div
@@ -258,7 +280,7 @@ export default function SinglePlayerGameView({
           </div>
 
           {showComments && commentThreadId && (
-            <div style={{ width: "100%", maxWidth: 600 }}>
+            <div ref={commentsSectionRef} style={{ width: "100%", maxWidth: 600 }}>
               <CommentsSection
                 threadId={commentThreadId}
                 setTimedMessage={setTimedMessage}

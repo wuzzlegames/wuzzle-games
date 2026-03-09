@@ -9,6 +9,9 @@ vi.mock('../hooks/useNotificationSeen', () => ({
   useNotificationSeen: vi.fn(() => ({ markNotificationsSeen: vi.fn() })),
   CHALLENGE_EXPIRY_MS: 30 * 60 * 1000,
 }));
+vi.mock('../hooks/useCommentNotifications', () => ({
+  useCommentNotifications: vi.fn(() => ({ commentNotifications: [] })),
+}));
 vi.mock('../hooks/useUserBadges', () => ({
   useBadgesForUser: () => ({ userBadges: {}, loading: false }),
 }));

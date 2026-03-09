@@ -6,6 +6,7 @@ import { useSubscription } from "../hooks/useSubscription";
 import { isSubscriptionAllowed } from "../lib/subscriptionConfig";
 import { useDailyResetTimer } from "../hooks/useDailyResetTimer";
 import { useNotificationSeen, getUnseenNotificationCount, getUnseenWithLabels } from "../hooks/useNotificationSeen";
+import { useCommentNotifications } from "../hooks/useCommentNotifications";
 import { getAllEarnedSorted } from "../lib/badges";
 import AuthModal from "./AuthModal";
 import SubscribeModal from "./SubscribeModal";
@@ -71,6 +72,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
   const { user, signOut, friendRequests, incomingChallenges, isVerifiedUser } = useAuth();
   const { userBadges } = useUserBadges(user);
   const { notificationSeenAt, markNotificationsSeen } = useNotificationSeen(user);
+  const { commentNotifications = [] } = useCommentNotifications(user);
   const { showSubscriptionGate, isSubscribed } = useSubscription(user);
   const earnedBadges = getAllEarnedSorted(userBadges);
   const isPremium = isSubscribed || (userBadges && !!userBadges['premium_member']);
@@ -80,7 +82,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
   const clearBadgeEarned = badgeEarnedContext?.clearBadgeEarned;
   const recentBadgeEarnings = badgeEarnedContext?.recentBadgeEarnings ?? [];
   const unseenCount =
-    getUnseenNotificationCount(friendRequests || [], incomingChallenges || [], notificationSeenAt) +
+    getUnseenNotificationCount(friendRequests || [], incomingChallenges || [], notificationSeenAt, commentNotifications) +
     recentBadgeEarnings.length;
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showSubscribeModal, setShowSubscribeModal] = useState(false);
@@ -101,7 +103,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
 
   // Effect 1: set baseline on "entry" (login or navigation) so we don't toast for pre-existing unseen notifications
   useEffect(() => {
-    const unseenList = getUnseenWithLabels(friendRequests || [], incomingChallenges || [], notificationSeenAt);
+    const unseenList = getUnseenWithLabels(friendRequests || [], incomingChallenges || [], notificationSeenAt, commentNotifications);
     const pathOrUserChanged = pathname !== prevPathnameRef.current || user?.uid !== prevUidRef.current;
     if (pathOrUserChanged) {
       prevPathnameRef.current = pathname;
@@ -117,12 +119,12 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
       // Data loaded after login (within window); baseline was set empty, so set it now so we don't toast for pre-existing unseen
       baselineIdsRef.current = new Set(unseenList.map((i) => i.id));
     }
-  }, [pathname, user?.uid, friendRequests, incomingChallenges, notificationSeenAt]);
+  }, [pathname, user?.uid, friendRequests, incomingChallenges, notificationSeenAt, commentNotifications]);
 
   // Effect 2: show toast only for notifications that arrived while user is on page (id not in baseline)
   useEffect(() => {
     if (notificationToast) return;
-    const unseenList = getUnseenWithLabels(friendRequests || [], incomingChallenges || [], notificationSeenAt);
+    const unseenList = getUnseenWithLabels(friendRequests || [], incomingChallenges || [], notificationSeenAt, commentNotifications);
     const candidate = unseenList.find(
       (item) => !baselineIdsRef.current.has(item.id) && !toastedIdsRef.current.has(item.id)
     );
@@ -130,7 +132,7 @@ export default function SiteHeader({ onOpenFeedback, onSignUpComplete, onHomeCli
       toastedIdsRef.current.add(candidate.id);
       setNotificationToast(candidate);
     }
-  }, [friendRequests, incomingChallenges, notificationSeenAt, notificationToast]);
+  }, [friendRequests, incomingChallenges, notificationSeenAt, commentNotifications, notificationToast]);
 
   const handleOpenAuth = useCallback(() => {
     setShowAuthModal(true);
